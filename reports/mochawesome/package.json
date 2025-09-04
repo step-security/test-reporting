@@ -6,7 +6,7 @@
   "scripts": {
     "test": "mocha --reporter mochawesome --reporter-options reportDir=../../__tests__/fixtures/,reportFilename=mochawesome-json.json"
   },
-  "author": "Ian Moroney <ianmoroney@gmail.com>",
+  "author": "step-security",
   "license": "MIT",
   "devDependencies": {
     "cypress": "^9.5.0",

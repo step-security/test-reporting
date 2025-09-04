@@ -2,7 +2,6 @@
 
 A fork of [Dorny's test reporter](https://github.com/dorny/test-reporter) created primarily to add support for `mochawesome-json`. Also includes several further feature enhancements and bug fixes on the original.
 
-This [Github Action](https://github.com/marketplace/actions/test-reporting) displays test results from popular testing frameworks directly in GitHub.
 
 ✔️ Parses test results in XML or JSON format and creates nice report as Github Check Run
 
@@ -23,8 +22,6 @@ This [Github Action](https://github.com/marketplace/actions/test-reporting) disp
 
 For more information see [Supported formats](#supported-formats) section.
 
-Do you miss support for your favorite language or framework?
-Please create [Issue](https://github.com/step-security/test-reporting/issues/new) or contribute with PR.
 
 ## Example
 
@@ -375,10 +372,7 @@ Unfortunately, there are some known issues and limitations caused by GitHub API:
 - Test report can't reference any additional files (e.g. screenshots). You can use `actions/upload-artifact@v2` to upload them and inspect them manually.
 - Check Runs are created for specific commit SHA. It's not possible to specify under which workflow test report should belong if more
   workflows are running for the same SHA. Thanks to this GitHub "feature" it's possible your test report will appear in an unexpected place in GitHub UI.
-  For more information, see [#67](https://github.com/dorny/test-reporter/issues/67).
 
-## See also
-- [paths-filter](https://github.com/dorny/paths-filter) - Conditionally run actions based on files modified by PR, feature branch, or pushed commits
 
 ## License
 
