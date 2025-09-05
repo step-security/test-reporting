@@ -17,7 +17,12 @@ jobs:
     name: Build & Test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@ec9f2d5744a09debf3a187a3f4f675c53b671911 # v2.13.0
+        with:
+          egress-policy: audit
+
+      - uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
       - run: npm ci
       - run: npm run build
       - run: npm run format-check
@@ -26,7 +31,7 @@ jobs:
 
       - name: Upload test results
         if: success() || failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: test-results
           path: __tests__/__results__/*.xml
