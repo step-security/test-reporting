@@ -7595,7 +7595,7 @@ module.exports = __toCommonJS(dist_src_exports);
 var import_universal_user_agent = __nccwpck_require__(5030);
 
 // pkg/dist-src/version.js
-var VERSION = "9.0.5";
+var VERSION = "9.0.6";
 
 // pkg/dist-src/defaults.js
 var userAgent = `octokit-endpoint.js/${VERSION} ${(0, import_universal_user_agent.getUserAgent)()}`;
@@ -7700,9 +7700,9 @@ function addQueryParameters(url, parameters) {
 }
 
 // pkg/dist-src/util/extract-url-variable-names.js
-var urlVariableRegex = /\{[^}]+\}/g;
+var urlVariableRegex = /\{[^{}}]+\}/g;
 function removeNonChars(variableName) {
-  return variableName.replace(/^\W+|\W+$/g, "").split(/,/);
+  return variableName.replace(/(?:^\W+)|(?:(?<!\W)\W+$)/g, "").split(/,/);
 }
 function extractUrlVariableNames(url) {
   const matches = url.match(urlVariableRegex);
@@ -7888,7 +7888,7 @@ function parse(options) {
     }
     if (url.endsWith("/graphql")) {
       if (options.mediaType.previews?.length) {
-        const previewsFromAcceptHeader = headers.accept.match(/[\w-]+(?=-preview)/g) || [];
+        const previewsFromAcceptHeader = headers.accept.match(/(?<![\w-])[\w-]+(?=-preview)/g) || [];
         headers.accept = previewsFromAcceptHeader.concat(options.mediaType.previews).map((preview) => {
           const format = options.mediaType.format ? `.${options.mediaType.format}` : "+json";
           return `application/vnd.github.${preview}-preview${format}`;
@@ -8137,7 +8137,7 @@ __export(dist_src_exports, {
 module.exports = __toCommonJS(dist_src_exports);
 
 // pkg/dist-src/version.js
-var VERSION = "9.2.1";
+var VERSION = "9.2.2";
 
 // pkg/dist-src/normalize-paginated-list-response.js
 function normalizePaginatedListResponse(response) {
@@ -8185,7 +8185,7 @@ function iterator(octokit, route, parameters) {
           const response = await requestMethod({ method, url, headers });
           const normalizedResponse = normalizePaginatedListResponse(response);
           url = ((normalizedResponse.headers.link || "").match(
-            /<([^>]+)>;\s*rel="next"/
+            /<([^<>]+)>;\s*rel="next"/
           ) || [])[1];
           return { value: normalizedResponse };
         } catch (error) {
@@ -10737,7 +10737,7 @@ var RequestError = class extends Error {
     if (options.request.headers.authorization) {
       requestCopy.headers = Object.assign({}, options.request.headers, {
         authorization: options.request.headers.authorization.replace(
-          / .*$/,
+          /(?<! ) .*$/,
           " [REDACTED]"
         )
       });
@@ -10805,7 +10805,7 @@ var import_endpoint = __nccwpck_require__(9440);
 var import_universal_user_agent = __nccwpck_require__(5030);
 
 // pkg/dist-src/version.js
-var VERSION = "8.4.0";
+var VERSION = "8.4.1";
 
 // pkg/dist-src/is-plain-object.js
 function isPlainObject(value) {
@@ -10864,7 +10864,7 @@ function fetchWrapper(requestOptions) {
       headers[keyAndValue[0]] = keyAndValue[1];
     }
     if ("deprecation" in headers) {
-      const matches = headers.link && headers.link.match(/<([^>]+)>; rel="deprecation"/);
+      const matches = headers.link && headers.link.match(/<([^<>]+)>; rel="deprecation"/);
       const deprecationLink = matches && matches.pop();
       log.warn(
         `[@octokit/request] "${requestOptions.method} ${requestOptions.url}" is deprecated. It is scheduled to be removed on ${headers.sunset}${deprecationLink ? `. See ${deprecationLink}` : ""}`
@@ -14726,8 +14726,8 @@ const braces = (input, options = {}) => {
   let output = [];
 
   if (Array.isArray(input)) {
-    for (let pattern of input) {
-      let result = braces.create(pattern, options);
+    for (const pattern of input) {
+      const result = braces.create(pattern, options);
       if (Array.isArray(result)) {
         output.push(...result);
       } else {
@@ -14861,7 +14861,7 @@ braces.create = (input, options = {}) => {
     return [input];
   }
 
- return options.expand !== true
+  return options.expand !== true
     ? braces.compile(input, options)
     : braces.expand(input, options);
 };
@@ -14885,30 +14885,32 @@ const fill = __nccwpck_require__(6330);
 const utils = __nccwpck_require__(5207);
 
 const compile = (ast, options = {}) => {
-  let walk = (node, parent = {}) => {
-    let invalidBlock = utils.isInvalidBrace(parent);
-    let invalidNode = node.invalid === true && options.escapeInvalid === true;
-    let invalid = invalidBlock === true || invalidNode === true;
-    let prefix = options.escapeInvalid === true ? '\\' : '';
+  const walk = (node, parent = {}) => {
+    const invalidBlock = utils.isInvalidBrace(parent);
+    const invalidNode = node.invalid === true && options.escapeInvalid === true;
+    const invalid = invalidBlock === true || invalidNode === true;
+    const prefix = options.escapeInvalid === true ? '\\' : '';
     let output = '';
 
     if (node.isOpen === true) {
       return prefix + node.value;
     }
+
     if (node.isClose === true) {
+      console.log('node.isClose', prefix, node.value);
       return prefix + node.value;
     }
 
     if (node.type === 'open') {
-      return invalid ? (prefix + node.value) : '(';
+      return invalid ? prefix + node.value : '(';
     }
 
     if (node.type === 'close') {
-      return invalid ? (prefix + node.value) : ')';
+      return invalid ? prefix + node.value : ')';
     }
 
     if (node.type === 'comma') {
-      return node.prev.type === 'comma' ? '' : (invalid ? node.value : '|');
+      return node.prev.type === 'comma' ? '' : invalid ? node.value : '|';
     }
 
     if (node.value) {
@@ -14916,8 +14918,8 @@ const compile = (ast, options = {}) => {
     }
 
     if (node.nodes && node.ranges > 0) {
-      let args = utils.reduce(node.nodes);
-      let range = fill(...args, { ...options, wrap: false, toRegex: true });
+      const args = utils.reduce(node.nodes);
+      const range = fill(...args, { ...options, wrap: false, toRegex: true, strictZeros: true });
 
       if (range.length !== 0) {
         return args.length > 1 && range.length > 1 ? `(${range})` : range;
@@ -14925,10 +14927,11 @@ const compile = (ast, options = {}) => {
     }
 
     if (node.nodes) {
-      for (let child of node.nodes) {
+      for (const child of node.nodes) {
         output += walk(child, node);
       }
     }
+
     return output;
   };
 
@@ -14947,7 +14950,7 @@ module.exports = compile;
 
 
 module.exports = {
-  MAX_LENGTH: 1024 * 64,
+  MAX_LENGTH: 10000,
 
   // Digits
   CHAR_0: '0', /* 0 */
@@ -15016,7 +15019,7 @@ const stringify = __nccwpck_require__(8750);
 const utils = __nccwpck_require__(5207);
 
 const append = (queue = '', stash = '', enclose = false) => {
-  let result = [];
+  const result = [];
 
   queue = [].concat(queue);
   stash = [].concat(stash);
@@ -15026,15 +15029,15 @@ const append = (queue = '', stash = '', enclose = false) => {
     return enclose ? utils.flatten(stash).map(ele => `{${ele}}`) : stash;
   }
 
-  for (let item of queue) {
+  for (const item of queue) {
     if (Array.isArray(item)) {
-      for (let value of item) {
+      for (const value of item) {
         result.push(append(value, stash, enclose));
       }
     } else {
       for (let ele of stash) {
         if (enclose === true && typeof ele === 'string') ele = `{${ele}}`;
-        result.push(Array.isArray(ele) ? append(item, ele, enclose) : (item + ele));
+        result.push(Array.isArray(ele) ? append(item, ele, enclose) : item + ele);
       }
     }
   }
@@ -15042,9 +15045,9 @@ const append = (queue = '', stash = '', enclose = false) => {
 };
 
 const expand = (ast, options = {}) => {
-  let rangeLimit = options.rangeLimit === void 0 ? 1000 : options.rangeLimit;
+  const rangeLimit = options.rangeLimit === undefined ? 1000 : options.rangeLimit;
 
-  let walk = (node, parent = {}) => {
+  const walk = (node, parent = {}) => {
     node.queue = [];
 
     let p = parent;
@@ -15066,7 +15069,7 @@ const expand = (ast, options = {}) => {
     }
 
     if (node.nodes && node.ranges > 0) {
-      let args = utils.reduce(node.nodes);
+      const args = utils.reduce(node.nodes);
 
       if (utils.exceedsLimit(...args, options.step, rangeLimit)) {
         throw new RangeError('expanded array length exceeds range limit. Use options.rangeLimit to increase or disable the limit.');
@@ -15082,7 +15085,7 @@ const expand = (ast, options = {}) => {
       return;
     }
 
-    let enclose = utils.encloseBrace(node);
+    const enclose = utils.encloseBrace(node);
     let queue = node.queue;
     let block = node;
 
@@ -15092,7 +15095,7 @@ const expand = (ast, options = {}) => {
     }
 
     for (let i = 0; i < node.nodes.length; i++) {
-      let child = node.nodes[i];
+      const child = node.nodes[i];
 
       if (child.type === 'comma' && node.type === 'brace') {
         if (i === 1) queue.push('');
@@ -15165,22 +15168,21 @@ const parse = (input, options = {}) => {
     throw new TypeError('Expected a string');
   }
 
-  let opts = options || {};
-  let max = typeof opts.maxLength === 'number' ? Math.min(MAX_LENGTH, opts.maxLength) : MAX_LENGTH;
+  const opts = options || {};
+  const max = typeof opts.maxLength === 'number' ? Math.min(MAX_LENGTH, opts.maxLength) : MAX_LENGTH;
   if (input.length > max) {
     throw new SyntaxError(`Input length (${input.length}), exceeds max characters (${max})`);
   }
 
-  let ast = { type: 'root', input, nodes: [] };
-  let stack = [ast];
+  const ast = { type: 'root', input, nodes: [] };
+  const stack = [ast];
   let block = ast;
   let prev = ast;
   let brackets = 0;
-  let length = input.length;
+  const length = input.length;
   let index = 0;
   let depth = 0;
   let value;
-  let memo = {};
 
   /**
    * Helpers
@@ -15243,7 +15245,6 @@ const parse = (input, options = {}) => {
     if (value === CHAR_LEFT_SQUARE_BRACKET) {
       brackets++;
 
-      let closed = true;
       let next;
 
       while (index < length && (next = advance())) {
@@ -15299,7 +15300,7 @@ const parse = (input, options = {}) => {
      */
 
     if (value === CHAR_DOUBLE_QUOTE || value === CHAR_SINGLE_QUOTE || value === CHAR_BACKTICK) {
-      let open = value;
+      const open = value;
       let next;
 
       if (options.keepQuotes !== true) {
@@ -15331,8 +15332,8 @@ const parse = (input, options = {}) => {
     if (value === CHAR_LEFT_CURLY_BRACE) {
       depth++;
 
-      let dollar = prev.value && prev.value.slice(-1) === '$' || block.dollar === true;
-      let brace = {
+      const dollar = prev.value && prev.value.slice(-1) === '$' || block.dollar === true;
+      const brace = {
         type: 'brace',
         open: true,
         close: false,
@@ -15359,7 +15360,7 @@ const parse = (input, options = {}) => {
         continue;
       }
 
-      let type = 'close';
+      const type = 'close';
       block = stack.pop();
       block.close = true;
 
@@ -15377,7 +15378,7 @@ const parse = (input, options = {}) => {
     if (value === CHAR_COMMA && depth > 0) {
       if (block.ranges > 0) {
         block.ranges = 0;
-        let open = block.nodes.shift();
+        const open = block.nodes.shift();
         block.nodes = [open, { type: 'text', value: stringify(block) }];
       }
 
@@ -15391,7 +15392,7 @@ const parse = (input, options = {}) => {
      */
 
     if (value === CHAR_DOT && depth > 0 && block.commas === 0) {
-      let siblings = block.nodes;
+      const siblings = block.nodes;
 
       if (depth === 0 || siblings.length === 0) {
         push({ type: 'text', value });
@@ -15418,7 +15419,7 @@ const parse = (input, options = {}) => {
       if (prev.type === 'range') {
         siblings.pop();
 
-        let before = siblings[siblings.length - 1];
+        const before = siblings[siblings.length - 1];
         before.value += prev.value + value;
         prev = before;
         block.ranges--;
@@ -15451,8 +15452,8 @@ const parse = (input, options = {}) => {
       });
 
       // get the location of the block on parent.nodes (block's siblings)
-      let parent = stack[stack.length - 1];
-      let index = parent.nodes.indexOf(block);
+      const parent = stack[stack.length - 1];
+      const index = parent.nodes.indexOf(block);
       // replace the (invalid) block with it's nodes
       parent.nodes.splice(index, 1, ...block.nodes);
     }
@@ -15476,9 +15477,9 @@ module.exports = parse;
 const utils = __nccwpck_require__(5207);
 
 module.exports = (ast, options = {}) => {
-  let stringify = (node, parent = {}) => {
-    let invalidBlock = options.escapeInvalid && utils.isInvalidBrace(parent);
-    let invalidNode = node.invalid === true && options.escapeInvalid === true;
+  const stringify = (node, parent = {}) => {
+    const invalidBlock = options.escapeInvalid && utils.isInvalidBrace(parent);
+    const invalidNode = node.invalid === true && options.escapeInvalid === true;
     let output = '';
 
     if (node.value) {
@@ -15493,7 +15494,7 @@ module.exports = (ast, options = {}) => {
     }
 
     if (node.nodes) {
-      for (let child of node.nodes) {
+      for (const child of node.nodes) {
         output += stringify(child);
       }
     }
@@ -15544,7 +15545,7 @@ exports.exceedsLimit = (min, max, step = 1, limit) => {
  */
 
 exports.escapeNode = (block, n = 0, type) => {
-  let node = block.nodes[n];
+  const node = block.nodes[n];
   if (!node) return;
 
   if ((type && node.type === type) || node.type === 'open' || node.type === 'close') {
@@ -15613,13 +15614,23 @@ exports.reduce = nodes => nodes.reduce((acc, node) => {
 
 exports.flatten = (...args) => {
   const result = [];
+
   const flat = arr => {
     for (let i = 0; i < arr.length; i++) {
-      let ele = arr[i];
-      Array.isArray(ele) ? flat(ele, result) : ele !== void 0 && result.push(ele);
+      const ele = arr[i];
+
+      if (Array.isArray(ele)) {
+        flat(ele);
+        continue;
+      }
+
+      if (ele !== undefined) {
+        result.push(ele);
+      }
     }
     return result;
   };
+
   flat(args);
   return result;
 };
@@ -17383,7 +17394,7 @@ exports.colors = [6, 2, 3, 4, 5, 1];
 try {
 	// Optional dependency (as in, doesn't need to be installed, NOT like optionalDependencies in package.json)
 	// eslint-disable-next-line import/no-extraneous-dependencies
-	const supportsColor = __nccwpck_require__(9318);
+	const supportsColor = __nccwpck_require__(132);
 
 	if (supportsColor && (supportsColor.stderr || supportsColor).level >= 2) {
 		exports.colors = [
@@ -19904,7 +19915,7 @@ const toMaxLen = (input, maxLength) => {
   return negative ? ('-' + input) : input;
 };
 
-const toSequence = (parts, options) => {
+const toSequence = (parts, options, maxLen) => {
   parts.negatives.sort((a, b) => a < b ? -1 : a > b ? 1 : 0);
   parts.positives.sort((a, b) => a < b ? -1 : a > b ? 1 : 0);
 
@@ -19914,11 +19925,11 @@ const toSequence = (parts, options) => {
   let result;
 
   if (parts.positives.length) {
-    positives = parts.positives.join('|');
+    positives = parts.positives.map(v => toMaxLen(String(v), maxLen)).join('|');
   }
 
   if (parts.negatives.length) {
-    negatives = `-(${prefix}${parts.negatives.join('|')})`;
+    negatives = `-(${prefix}${parts.negatives.map(v => toMaxLen(String(v), maxLen)).join('|')})`;
   }
 
   if (positives && negatives) {
@@ -20016,7 +20027,7 @@ const fillNumbers = (start, end, step = 1, options = {}) => {
 
   if (options.toRegex === true) {
     return step > 1
-      ? toSequence(parts, options)
+      ? toSequence(parts, options, maxLen)
       : toRegex(range, null, { wrap: false, ...options });
   }
 
@@ -20027,7 +20038,6 @@ const fillLetters = (start, end, step = 1, options = {}) => {
   if ((!isNumber(start) && start.length > 1) || (!isNumber(end) && end.length > 1)) {
     return invalidRange(start, end, options);
   }
-
 
   let format = options.transform || (val => String.fromCharCode(val));
   let a = `${start}`.charCodeAt(0);
@@ -24777,22 +24787,6 @@ exports["default"] = (message) => {
 
 /***/ }),
 
-/***/ 1621:
-/***/ ((module) => {
-
-"use strict";
-
-module.exports = (flag, argv) => {
-	argv = argv || process.argv;
-	const prefix = flag.startsWith('-') ? '' : (flag.length === 1 ? '-' : '--');
-	const pos = argv.indexOf(prefix + flag);
-	const terminatorPos = argv.indexOf('--');
-	return pos !== -1 && (terminatorPos === -1 ? true : pos < terminatorPos);
-};
-
-
-/***/ }),
-
 /***/ 587:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
@@ -27961,7 +27955,12 @@ const util = __nccwpck_require__(3837);
 const braces = __nccwpck_require__(610);
 const picomatch = __nccwpck_require__(8569);
 const utils = __nccwpck_require__(479);
-const isEmptyString = val => val === '' || val === './';
+
+const isEmptyString = v => v === '' || v === './';
+const hasBraces = v => {
+  const index = v.indexOf('{');
+  return index > -1 && v.indexOf('}', index) > -1;
+};
 
 /**
  * Returns an array of strings that match one or more glob patterns.
@@ -28402,7 +28401,7 @@ micromatch.parse = (patterns, options) => {
 
 micromatch.braces = (pattern, options) => {
   if (typeof pattern !== 'string') throw new TypeError('Expected a string');
-  if ((options && options.nobrace === true) || !/\{.*\}/.test(pattern)) {
+  if ((options && options.nobrace === true) || !hasBraces(pattern)) {
     return [pattern];
   }
   return braces(pattern, options);
@@ -28421,6 +28420,8 @@ micromatch.braceExpand = (pattern, options) => {
  * Expose micromatch
  */
 
+// exposed for tests
+micromatch.hasBraces = hasBraces;
 module.exports = micromatch;
 
 
@@ -33441,145 +33442,6 @@ function runParallel (tasks, cb) {
     }())
   }
 })( false ? 0 : exports)
-
-
-/***/ }),
-
-/***/ 9318:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-
-const os = __nccwpck_require__(2037);
-const hasFlag = __nccwpck_require__(1621);
-
-const env = process.env;
-
-let forceColor;
-if (hasFlag('no-color') ||
-	hasFlag('no-colors') ||
-	hasFlag('color=false')) {
-	forceColor = false;
-} else if (hasFlag('color') ||
-	hasFlag('colors') ||
-	hasFlag('color=true') ||
-	hasFlag('color=always')) {
-	forceColor = true;
-}
-if ('FORCE_COLOR' in env) {
-	forceColor = env.FORCE_COLOR.length === 0 || parseInt(env.FORCE_COLOR, 10) !== 0;
-}
-
-function translateLevel(level) {
-	if (level === 0) {
-		return false;
-	}
-
-	return {
-		level,
-		hasBasic: true,
-		has256: level >= 2,
-		has16m: level >= 3
-	};
-}
-
-function supportsColor(stream) {
-	if (forceColor === false) {
-		return 0;
-	}
-
-	if (hasFlag('color=16m') ||
-		hasFlag('color=full') ||
-		hasFlag('color=truecolor')) {
-		return 3;
-	}
-
-	if (hasFlag('color=256')) {
-		return 2;
-	}
-
-	if (stream && !stream.isTTY && forceColor !== true) {
-		return 0;
-	}
-
-	const min = forceColor ? 1 : 0;
-
-	if (process.platform === 'win32') {
-		// Node.js 7.5.0 is the first version of Node.js to include a patch to
-		// libuv that enables 256 color output on Windows. Anything earlier and it
-		// won't work. However, here we target Node.js 8 at minimum as it is an LTS
-		// release, and Node.js 7 is not. Windows 10 build 10586 is the first Windows
-		// release that supports 256 colors. Windows 10 build 14931 is the first release
-		// that supports 16m/TrueColor.
-		const osRelease = os.release().split('.');
-		if (
-			Number(process.versions.node.split('.')[0]) >= 8 &&
-			Number(osRelease[0]) >= 10 &&
-			Number(osRelease[2]) >= 10586
-		) {
-			return Number(osRelease[2]) >= 14931 ? 3 : 2;
-		}
-
-		return 1;
-	}
-
-	if ('CI' in env) {
-		if (['TRAVIS', 'CIRCLECI', 'APPVEYOR', 'GITLAB_CI'].some(sign => sign in env) || env.CI_NAME === 'codeship') {
-			return 1;
-		}
-
-		return min;
-	}
-
-	if ('TEAMCITY_VERSION' in env) {
-		return /^(9\.(0*[1-9]\d*)\.|\d{2,}\.)/.test(env.TEAMCITY_VERSION) ? 1 : 0;
-	}
-
-	if (env.COLORTERM === 'truecolor') {
-		return 3;
-	}
-
-	if ('TERM_PROGRAM' in env) {
-		const version = parseInt((env.TERM_PROGRAM_VERSION || '').split('.')[0], 10);
-
-		switch (env.TERM_PROGRAM) {
-			case 'iTerm.app':
-				return version >= 3 ? 3 : 2;
-			case 'Apple_Terminal':
-				return 2;
-			// No default
-		}
-	}
-
-	if (/-256(color)?$/i.test(env.TERM)) {
-		return 2;
-	}
-
-	if (/^screen|^xterm|^vt100|^vt220|^rxvt|color|ansi|cygwin|linux/i.test(env.TERM)) {
-		return 1;
-	}
-
-	if ('COLORTERM' in env) {
-		return 1;
-	}
-
-	if (env.TERM === 'dumb') {
-		return min;
-	}
-
-	return min;
-}
-
-function getSupportLevel(stream) {
-	const level = supportsColor(stream);
-	return translateLevel(level);
-}
-
-module.exports = {
-	supportsColor: getSupportLevel,
-	stdout: getSupportLevel(process.stdout),
-	stderr: getSupportLevel(process.stderr)
-};
 
 
 /***/ }),
@@ -39488,7 +39350,7 @@ module.exports = {
 
 
 const { parseSetCookie } = __nccwpck_require__(4408)
-const { stringify, getHeadersList } = __nccwpck_require__(3121)
+const { stringify } = __nccwpck_require__(3121)
 const { webidl } = __nccwpck_require__(1744)
 const { Headers } = __nccwpck_require__(554)
 
@@ -39564,14 +39426,13 @@ function getSetCookies (headers) {
 
   webidl.brandCheck(headers, Headers, { strict: false })
 
-  const cookies = getHeadersList(headers).cookies
+  const cookies = headers.getSetCookie()
 
   if (!cookies) {
     return []
   }
 
-  // In older versions of undici, cookies is a list of name:value.
-  return cookies.map((pair) => parseSetCookie(Array.isArray(pair) ? pair[1] : pair))
+  return cookies.map((pair) => parseSetCookie(pair))
 }
 
 /**
@@ -39999,14 +39860,15 @@ module.exports = {
 /***/ }),
 
 /***/ 3121:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+/***/ ((module) => {
 
 "use strict";
 
 
-const assert = __nccwpck_require__(9491)
-const { kHeadersList } = __nccwpck_require__(2785)
-
+/**
+ * @param {string} value
+ * @returns {boolean}
+ */
 function isCTLExcludingHtab (value) {
   if (value.length === 0) {
     return false
@@ -40267,31 +40129,13 @@ function stringify (cookie) {
   return out.join('; ')
 }
 
-let kHeadersListNode
-
-function getHeadersList (headers) {
-  if (headers[kHeadersList]) {
-    return headers[kHeadersList]
-  }
-
-  if (!kHeadersListNode) {
-    kHeadersListNode = Object.getOwnPropertySymbols(headers).find(
-      (symbol) => symbol.description === 'headers list'
-    )
-
-    assert(kHeadersListNode, 'Headers cannot be parsed')
-  }
-
-  const headersList = headers[kHeadersListNode]
-  assert(headersList)
-
-  return headersList
-}
-
 module.exports = {
   isCTLExcludingHtab,
-  stringify,
-  getHeadersList
+  validateCookieName,
+  validateCookiePath,
+  validateCookieValue,
+  toIMFDate,
+  stringify
 }
 
 
@@ -42220,6 +42064,14 @@ const { isUint8Array, isArrayBuffer } = __nccwpck_require__(9830)
 const { File: UndiciFile } = __nccwpck_require__(8511)
 const { parseMIMEType, serializeAMimeType } = __nccwpck_require__(685)
 
+let random
+try {
+  const crypto = __nccwpck_require__(6005)
+  random = (max) => crypto.randomInt(0, max)
+} catch {
+  random = (max) => Math.floor(Math.random(max))
+}
+
 let ReadableStream = globalThis.ReadableStream
 
 /** @type {globalThis['File']} */
@@ -42305,7 +42157,7 @@ function extractBody (object, keepalive = false) {
     // Set source to a copy of the bytes held by object.
     source = new Uint8Array(object.buffer.slice(object.byteOffset, object.byteOffset + object.byteLength))
   } else if (util.isFormDataLike(object)) {
-    const boundary = `----formdata-undici-0${`${Math.floor(Math.random() * 1e11)}`.padStart(11, '0')}`
+    const boundary = `----formdata-undici-0${`${random(1e11)}`.padStart(11, '0')}`
     const prefix = `--${boundary}\r\nContent-Disposition: form-data`
 
     /*! formdata-polyfill. MIT License. Jimmy Wärting <https://jimmy.warting.se/opensource> */
@@ -44287,6 +44139,7 @@ const {
   isValidHeaderName,
   isValidHeaderValue
 } = __nccwpck_require__(2538)
+const util = __nccwpck_require__(3837)
 const { webidl } = __nccwpck_require__(1744)
 const assert = __nccwpck_require__(9491)
 
@@ -44840,6 +44693,9 @@ Object.defineProperties(Headers.prototype, {
   [Symbol.toStringTag]: {
     value: 'Headers',
     configurable: true
+  },
+  [util.inspect.custom]: {
+    enumerable: false
   }
 })
 
@@ -54016,6 +53872,20 @@ class Pool extends PoolBase {
       ? { ...options.interceptors }
       : undefined
     this[kFactory] = factory
+
+    this.on('connectionError', (origin, targets, error) => {
+      // If a connection error occurs, we remove the client from the pool,
+      // and emit a connectionError event. They will not be re-used.
+      // Fixes https://github.com/nodejs/undici/issues/3895
+      for (const target of targets) {
+        // Do not use kRemoveClient here, as it will close the client,
+        // but the client cannot be closed in this state.
+        const idx = this[kClients].indexOf(target)
+        if (idx !== -1) {
+          this[kClients].splice(idx, 1)
+        }
+      }
+    })
   }
 
   [kGetDispatcher] () {
@@ -56624,7 +56494,7 @@ function wrappy (fn, cb) {
 // Generated by CoffeeScript 1.12.7
 (function() {
   "use strict";
-  var bom, defaults, events, isEmpty, processItem, processors, sax, setImmediate,
+  var bom, defaults, defineProperty, events, isEmpty, processItem, processors, sax, setImmediate,
     bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
     extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
     hasProp = {}.hasOwnProperty;
@@ -56652,6 +56522,16 @@ function wrappy (fn, cb) {
       item = process(item, key);
     }
     return item;
+  };
+
+  defineProperty = function(obj, key, value) {
+    var descriptor;
+    descriptor = Object.create(null);
+    descriptor.value = value;
+    descriptor.writable = true;
+    descriptor.enumerable = true;
+    descriptor.configurable = true;
+    return Object.defineProperty(obj, key, descriptor);
   };
 
   exports.Parser = (function(superClass) {
@@ -56717,13 +56597,13 @@ function wrappy (fn, cb) {
     Parser.prototype.assignOrPush = function(obj, key, newValue) {
       if (!(key in obj)) {
         if (!this.options.explicitArray) {
-          return obj[key] = newValue;
+          return defineProperty(obj, key, newValue);
         } else {
-          return obj[key] = [newValue];
+          return defineProperty(obj, key, [newValue]);
         }
       } else {
         if (!(obj[key] instanceof Array)) {
-          obj[key] = [obj[key]];
+          defineProperty(obj, key, [obj[key]]);
         }
         return obj[key].push(newValue);
       }
@@ -56778,7 +56658,7 @@ function wrappy (fn, cb) {
               if (_this.options.mergeAttrs) {
                 _this.assignOrPush(obj, processedKey, newValue);
               } else {
-                obj[attrkey][processedKey] = newValue;
+                defineProperty(obj[attrkey], processedKey, newValue);
               }
             }
           }
@@ -56821,7 +56701,11 @@ function wrappy (fn, cb) {
             }
           }
           if (isEmpty(obj)) {
-            obj = _this.options.emptyTag !== '' ? _this.options.emptyTag : emptyStr;
+            if (typeof _this.options.emptyTag === 'function') {
+              obj = _this.options.emptyTag();
+            } else {
+              obj = _this.options.emptyTag !== '' ? _this.options.emptyTag : emptyStr;
+            }
           }
           if (_this.options.validator != null) {
             xpath = "/" + ((function() {
@@ -56863,7 +56747,7 @@ function wrappy (fn, cb) {
               objClone = {};
               for (key in obj) {
                 if (!hasProp.call(obj, key)) continue;
-                objClone[key] = obj[key];
+                defineProperty(objClone, key, obj[key]);
               }
               s[_this.options.childkey].push(objClone);
               delete obj["#name"];
@@ -56878,7 +56762,7 @@ function wrappy (fn, cb) {
             if (_this.options.explicitRoot) {
               old = obj;
               obj = {};
-              obj[nodeName] = old;
+              defineProperty(obj, nodeName, old);
             }
             _this.resultObject = obj;
             _this.saxParser.ended = true;
@@ -61397,6 +61281,14 @@ module.exports = eval("require")("original-fs");
 
 /***/ }),
 
+/***/ 132:
+/***/ ((module) => {
+
+module.exports = eval("require")("supports-color");
+
+
+/***/ }),
+
 /***/ 9491:
 /***/ ((module) => {
 
@@ -61506,6 +61398,14 @@ module.exports = require("https");
 
 "use strict";
 module.exports = require("net");
+
+/***/ }),
+
+/***/ 6005:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("node:crypto");
 
 /***/ }),
 
