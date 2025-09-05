@@ -1,0 +1,36 @@
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: daily
+
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: daily
+
+  - package-ecosystem: nuget
+    directory: /reports/dotnet/DotnetTests.Unit
+    schedule:
+      interval: daily
+
+  - package-ecosystem: nuget
+    directory: /reports/dotnet/DotnetTests.XUnitTests
+    schedule:
+      interval: daily
+
+  - package-ecosystem: npm
+    directory: /reports/jest
+    schedule:
+      interval: daily
+
+  - package-ecosystem: npm
+    directory: /reports/mocha
+    schedule:
+      interval: daily
+
+  - package-ecosystem: npm
+    directory: /reports/mochawesome
+    schedule:
+      interval: daily
