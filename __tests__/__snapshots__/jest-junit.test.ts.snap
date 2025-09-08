@@ -15,7 +15,7 @@ TestRunResult {
 
     tsconfig.json:13:3 - error TS6258: 'typeRoots' should be set inside the 'compilerOptions' object of the config json file
 
-    13   \"typeRoots\": [\"./src/lib/types\", \"./node_modules/@types\"],
+    13   "typeRoots": ["./src/lib/types", "./node_modules/@types"],
          ~~~~~~~~~~~
 ",
                 "line": undefined,
@@ -42,7 +42,7 @@ TestRunResult {
 
     tsconfig.json:13:3 - error TS6258: 'typeRoots' should be set inside the 'compilerOptions' object of the config json file
 
-    13   \"typeRoots\": [\"./src/lib/types\", \"./node_modules/@types\"],
+    13   "typeRoots": ["./src/lib/types", "./node_modules/@types"],
          ~~~~~~~~~~~
 ",
                 "line": undefined,
@@ -103,9 +103,9 @@ TestRunResult {
                 "details": "
   [LRS:Chromium] › libs/foo.spec.ts:38:5 › Test suite failure 
 
-    locator.click: Error: strict mode violation: locator('button:text(\"Email\")') resolved to 2 elements:
-        1) <button data-testid=\"first\">Email</button> aka getByTestId('first')
-        2) <button data-testid=\"second\">Anoher Email</button> aka getByTestId('second')
+    locator.click: Error: strict mode violation: locator('button:text("Email")') resolved to 2 elements:
+        1) <button data-testid="first">Email</button> aka getByTestId('first')
+        2) <button data-testid="second">Anoher Email</button> aka getByTestId('second')
 
 ",
                 "line": 38,
@@ -151,31 +151,47 @@ TestRunResult {
                 "details": "Error: expect(received).toBeTruthy()
 
 Received: false
-    at Object.<anonymous> (C:\\Users\\Michal\\Workspace\\dorny\\test-check\\reports\\jest\\__tests__\\main.test.js:10:21)
-    at Object.asyncJestTest (C:\\Users\\Michal\\Workspace\\dorny\\test-check\\reports\\jest\\node_modules\\jest-jasmine2\\build\\jasmineAsyncInstall.js:106:37)
-    at C:\\Users\\Michal\\Workspace\\dorny\\test-check\\reports\\jest\\node_modules\\jest-jasmine2\\build\\queueRunner.js:45:12
+    at Object.toBeTruthy (/Users/noobie_doobie_doo/Desktop/step/maintained-actions/test-reporting/reports/jest/__tests__/main.test.js:10:21)
+    at Promise.then.completed (/Users/noobie_doobie_doo/Desktop/step/maintained-actions/test-reporting/reports/jest/node_modules/jest-circus/build/utils.js:298:28)
     at new Promise (<anonymous>)
-    at mapper (C:\\Users\\Michal\\Workspace\\dorny\\test-check\\reports\\jest\\node_modules\\jest-jasmine2\\build\\queueRunner.js:28:19)
-    at C:\\Users\\Michal\\Workspace\\dorny\\test-check\\reports\\jest\\node_modules\\jest-jasmine2\\build\\queueRunner.js:75:41
-    at processTicksAndRejections (internal/process/task_queues.js:97:5)",
+    at callAsyncCircusFn (/Users/noobie_doobie_doo/Desktop/step/maintained-actions/test-reporting/reports/jest/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/Users/noobie_doobie_doo/Desktop/step/maintained-actions/test-reporting/reports/jest/node_modules/jest-circus/build/run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at _runTest (/Users/noobie_doobie_doo/Desktop/step/maintained-actions/test-reporting/reports/jest/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/Users/noobie_doobie_doo/Desktop/step/maintained-actions/test-reporting/reports/jest/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/Users/noobie_doobie_doo/Desktop/step/maintained-actions/test-reporting/reports/jest/node_modules/jest-circus/build/run.js:121:9)
+    at _runTestsForDescribeBlock (/Users/noobie_doobie_doo/Desktop/step/maintained-actions/test-reporting/reports/jest/node_modules/jest-circus/build/run.js:121:9)
+    at run (/Users/noobie_doobie_doo/Desktop/step/maintained-actions/test-reporting/reports/jest/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/Users/noobie_doobie_doo/Desktop/step/maintained-actions/test-reporting/reports/jest/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/Users/noobie_doobie_doo/Desktop/step/maintained-actions/test-reporting/reports/jest/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/Users/noobie_doobie_doo/Desktop/step/maintained-actions/test-reporting/reports/jest/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/Users/noobie_doobie_doo/Desktop/step/maintained-actions/test-reporting/reports/jest/node_modules/jest-runner/build/runTest.js:444:34)",
                 "line": 10,
                 "path": "__tests__/main.test.js",
               },
               "name": "Failing test",
               "result": "failed",
-              "time": 2,
+              "time": 1,
             },
             TestCaseResult {
               "error": {
                 "details": "Error: Some error
-    at Object.throwError (C:\\Users\\Michal\\Workspace\\dorny\\test-check\\reports\\jest\\lib\\main.js:2:9)
-    at Object.<anonymous> (C:\\Users\\Michal\\Workspace\\dorny\\test-check\\reports\\jest\\__tests__\\main.test.js:14:11)
-    at Object.asyncJestTest (C:\\Users\\Michal\\Workspace\\dorny\\test-check\\reports\\jest\\node_modules\\jest-jasmine2\\build\\jasmineAsyncInstall.js:106:37)
-    at C:\\Users\\Michal\\Workspace\\dorny\\test-check\\reports\\jest\\node_modules\\jest-jasmine2\\build\\queueRunner.js:45:12
+    at Object.throwError (/Users/noobie_doobie_doo/Desktop/step/maintained-actions/test-reporting/reports/jest/lib/main.js:2:9)
+    at Object.throwError (/Users/noobie_doobie_doo/Desktop/step/maintained-actions/test-reporting/reports/jest/__tests__/main.test.js:14:11)
+    at Promise.then.completed (/Users/noobie_doobie_doo/Desktop/step/maintained-actions/test-reporting/reports/jest/node_modules/jest-circus/build/utils.js:298:28)
     at new Promise (<anonymous>)
-    at mapper (C:\\Users\\Michal\\Workspace\\dorny\\test-check\\reports\\jest\\node_modules\\jest-jasmine2\\build\\queueRunner.js:28:19)
-    at C:\\Users\\Michal\\Workspace\\dorny\\test-check\\reports\\jest\\node_modules\\jest-jasmine2\\build\\queueRunner.js:75:41
-    at processTicksAndRejections (internal/process/task_queues.js:97:5)",
+    at callAsyncCircusFn (/Users/noobie_doobie_doo/Desktop/step/maintained-actions/test-reporting/reports/jest/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/Users/noobie_doobie_doo/Desktop/step/maintained-actions/test-reporting/reports/jest/node_modules/jest-circus/build/run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at _runTest (/Users/noobie_doobie_doo/Desktop/step/maintained-actions/test-reporting/reports/jest/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/Users/noobie_doobie_doo/Desktop/step/maintained-actions/test-reporting/reports/jest/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/Users/noobie_doobie_doo/Desktop/step/maintained-actions/test-reporting/reports/jest/node_modules/jest-circus/build/run.js:121:9)
+    at _runTestsForDescribeBlock (/Users/noobie_doobie_doo/Desktop/step/maintained-actions/test-reporting/reports/jest/node_modules/jest-circus/build/run.js:121:9)
+    at run (/Users/noobie_doobie_doo/Desktop/step/maintained-actions/test-reporting/reports/jest/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/Users/noobie_doobie_doo/Desktop/step/maintained-actions/test-reporting/reports/jest/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/Users/noobie_doobie_doo/Desktop/step/maintained-actions/test-reporting/reports/jest/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/Users/noobie_doobie_doo/Desktop/step/maintained-actions/test-reporting/reports/jest/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/Users/noobie_doobie_doo/Desktop/step/maintained-actions/test-reporting/reports/jest/node_modules/jest-runner/build/runTest.js:444:34)",
                 "line": 2,
                 "path": "lib/main.js",
               },
@@ -191,13 +207,20 @@ Received: false
             TestCaseResult {
               "error": {
                 "details": "Error: Some error
-    at Object.<anonymous> (C:\\Users\\Michal\\Workspace\\dorny\\test-check\\reports\\jest\\__tests__\\main.test.js:21:11)
-    at Object.asyncJestTest (C:\\Users\\Michal\\Workspace\\dorny\\test-check\\reports\\jest\\node_modules\\jest-jasmine2\\build\\jasmineAsyncInstall.js:106:37)
-    at C:\\Users\\Michal\\Workspace\\dorny\\test-check\\reports\\jest\\node_modules\\jest-jasmine2\\build\\queueRunner.js:45:12
+    at Object.<anonymous> (/Users/noobie_doobie_doo/Desktop/step/maintained-actions/test-reporting/reports/jest/__tests__/main.test.js:21:11)
+    at Promise.then.completed (/Users/noobie_doobie_doo/Desktop/step/maintained-actions/test-reporting/reports/jest/node_modules/jest-circus/build/utils.js:298:28)
     at new Promise (<anonymous>)
-    at mapper (C:\\Users\\Michal\\Workspace\\dorny\\test-check\\reports\\jest\\node_modules\\jest-jasmine2\\build\\queueRunner.js:28:19)
-    at C:\\Users\\Michal\\Workspace\\dorny\\test-check\\reports\\jest\\node_modules\\jest-jasmine2\\build\\queueRunner.js:75:41
-    at processTicksAndRejections (internal/process/task_queues.js:97:5)",
+    at callAsyncCircusFn (/Users/noobie_doobie_doo/Desktop/step/maintained-actions/test-reporting/reports/jest/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/Users/noobie_doobie_doo/Desktop/step/maintained-actions/test-reporting/reports/jest/node_modules/jest-circus/build/run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at _runTest (/Users/noobie_doobie_doo/Desktop/step/maintained-actions/test-reporting/reports/jest/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/Users/noobie_doobie_doo/Desktop/step/maintained-actions/test-reporting/reports/jest/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/Users/noobie_doobie_doo/Desktop/step/maintained-actions/test-reporting/reports/jest/node_modules/jest-circus/build/run.js:121:9)
+    at run (/Users/noobie_doobie_doo/Desktop/step/maintained-actions/test-reporting/reports/jest/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/Users/noobie_doobie_doo/Desktop/step/maintained-actions/test-reporting/reports/jest/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/Users/noobie_doobie_doo/Desktop/step/maintained-actions/test-reporting/reports/jest/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/Users/noobie_doobie_doo/Desktop/step/maintained-actions/test-reporting/reports/jest/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/Users/noobie_doobie_doo/Desktop/step/maintained-actions/test-reporting/reports/jest/node_modules/jest-runner/build/runTest.js:444:34)",
                 "line": 21,
                 "path": "__tests__/main.test.js",
               },
@@ -208,8 +231,8 @@ Received: false
           ],
         },
       ],
-      "name": "__tests__\\main.test.js",
-      "totalTime": 486,
+      "name": "__tests__/main.test.js",
+      "totalTime": 105,
     },
     TestSuiteResult {
       "groups": [
@@ -218,26 +241,21 @@ Received: false
           "tests": [
             TestCaseResult {
               "error": {
-                "details": ": Timeout - Async callback was not invoked within the 1 ms timeout specified by jest.setTimeout.Timeout - Async callback was not invoked within the 1 ms timeout specified by jest.setTimeout.Error: 
-    at new Spec (C:\\Users\\Michal\\Workspace\\dorny\\test-check\\reports\\jest\\node_modules\\jest-jasmine2\\build\\jasmine\\Spec.js:116:22)
-    at new Spec (C:\\Users\\Michal\\Workspace\\dorny\\test-check\\reports\\jest\\node_modules\\jest-jasmine2\\build\\setup_jest_globals.js:78:9)
-    at specFactory (C:\\Users\\Michal\\Workspace\\dorny\\test-check\\reports\\jest\\node_modules\\jest-jasmine2\\build\\jasmine\\Env.js:523:24)
-    at Env.it (C:\\Users\\Michal\\Workspace\\dorny\\test-check\\reports\\jest\\node_modules\\jest-jasmine2\\build\\jasmine\\Env.js:592:24)
-    at Env.it (C:\\Users\\Michal\\Workspace\\dorny\\test-check\\reports\\jest\\node_modules\\jest-jasmine2\\build\\jasmineAsyncInstall.js:134:23)
-    at it (C:\\Users\\Michal\\Workspace\\dorny\\test-check\\reports\\jest\\node_modules\\jest-jasmine2\\build\\jasmine\\jasmineLight.js:100:21)
-    at Object.<anonymous> (C:\\Users\\Michal\\Workspace\\dorny\\test-check\\reports\\jest\\__tests__\\second.test.js:1:34)
-    at Runtime._execModule (C:\\Users\\Michal\\Workspace\\dorny\\test-check\\reports\\jest\\node_modules\\jest-runtime\\build\\index.js:1245:24)
-    at Runtime._loadModule (C:\\Users\\Michal\\Workspace\\dorny\\test-check\\reports\\jest\\node_modules\\jest-runtime\\build\\index.js:844:12)
-    at Runtime.requireModule (C:\\Users\\Michal\\Workspace\\dorny\\test-check\\reports\\jest\\node_modules\\jest-runtime\\build\\index.js:694:10)
-    at jasmine2 (C:\\Users\\Michal\\Workspace\\dorny\\test-check\\reports\\jest\\node_modules\\jest-jasmine2\\build\\index.js:230:13)
-    at runTestInternal (C:\\Users\\Michal\\Workspace\\dorny\\test-check\\reports\\jest\\node_modules\\jest-runner\\build\\runTest.js:380:22)
-    at runTest (C:\\Users\\Michal\\Workspace\\dorny\\test-check\\reports\\jest\\node_modules\\jest-runner\\build\\runTest.js:472:34)",
+                "details": "Error: thrown: "Exceeded timeout of 1 ms for a test.
+Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+    at Object.<anonymous> (/Users/noobie_doobie_doo/Desktop/step/maintained-actions/test-reporting/reports/jest/__tests__/second.test.js:1:34)
+    at Runtime._execModule (/Users/noobie_doobie_doo/Desktop/step/maintained-actions/test-reporting/reports/jest/node_modules/jest-runtime/build/index.js:1439:24)
+    at Runtime._loadModule (/Users/noobie_doobie_doo/Desktop/step/maintained-actions/test-reporting/reports/jest/node_modules/jest-runtime/build/index.js:1022:12)
+    at Runtime.requireModule (/Users/noobie_doobie_doo/Desktop/step/maintained-actions/test-reporting/reports/jest/node_modules/jest-runtime/build/index.js:882:12)
+    at jestAdapter (/Users/noobie_doobie_doo/Desktop/step/maintained-actions/test-reporting/reports/jest/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:77:13)
+    at runTestInternal (/Users/noobie_doobie_doo/Desktop/step/maintained-actions/test-reporting/reports/jest/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/Users/noobie_doobie_doo/Desktop/step/maintained-actions/test-reporting/reports/jest/node_modules/jest-runner/build/runTest.js:444:34)",
                 "line": 1,
                 "path": "__tests__/second.test.js",
               },
               "name": "Timeout test",
               "result": "failed",
-              "time": 4,
+              "time": 3,
             },
             TestCaseResult {
               "error": undefined,
@@ -248,11 +266,11 @@ Received: false
           ],
         },
       ],
-      "name": "__tests__\\second.test.js",
-      "totalTime": 82,
+      "name": "__tests__/second.test.js",
+      "totalTime": 22,
     },
   ],
-  "totalTime": 1360,
+  "totalTime": 148,
 }
 `;
 
@@ -712,7 +730,7 @@ TestRunResult {
             },
             TestCaseResult {
               "error": undefined,
-              "name": "throws when module was found but no \"jest-preset.js\" or \"jest-preset.json\" files",
+              "name": "throws when module was found but no "jest-preset.js" or "jest-preset.json" files",
               "result": "success",
               "time": 1,
             },
@@ -736,7 +754,7 @@ TestRunResult {
             },
             TestCaseResult {
               "error": undefined,
-              "name": "works with \"react-native\"",
+              "name": "works with "react-native"",
               "result": "success",
               "time": 3,
             },
@@ -931,7 +949,7 @@ TestRunResult {
           "tests": [
             TestCaseResult {
               "error": undefined,
-              "name": "preserves any use of \"\\\"",
+              "name": "preserves any use of "\\"",
               "result": "success",
               "time": 1,
             },
@@ -994,7 +1012,7 @@ TestRunResult {
           "tests": [
             TestCaseResult {
               "error": undefined,
-              "name": "preserves any use of \"\\\"",
+              "name": "preserves any use of "\\"",
               "result": "success",
               "time": 15,
             },
@@ -1906,13 +1924,13 @@ TestRunResult {
           "tests": [
             TestCaseResult {
               "error": undefined,
-              "name": "can resolve node modules relative to absolute paths in \"moduleDirectories\" on Windows platforms",
+              "name": "can resolve node modules relative to absolute paths in "moduleDirectories" on Windows platforms",
               "result": "success",
               "time": 21,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "can resolve node modules relative to absolute paths in \"moduleDirectories\" on Posix platforms",
+              "name": "can resolve node modules relative to absolute paths in "moduleDirectories" on Posix platforms",
               "result": "success",
               "time": 8,
             },
@@ -3459,7 +3477,7 @@ TestRunResult {
             },
             TestCaseResult {
               "error": undefined,
-              "name": "Comments in config JSON using \"//\" key are not warned",
+              "name": "Comments in config JSON using "//" key are not warned",
               "result": "success",
               "time": 0,
             },
@@ -3597,25 +3615,25 @@ TestRunResult {
           "tests": [
             TestCaseResult {
               "error": undefined,
-              "name": "{\"supportsDynamicImport\":true,\"supportsStaticESM\":true} -> {\"supportsDynamicImport\":true,\"supportsStaticESM\":true}",
+              "name": "{"supportsDynamicImport":true,"supportsStaticESM":true} -> {"supportsDynamicImport":true,"supportsStaticESM":true}",
               "result": "success",
               "time": 6,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{\"supportsDynamicImport\":false,\"supportsStaticESM\":false} -> {\"supportsDynamicImport\":false,\"supportsStaticESM\":false}",
+              "name": "{"supportsDynamicImport":false,"supportsStaticESM":false} -> {"supportsDynamicImport":false,"supportsStaticESM":false}",
               "result": "success",
               "time": 11,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{\"supportsStaticESM\":false} -> {\"supportsDynamicImport\":false,\"supportsStaticESM\":false}",
+              "name": "{"supportsStaticESM":false} -> {"supportsDynamicImport":false,"supportsStaticESM":false}",
               "result": "success",
               "time": 13,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{\"supportsDynamicImport\":true} -> {\"supportsDynamicImport\":true,\"supportsStaticESM\":false}",
+              "name": "{"supportsDynamicImport":true} -> {"supportsDynamicImport":true,"supportsStaticESM":false}",
               "result": "success",
               "time": 11,
             },
@@ -3632,13 +3650,13 @@ TestRunResult {
           "tests": [
             TestCaseResult {
               "error": undefined,
-              "name": "file path with \".js\"",
+              "name": "file path with ".js"",
               "result": "success",
               "time": 9,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "directory path with \".js\"",
+              "name": "directory path with ".js"",
               "result": "success",
               "time": 11,
             },
@@ -3649,13 +3667,13 @@ TestRunResult {
           "tests": [
             TestCaseResult {
               "error": undefined,
-              "name": "file path with \".ts\"",
+              "name": "file path with ".ts"",
               "result": "success",
               "time": 2,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "directory path with \".ts\"",
+              "name": "directory path with ".ts"",
               "result": "success",
               "time": 3,
             },
@@ -3666,13 +3684,13 @@ TestRunResult {
           "tests": [
             TestCaseResult {
               "error": undefined,
-              "name": "file path with \".mjs\"",
+              "name": "file path with ".mjs"",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "directory path with \".mjs\"",
+              "name": "directory path with ".mjs"",
               "result": "success",
               "time": 7,
             },
@@ -3683,13 +3701,13 @@ TestRunResult {
           "tests": [
             TestCaseResult {
               "error": undefined,
-              "name": "file path with \".cjs\"",
+              "name": "file path with ".cjs"",
               "result": "success",
               "time": 2,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "directory path with \".cjs\"",
+              "name": "directory path with ".cjs"",
               "result": "success",
               "time": 2,
             },
@@ -3700,13 +3718,13 @@ TestRunResult {
           "tests": [
             TestCaseResult {
               "error": undefined,
-              "name": "file path with \".json\"",
+              "name": "file path with ".json"",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "directory path with \".json\"",
+              "name": "directory path with ".json"",
               "result": "success",
               "time": 3,
             },
@@ -10519,7 +10537,7 @@ TestRunResult {
             },
             TestCaseResult {
               "error": undefined,
-              "name": "throws if theme option is not of type \"object\"",
+              "name": "throws if theme option is not of type "object"",
               "result": "success",
               "time": 0,
             },
@@ -11354,13 +11372,13 @@ TestRunResult {
             },
             TestCaseResult {
               "error": undefined,
-              "name": "calls the main module if the method call is \"default\"",
+              "name": "calls the main module if the method call is "default"",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "calls the main export if the method call is \"default\" and it is a Babel transpiled one",
+              "name": "calls the main export if the method call is "default" and it is a Babel transpiled one",
               "result": "success",
               "time": 1,
             },
@@ -11573,13 +11591,13 @@ TestRunResult {
             },
             TestCaseResult {
               "error": undefined,
-              "name": "calls the main module if the method call is \"default\"",
+              "name": "calls the main module if the method call is "default"",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "calls the main export if the method call is \"default\" and it is a Babel transpiled one",
+              "name": "calls the main export if the method call is "default" and it is a Babel transpiled one",
               "result": "success",
               "time": 1,
             },
@@ -11643,7 +11661,7 @@ TestRunResult {
           "tests": [
             TestCaseResult {
               "error": undefined,
-              "name": "beforeEach throws an error when \"String\" is provided as a first argument to it",
+              "name": "beforeEach throws an error when "String" is provided as a first argument to it",
               "result": "success",
               "time": 19,
             },
@@ -11696,7 +11714,7 @@ TestRunResult {
           "tests": [
             TestCaseResult {
               "error": undefined,
-              "name": "beforeAll throws an error when \"String\" is provided as a first argument to it",
+              "name": "beforeAll throws an error when "String" is provided as a first argument to it",
               "result": "success",
               "time": 0,
             },
@@ -11749,7 +11767,7 @@ TestRunResult {
           "tests": [
             TestCaseResult {
               "error": undefined,
-              "name": "afterEach throws an error when \"String\" is provided as a first argument to it",
+              "name": "afterEach throws an error when "String" is provided as a first argument to it",
               "result": "success",
               "time": 0,
             },
@@ -11802,7 +11820,7 @@ TestRunResult {
           "tests": [
             TestCaseResult {
               "error": undefined,
-              "name": "afterAll throws an error when \"String\" is provided as a first argument to it",
+              "name": "afterAll throws an error when "String" is provided as a first argument to it",
               "result": "success",
               "time": 1,
             },
@@ -13333,7 +13351,7 @@ TestRunResult {
           "tests": [
             TestCaseResult {
               "error": undefined,
-              "name": "beforeEach throws an error when \"String\" is provided as a first argument to it",
+              "name": "beforeEach throws an error when "String" is provided as a first argument to it",
               "result": "success",
               "time": 2,
             },
@@ -13386,7 +13404,7 @@ TestRunResult {
           "tests": [
             TestCaseResult {
               "error": undefined,
-              "name": "beforeAll throws an error when \"String\" is provided as a first argument to it",
+              "name": "beforeAll throws an error when "String" is provided as a first argument to it",
               "result": "success",
               "time": 0,
             },
@@ -13439,7 +13457,7 @@ TestRunResult {
           "tests": [
             TestCaseResult {
               "error": undefined,
-              "name": "afterEach throws an error when \"String\" is provided as a first argument to it",
+              "name": "afterEach throws an error when "String" is provided as a first argument to it",
               "result": "success",
               "time": 0,
             },
@@ -13492,7 +13510,7 @@ TestRunResult {
           "tests": [
             TestCaseResult {
               "error": undefined,
-              "name": "afterAll throws an error when \"String\" is provided as a first argument to it",
+              "name": "afterAll throws an error when "String" is provided as a first argument to it",
               "result": "success",
               "time": 1,
             },
@@ -14092,13 +14110,13 @@ TestRunResult {
             },
             TestCaseResult {
               "error": undefined,
-              "name": "fails non-promise value \"a\" synchronously",
+              "name": "fails non-promise value "a" synchronously",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "fails non-promise value \"a\"",
+              "name": "fails non-promise value "a"",
               "result": "success",
               "time": 2,
             },
@@ -14128,13 +14146,13 @@ TestRunResult {
             },
             TestCaseResult {
               "error": undefined,
-              "name": "fails non-promise value {\"a\": 1} synchronously",
+              "name": "fails non-promise value {"a": 1} synchronously",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "fails non-promise value {\"a\": 1}",
+              "name": "fails non-promise value {"a": 1}",
               "result": "success",
               "time": 0,
             },
@@ -14205,13 +14223,13 @@ TestRunResult {
             },
             TestCaseResult {
               "error": undefined,
-              "name": "fails non-promise value \"a\" synchronously",
+              "name": "fails non-promise value "a" synchronously",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "fails non-promise value \"a\"",
+              "name": "fails non-promise value "a"",
               "result": "success",
               "time": 0,
             },
@@ -14241,13 +14259,13 @@ TestRunResult {
             },
             TestCaseResult {
               "error": undefined,
-              "name": "fails non-promise value {\"a\": 1} synchronously",
+              "name": "fails non-promise value {"a": 1} synchronously",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "fails non-promise value {\"a\": 1}",
+              "name": "fails non-promise value {"a": 1}",
               "result": "success",
               "time": 0,
             },
@@ -14342,25 +14360,25 @@ TestRunResult {
             },
             TestCaseResult {
               "error": undefined,
-              "name": "fails for: {\"a\": 1} and {\"a\": 1}",
+              "name": "fails for: {"a": 1} and {"a": 1}",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "fails for: {\"a\": 1} and {\"a\": 5}",
+              "name": "fails for: {"a": 1} and {"a": 5}",
               "result": "success",
               "time": 2,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "fails for: {\"a\": [Function a], \"b\": 2} and {\"a\": Any<Function>, \"b\": 2}",
+              "name": "fails for: {"a": [Function a], "b": 2} and {"a": Any<Function>, "b": 2}",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "fails for: {\"a\": undefined, \"b\": 2} and {\"b\": 2}",
+              "name": "fails for: {"a": undefined, "b": 2} and {"b": 2}",
               "result": "success",
               "time": 8,
             },
@@ -14396,37 +14414,37 @@ TestRunResult {
             },
             TestCaseResult {
               "error": undefined,
-              "name": "fails for: \"abc\" and \"cde\"",
+              "name": "fails for: "abc" and "cde"",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "fails for: \"painless JavaScript testing\" and \"delightful JavaScript testing\"",
+              "name": "fails for: "painless JavaScript testing" and "delightful JavaScript testing"",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "fails for: \"\" and \"compare one-line string to empty string\"",
+              "name": "fails for: "" and "compare one-line string to empty string"",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "fails for: \"with 
-trailing space\" and \"without trailing space\"",
+              "name": "fails for: "with 
+trailing space" and "without trailing space"",
               "result": "success",
               "time": 8,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "fails for: \"four
+              "name": "fails for: "four
 4
 line
-string\" and \"3
+string" and "3
 line
-string\"",
+string"",
               "result": "success",
               "time": 0,
             },
@@ -14456,7 +14474,7 @@ string\"",
             },
             TestCaseResult {
               "error": undefined,
-              "name": "fails for: {\"a\": 1n} and {\"a\": 1n}",
+              "name": "fails for: {"a": 1n} and {"a": 1n}",
               "result": "success",
               "time": 0,
             },
@@ -14474,7 +14492,7 @@ string\"",
             },
             TestCaseResult {
               "error": undefined,
-              "name": "fails for '\"a\"' with '.not'",
+              "name": "fails for '"a"' with '.not'",
               "result": "success",
               "time": 0,
             },
@@ -14658,13 +14676,13 @@ string\"",
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect(\"abc\").toEqual({\"0\": \"a\", \"1\": \"b\", \"2\": \"c\"})",
+              "name": "{pass: false} expect("abc").toEqual({"0": "a", "1": "b", "2": "c"})",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect({\"0\": \"a\", \"1\": \"b\", \"2\": \"c\"}).toEqual(\"abc\")",
+              "name": "{pass: false} expect({"0": "a", "1": "b", "2": "c"}).toEqual("abc")",
               "result": "success",
               "time": 1,
             },
@@ -14676,75 +14694,75 @@ string\"",
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect({\"a\": 1}).toEqual({\"a\": 2})",
+              "name": "{pass: false} expect({"a": 1}).toEqual({"a": 2})",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect({\"a\": 5}).toEqual({\"b\": 6})",
+              "name": "{pass: false} expect({"a": 5}).toEqual({"b": 6})",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect({\"foo\": {\"bar\": 1}}).toEqual({\"foo\": {}})",
+              "name": "{pass: false} expect({"foo": {"bar": 1}}).toEqual({"foo": {}})",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect({\"getterAndSetter\": {}}).toEqual({\"getterAndSetter\": {\"foo\": \"bar\"}})",
+              "name": "{pass: false} expect({"getterAndSetter": {}}).toEqual({"getterAndSetter": {"foo": "bar"}})",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect({\"frozenGetterAndSetter\": {}}).toEqual({\"frozenGetterAndSetter\": {\"foo\": \"bar\"}})",
+              "name": "{pass: false} expect({"frozenGetterAndSetter": {}}).toEqual({"frozenGetterAndSetter": {"foo": "bar"}})",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect({\"getter\": {}}).toEqual({\"getter\": {\"foo\": \"bar\"}})",
+              "name": "{pass: false} expect({"getter": {}}).toEqual({"getter": {"foo": "bar"}})",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect({\"frozenGetter\": {}}).toEqual({\"frozenGetter\": {\"foo\": \"bar\"}})",
+              "name": "{pass: false} expect({"frozenGetter": {}}).toEqual({"frozenGetter": {"foo": "bar"}})",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect({\"setter\": undefined}).toEqual({\"setter\": {\"foo\": \"bar\"}})",
+              "name": "{pass: false} expect({"setter": undefined}).toEqual({"setter": {"foo": "bar"}})",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect({\"frozenSetter\": undefined}).toEqual({\"frozenSetter\": {\"foo\": \"bar\"}})",
+              "name": "{pass: false} expect({"frozenSetter": undefined}).toEqual({"frozenSetter": {"foo": "bar"}})",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect(\"banana\").toEqual(\"apple\")",
+              "name": "{pass: false} expect("banana").toEqual("apple")",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect(\"1 234,57 $\").toEqual(\"1 234,57 $\")",
+              "name": "{pass: false} expect("1 234,57 $").toEqual("1 234,57 $")",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect(\"type TypeName<T> = T extends Function ? \\\"function\\\" : \\\"object\\\";\").toEqual(\"type TypeName<T> = T extends Function
-? \\\"function\\\"
-: \\\"object\\\";\")",
+              "name": "{pass: false} expect("type TypeName<T> = T extends Function ? \\"function\\" : \\"object\\";").toEqual("type TypeName<T> = T extends Function
+? \\"function\\"
+: \\"object\\";")",
               "result": "success",
               "time": 1,
             },
@@ -14834,55 +14852,55 @@ string\"",
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect(Map {1 => \"one\", 2 => \"two\"}).toEqual(Map {1 => \"one\"})",
+              "name": "{pass: false} expect(Map {1 => "one", 2 => "two"}).toEqual(Map {1 => "one"})",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect(Map {\"a\" => 0}).toEqual(Map {\"b\" => 0})",
+              "name": "{pass: false} expect(Map {"a" => 0}).toEqual(Map {"b" => 0})",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect(Map {\"v\" => 1}).toEqual(Map {\"v\" => 2})",
+              "name": "{pass: false} expect(Map {"v" => 1}).toEqual(Map {"v" => 2})",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect(Map {[\"v\"] => 1}).toEqual(Map {[\"v\"] => 2})",
+              "name": "{pass: false} expect(Map {["v"] => 1}).toEqual(Map {["v"] => 2})",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect(Map {[1] => Map {[1] => \"one\"}}).toEqual(Map {[1] => Map {[1] => \"two\"}})",
+              "name": "{pass: false} expect(Map {[1] => Map {[1] => "one"}}).toEqual(Map {[1] => Map {[1] => "two"}})",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect(Immutable.Map {\"a\": 0}).toEqual(Immutable.Map {\"b\": 0})",
+              "name": "{pass: false} expect(Immutable.Map {"a": 0}).toEqual(Immutable.Map {"b": 0})",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect(Immutable.Map {\"v\": 1}).toEqual(Immutable.Map {\"v\": 2})",
+              "name": "{pass: false} expect(Immutable.Map {"v": 1}).toEqual(Immutable.Map {"v": 2})",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect(Immutable.OrderedMap {1: \"one\", 2: \"two\"}).toEqual(Immutable.OrderedMap {2: \"two\", 1: \"one\"})",
+              "name": "{pass: false} expect(Immutable.OrderedMap {1: "one", 2: "two"}).toEqual(Immutable.OrderedMap {2: "two", 1: "one"})",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect(Immutable.Map {\"1\": Immutable.Map {\"2\": {\"a\": 99}}}).toEqual(Immutable.Map {\"1\": Immutable.Map {\"2\": {\"a\": 11}}})",
+              "name": "{pass: false} expect(Immutable.Map {"1": Immutable.Map {"2": {"a": 99}}}).toEqual(Immutable.Map {"1": Immutable.Map {"2": {"a": 11}}})",
               "result": "success",
               "time": 1,
             },
@@ -14894,13 +14912,13 @@ string\"",
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect({\"a\": 1, \"b\": 2}).toEqual(ObjectContaining {\"a\": 2})",
+              "name": "{pass: false} expect({"a": 1, "b": 2}).toEqual(ObjectContaining {"a": 2})",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect(false).toEqual(ObjectContaining {\"a\": 2})",
+              "name": "{pass: false} expect(false).toEqual(ObjectContaining {"a": 2})",
               "result": "success",
               "time": 0,
             },
@@ -14918,13 +14936,13 @@ string\"",
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect(\"abd\").toEqual(StringContaining \"bc\")",
+              "name": "{pass: false} expect("abd").toEqual(StringContaining "bc")",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect(\"abd\").toEqual(StringMatching /bc/i)",
+              "name": "{pass: false} expect("abd").toEqual(StringMatching /bc/i)",
               "result": "success",
               "time": 0,
             },
@@ -14942,19 +14960,19 @@ string\"",
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect(\"Eve\").toEqual({\"asymmetricMatch\": [Function asymmetricMatch]})",
+              "name": "{pass: false} expect("Eve").toEqual({"asymmetricMatch": [Function asymmetricMatch]})",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect({\"target\": {\"nodeType\": 1, \"value\": \"a\"}}).toEqual({\"target\": {\"nodeType\": 1, \"value\": \"b\"}})",
+              "name": "{pass: false} expect({"target": {"nodeType": 1, "value": "a"}}).toEqual({"target": {"nodeType": 1, "value": "b"}})",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect({\"nodeName\": \"div\", \"nodeType\": 1}).toEqual({\"nodeName\": \"p\", \"nodeType\": 1})",
+              "name": "{pass: false} expect({"nodeName": "div", "nodeType": 1}).toEqual({"nodeName": "p", "nodeType": 1})",
               "result": "success",
               "time": 1,
             },
@@ -15014,19 +15032,19 @@ string\"",
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect(\"abc\").not.toEqual(\"abc\")",
+              "name": "{pass: true} expect("abc").not.toEqual("abc")",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect(\"abc\").not.toEqual(\"abc\")",
+              "name": "{pass: true} expect("abc").not.toEqual("abc")",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect(\"abc\").not.toEqual(\"abc\")",
+              "name": "{pass: true} expect("abc").not.toEqual("abc")",
               "result": "success",
               "time": 1,
             },
@@ -15062,7 +15080,7 @@ string\"",
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect({\"a\": 99}).not.toEqual({\"a\": 99})",
+              "name": "{pass: true} expect({"a": 99}).not.toEqual({"a": 99})",
               "result": "success",
               "time": 1,
             },
@@ -15104,7 +15122,7 @@ string\"",
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect(Set {{\"a\": 1}, {\"b\": 2}}).not.toEqual(Set {{\"b\": 2}, {\"a\": 1}})",
+              "name": "{pass: true} expect(Set {{"a": 1}, {"b": 2}}).not.toEqual(Set {{"b": 2}, {"a": 1}})",
               "result": "success",
               "time": 0,
             },
@@ -15146,43 +15164,43 @@ string\"",
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect(Map {1 => \"one\", 2 => \"two\"}).not.toEqual(Map {1 => \"one\", 2 => \"two\"})",
+              "name": "{pass: true} expect(Map {1 => "one", 2 => "two"}).not.toEqual(Map {1 => "one", 2 => "two"})",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect(Map {1 => \"one\", 2 => \"two\"}).not.toEqual(Map {2 => \"two\", 1 => \"one\"})",
+              "name": "{pass: true} expect(Map {1 => "one", 2 => "two"}).not.toEqual(Map {2 => "two", 1 => "one"})",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect(Map {[1] => \"one\", [2] => \"two\", [3] => \"three\", [3] => \"four\"}).not.toEqual(Map {[3] => \"three\", [3] => \"four\", [2] => \"two\", [1] => \"one\"})",
+              "name": "{pass: true} expect(Map {[1] => "one", [2] => "two", [3] => "three", [3] => "four"}).not.toEqual(Map {[3] => "three", [3] => "four", [2] => "two", [1] => "one"})",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect(Map {[1] => Map {[1] => \"one\"}, [2] => Map {[2] => \"two\"}}).not.toEqual(Map {[2] => Map {[2] => \"two\"}, [1] => Map {[1] => \"one\"}})",
+              "name": "{pass: true} expect(Map {[1] => Map {[1] => "one"}, [2] => Map {[2] => "two"}}).not.toEqual(Map {[2] => Map {[2] => "two"}, [1] => Map {[1] => "one"}})",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect(Map {[1] => \"one\", [2] => \"two\"}).not.toEqual(Map {[2] => \"two\", [1] => \"one\"})",
+              "name": "{pass: true} expect(Map {[1] => "one", [2] => "two"}).not.toEqual(Map {[2] => "two", [1] => "one"})",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect(Map {{\"a\": 1} => \"one\", {\"b\": 2} => \"two\"}).not.toEqual(Map {{\"b\": 2} => \"two\", {\"a\": 1} => \"one\"})",
+              "name": "{pass: true} expect(Map {{"a": 1} => "one", {"b": 2} => "two"}).not.toEqual(Map {{"b": 2} => "two", {"a": 1} => "one"})",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect(Map {1 => [\"one\"], 2 => [\"two\"]}).not.toEqual(Map {2 => [\"two\"], 1 => [\"one\"]})",
+              "name": "{pass: true} expect(Map {1 => ["one"], 2 => ["two"]}).not.toEqual(Map {2 => ["two"], 1 => ["one"]})",
               "result": "success",
               "time": 1,
             },
@@ -15194,25 +15212,25 @@ string\"",
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect(Immutable.Map {1: \"one\", 2: \"two\"}).not.toEqual(Immutable.Map {1: \"one\", 2: \"two\"})",
+              "name": "{pass: true} expect(Immutable.Map {1: "one", 2: "two"}).not.toEqual(Immutable.Map {1: "one", 2: "two"})",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect(Immutable.Map {1: \"one\", 2: \"two\"}).not.toEqual(Immutable.Map {2: \"two\", 1: \"one\"})",
+              "name": "{pass: true} expect(Immutable.Map {1: "one", 2: "two"}).not.toEqual(Immutable.Map {2: "two", 1: "one"})",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect(Immutable.OrderedMap {1: \"one\", 2: \"two\"}).not.toEqual(Immutable.OrderedMap {1: \"one\", 2: \"two\"})",
+              "name": "{pass: true} expect(Immutable.OrderedMap {1: "one", 2: "two"}).not.toEqual(Immutable.OrderedMap {1: "one", 2: "two"})",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect(Immutable.Map {\"1\": Immutable.Map {\"2\": {\"a\": 99}}}).not.toEqual(Immutable.Map {\"1\": Immutable.Map {\"2\": {\"a\": 99}}})",
+              "name": "{pass: true} expect(Immutable.Map {"1": Immutable.Map {"2": {"a": 99}}}).not.toEqual(Immutable.Map {"1": Immutable.Map {"2": {"a": 99}}})",
               "result": "success",
               "time": 1,
             },
@@ -15224,7 +15242,7 @@ string\"",
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect({\"a\": 1, \"b\": 2}).not.toEqual(ObjectContaining {\"a\": 1})",
+              "name": "{pass: true} expect({"a": 1, "b": 2}).not.toEqual(ObjectContaining {"a": 1})",
               "result": "success",
               "time": 0,
             },
@@ -15236,13 +15254,13 @@ string\"",
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect(\"abcd\").not.toEqual(StringContaining \"bc\")",
+              "name": "{pass: true} expect("abcd").not.toEqual(StringContaining "bc")",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect(\"abcd\").not.toEqual(StringMatching /bc/)",
+              "name": "{pass: true} expect("abcd").not.toEqual(StringMatching /bc/)",
               "result": "success",
               "time": 1,
             },
@@ -15260,19 +15278,19 @@ string\"",
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect({\"a\": 1, \"b\": [Function b], \"c\": true}).not.toEqual({\"a\": 1, \"b\": Any<Function>, \"c\": Anything})",
+              "name": "{pass: true} expect({"a": 1, "b": [Function b], "c": true}).not.toEqual({"a": 1, "b": Any<Function>, "c": Anything})",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect(\"Alice\").not.toEqual({\"asymmetricMatch\": [Function asymmetricMatch]})",
+              "name": "{pass: true} expect("Alice").not.toEqual({"asymmetricMatch": [Function asymmetricMatch]})",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect({\"nodeName\": \"div\", \"nodeType\": 1}).not.toEqual({\"nodeName\": \"div\", \"nodeType\": 1})",
+              "name": "{pass: true} expect({"nodeName": "div", "nodeType": 1}).not.toEqual({"nodeName": "div", "nodeType": 1})",
               "result": "success",
               "time": 0,
             },
@@ -15314,7 +15332,7 @@ string\"",
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect({\"a\": 99n}).not.toEqual({\"a\": 99n})",
+              "name": "{pass: true} expect({"a": 99n}).not.toEqual({"a": 99n})",
               "result": "success",
               "time": 0,
             },
@@ -15426,7 +15444,7 @@ string\"",
             },
             TestCaseResult {
               "error": undefined,
-              "name": "failing \"a\" and [Function String]",
+              "name": "failing "a" and [Function String]",
               "result": "success",
               "time": 0,
             },
@@ -15468,7 +15486,7 @@ string\"",
             },
             TestCaseResult {
               "error": undefined,
-              "name": "failing /\\\w+/ and [Function anonymous]",
+              "name": "failing /\\w+/ and [Function anonymous]",
               "result": "success",
               "time": 1,
             },
@@ -15521,7 +15539,7 @@ string\"",
             },
             TestCaseResult {
               "error": undefined,
-              "name": "'\"a\"' is truthy",
+              "name": "'"a"' is truthy",
               "result": "success",
               "time": 1,
             },
@@ -15581,7 +15599,7 @@ string\"",
             },
             TestCaseResult {
               "error": undefined,
-              "name": "'\"\"' is falsy",
+              "name": "'""' is falsy",
               "result": "success",
               "time": 1,
             },
@@ -15645,7 +15663,7 @@ string\"",
             },
             TestCaseResult {
               "error": undefined,
-              "name": "fails for '\"a\"'",
+              "name": "fails for '"a"'",
               "result": "success",
               "time": 0,
             },
@@ -15716,7 +15734,7 @@ string\"",
             },
             TestCaseResult {
               "error": undefined,
-              "name": "'\"a\"' is defined",
+              "name": "'"a"' is defined",
               "result": "success",
               "time": 0,
             },
@@ -16368,7 +16386,7 @@ string\"",
             },
             TestCaseResult {
               "error": undefined,
-              "name": "'[\"a\", \"b\", \"c\", \"d\"]' contains '\"a\"'",
+              "name": "'["a", "b", "c", "d"]' contains '"a"'",
               "result": "success",
               "time": 1,
             },
@@ -16392,19 +16410,19 @@ string\"",
             },
             TestCaseResult {
               "error": undefined,
-              "name": "'\"abcdef\"' contains '\"abc\"'",
+              "name": "'"abcdef"' contains '"abc"'",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "'\"11112111\"' contains '\"2\"'",
+              "name": "'"11112111"' contains '"2"'",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "'Set {\"abc\", \"def\"}' contains '\"abc\"'",
+              "name": "'Set {"abc", "def"}' contains '"abc"'",
               "result": "success",
               "time": 0,
             },
@@ -16470,7 +16488,7 @@ string\"",
             },
             TestCaseResult {
               "error": undefined,
-              "name": "'[\"a\", \"b\", \"c\", \"d\"]' contains a value equal to '\"a\"'",
+              "name": "'["a", "b", "c", "d"]' contains a value equal to '"a"'",
               "result": "success",
               "time": 0,
             },
@@ -16494,7 +16512,7 @@ string\"",
             },
             TestCaseResult {
               "error": undefined,
-              "name": "'[{\"a\": \"b\"}, {\"a\": \"c\"}]' contains a value equal to '{\"a\": \"b\"}'",
+              "name": "'[{"a": "b"}, {"a": "c"}]' contains a value equal to '{"a": "b"}'",
               "result": "success",
               "time": 1,
             },
@@ -16512,7 +16530,7 @@ string\"",
             },
             TestCaseResult {
               "error": undefined,
-              "name": "'[{\"a\": \"b\"}, {\"a\": \"c\"}]' does not contain a value equal to'{\"a\": \"d\"}'",
+              "name": "'[{"a": "b"}, {"a": "c"}]' does not contain a value equal to'{"a": "d"}'",
               "result": "success",
               "time": 2,
             },
@@ -16719,79 +16737,79 @@ string\"",
             },
             TestCaseResult {
               "error": undefined,
-              "name": "throws if non String actual value passed: [1, \"foo\"]",
+              "name": "throws if non String actual value passed: [1, "foo"]",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "throws if non String actual value passed: [{}, \"foo\"]",
+              "name": "throws if non String actual value passed: [{}, "foo"]",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "throws if non String actual value passed: [[], \"foo\"]",
+              "name": "throws if non String actual value passed: [[], "foo"]",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "throws if non String actual value passed: [true, \"foo\"]",
+              "name": "throws if non String actual value passed: [true, "foo"]",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "throws if non String actual value passed: [/foo/i, \"foo\"]",
+              "name": "throws if non String actual value passed: [/foo/i, "foo"]",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "throws if non String actual value passed: [[Function anonymous], \"foo\"]",
+              "name": "throws if non String actual value passed: [[Function anonymous], "foo"]",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "throws if non String actual value passed: [undefined, \"foo\"]",
+              "name": "throws if non String actual value passed: [undefined, "foo"]",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "throws if non String/RegExp expected value passed: [\"foo\", 1]",
+              "name": "throws if non String/RegExp expected value passed: ["foo", 1]",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "throws if non String/RegExp expected value passed: [\"foo\", {}]",
+              "name": "throws if non String/RegExp expected value passed: ["foo", {}]",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "throws if non String/RegExp expected value passed: [\"foo\", []]",
+              "name": "throws if non String/RegExp expected value passed: ["foo", []]",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "throws if non String/RegExp expected value passed: [\"foo\", true]",
+              "name": "throws if non String/RegExp expected value passed: ["foo", true]",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "throws if non String/RegExp expected value passed: [\"foo\", [Function anonymous]]",
+              "name": "throws if non String/RegExp expected value passed: ["foo", [Function anonymous]]",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "throws if non String/RegExp expected value passed: [\"foo\", undefined]",
+              "name": "throws if non String/RegExp expected value passed: ["foo", undefined]",
               "result": "success",
               "time": 0,
             },
@@ -16826,19 +16844,19 @@ string\"",
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect([\"a\", \"b\"]).toHaveLength(2)",
+              "name": "{pass: true} expect(["a", "b"]).toHaveLength(2)",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect(\"abc\").toHaveLength(3)",
+              "name": "{pass: true} expect("abc").toHaveLength(3)",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect(\"\").toHaveLength(0)",
+              "name": "{pass: true} expect("").toHaveLength(0)",
               "result": "success",
               "time": 0,
             },
@@ -16862,19 +16880,19 @@ string\"",
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect([\"a\", \"b\"]).toHaveLength(99)",
+              "name": "{pass: false} expect(["a", "b"]).toHaveLength(99)",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect(\"abc\").toHaveLength(66)",
+              "name": "{pass: false} expect("abc").toHaveLength(66)",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect(\"\").toHaveLength(1)",
+              "name": "{pass: false} expect("").toHaveLength(1)",
               "result": "success",
               "time": 1,
             },
@@ -16926,61 +16944,61 @@ string\"",
           "tests": [
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect({\"a\": {\"b\": {\"c\": {\"d\": 1}}}}).toHaveProperty('a.b.c.d', 1)",
+              "name": "{pass: true} expect({"a": {"b": {"c": {"d": 1}}}}).toHaveProperty('a.b.c.d', 1)",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect({\"a\": {\"b\": {\"c\": {\"d\": 1}}}}).toHaveProperty('a,b,c,d', 1)",
+              "name": "{pass: true} expect({"a": {"b": {"c": {"d": 1}}}}).toHaveProperty('a,b,c,d', 1)",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect({\"a.b.c.d\": 1}).toHaveProperty('a.b.c.d', 1)",
+              "name": "{pass: true} expect({"a.b.c.d": 1}).toHaveProperty('a.b.c.d', 1)",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect({\"a\": {\"b\": [1, 2, 3]}}).toHaveProperty('a,b,1', 2)",
+              "name": "{pass: true} expect({"a": {"b": [1, 2, 3]}}).toHaveProperty('a,b,1', 2)",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect({\"a\": {\"b\": [1, 2, 3]}}).toHaveProperty('a,b,1', Any<Number>)",
+              "name": "{pass: true} expect({"a": {"b": [1, 2, 3]}}).toHaveProperty('a,b,1', Any<Number>)",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect({\"a\": 0}).toHaveProperty('a', 0)",
+              "name": "{pass: true} expect({"a": 0}).toHaveProperty('a', 0)",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect({\"a\": {\"b\": undefined}}).toHaveProperty('a.b', undefined)",
+              "name": "{pass: true} expect({"a": {"b": undefined}}).toHaveProperty('a.b', undefined)",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect({\"a\": {}}).toHaveProperty('a.b', undefined)",
+              "name": "{pass: true} expect({"a": {}}).toHaveProperty('a.b', undefined)",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect({\"a\": {\"b\": {\"c\": 5}}}).toHaveProperty('a.b', {\"c\": 5})",
+              "name": "{pass: true} expect({"a": {"b": {"c": 5}}}).toHaveProperty('a.b', {"c": 5})",
               "result": "success",
               "time": 2,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect({\"property\": 1}).toHaveProperty('property', 1)",
+              "name": "{pass: true} expect({"property": 1}).toHaveProperty('property', 1)",
               "result": "success",
               "time": 0,
             },
@@ -16992,7 +17010,7 @@ string\"",
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect({}).toHaveProperty('b', \"b\")",
+              "name": "{pass: true} expect({}).toHaveProperty('b', "b")",
               "result": "success",
               "time": 0,
             },
@@ -17004,31 +17022,31 @@ string\"",
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect({\"val\": true}).toHaveProperty('a', undefined)",
+              "name": "{pass: true} expect({"val": true}).toHaveProperty('a', undefined)",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect({\"val\": true}).toHaveProperty('c', \"c\")",
+              "name": "{pass: true} expect({"val": true}).toHaveProperty('c', "c")",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect({\"val\": true}).toHaveProperty('val', true)",
+              "name": "{pass: true} expect({"val": true}).toHaveProperty('val', true)",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect({\"nodeName\": \"DIV\"}).toHaveProperty('nodeType', 1)",
+              "name": "{pass: true} expect({"nodeName": "DIV"}).toHaveProperty('nodeType', 1)",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect(\"\").toHaveProperty('length', 0)",
+              "name": "{pass: true} expect("").toHaveProperty('length', 0)",
               "result": "success",
               "time": 0,
             },
@@ -17040,95 +17058,95 @@ string\"",
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect({\"a\": {\"b\": {\"c\": {\"d\": 1}}}}).toHaveProperty('a.b.ttt.d', 1)",
+              "name": "{pass: false} expect({"a": {"b": {"c": {"d": 1}}}}).toHaveProperty('a.b.ttt.d', 1)",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect({\"a\": {\"b\": {\"c\": {\"d\": 1}}}}).toHaveProperty('a.b.c.d', 2)",
+              "name": "{pass: false} expect({"a": {"b": {"c": {"d": 1}}}}).toHaveProperty('a.b.c.d', 2)",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect({\"a.b.c.d\": 1}).toHaveProperty('a.b.c.d', 2)",
+              "name": "{pass: false} expect({"a.b.c.d": 1}).toHaveProperty('a.b.c.d', 2)",
               "result": "success",
               "time": 2,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect({\"a.b.c.d\": 1}).toHaveProperty('a.b.c.d', 2)",
+              "name": "{pass: false} expect({"a.b.c.d": 1}).toHaveProperty('a.b.c.d', 2)",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect({\"children\": [\"\\\"That cartoon\\\"\"], \"props\": null, \"type\": \"p\"}).toHaveProperty('children,0', \"\\\"That cat cartoon\\\"\")",
+              "name": "{pass: false} expect({"children": ["\\"That cartoon\\""], "props": null, "type": "p"}).toHaveProperty('children,0', "\\"That cat cartoon\\"")",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect({\"children\": [\"Roses are red.
+              "name": "{pass: false} expect({"children": ["Roses are red.
 Violets are blue.
-Testing with Jest is good for you.\"], \"props\": null, \"type\": \"pre\"}).toHaveProperty('children,0', \"Roses are red, violets are blue.
+Testing with Jest is good for you."], "props": null, "type": "pre"}).toHaveProperty('children,0', "Roses are red, violets are blue.
 Testing with Jest
-Is good for you.\")",
+Is good for you.")",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect({\"a\": {\"b\": {\"c\": {\"d\": 1}}}}).toHaveProperty('a,b,c,d', 2)",
+              "name": "{pass: false} expect({"a": {"b": {"c": {"d": 1}}}}).toHaveProperty('a,b,c,d', 2)",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect({\"a\": {\"b\": {\"c\": {}}}}).toHaveProperty('a.b.c.d', 1)",
+              "name": "{pass: false} expect({"a": {"b": {"c": {}}}}).toHaveProperty('a.b.c.d', 1)",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect({\"a\": 1}).toHaveProperty('a.b.c.d', 5)",
+              "name": "{pass: false} expect({"a": 1}).toHaveProperty('a.b.c.d', 5)",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect({}).toHaveProperty('a', \"test\")",
+              "name": "{pass: false} expect({}).toHaveProperty('a', "test")",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect({\"a\": {\"b\": 3}}).toHaveProperty('a.b', undefined)",
+              "name": "{pass: false} expect({"a": {"b": 3}}).toHaveProperty('a.b', undefined)",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect(1).toHaveProperty('a.b.c', \"test\")",
+              "name": "{pass: false} expect(1).toHaveProperty('a.b.c', "test")",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect(\"abc\").toHaveProperty('a.b.c', {\"a\": 5})",
+              "name": "{pass: false} expect("abc").toHaveProperty('a.b.c', {"a": 5})",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect({\"a\": {\"b\": {\"c\": 5}}}).toHaveProperty('a.b', {\"c\": 4})",
+              "name": "{pass: false} expect({"a": {"b": {"c": 5}}}).toHaveProperty('a.b', {"c": 4})",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect({}).toHaveProperty('a', \"a\")",
+              "name": "{pass: false} expect({}).toHaveProperty('a', "a")",
               "result": "success",
               "time": 1,
             },
@@ -17140,49 +17158,49 @@ Is good for you.\")",
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect({\"a\": {\"b\": {\"c\": {\"d\": 1}}}}).toHaveProperty('a.b.c.d')",
+              "name": "{pass: true} expect({"a": {"b": {"c": {"d": 1}}}}).toHaveProperty('a.b.c.d')",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect({\"a\": {\"b\": {\"c\": {\"d\": 1}}}}).toHaveProperty('a,b,c,d')",
+              "name": "{pass: true} expect({"a": {"b": {"c": {"d": 1}}}}).toHaveProperty('a,b,c,d')",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect({\"a.b.c.d\": 1}).toHaveProperty('a.b.c.d')",
+              "name": "{pass: true} expect({"a.b.c.d": 1}).toHaveProperty('a.b.c.d')",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect({\"a\": {\"b\": [1, 2, 3]}}).toHaveProperty('a,b,1')",
+              "name": "{pass: true} expect({"a": {"b": [1, 2, 3]}}).toHaveProperty('a,b,1')",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect({\"a\": 0}).toHaveProperty('a')",
+              "name": "{pass: true} expect({"a": 0}).toHaveProperty('a')",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect({\"a\": {\"b\": undefined}}).toHaveProperty('a.b')",
+              "name": "{pass: true} expect({"a": {"b": undefined}}).toHaveProperty('a.b')",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect({\"a\": {\"b\": {\"c\": {}}}}).toHaveProperty('a.b.c.d')",
+              "name": "{pass: false} expect({"a": {"b": {"c": {}}}}).toHaveProperty('a.b.c.d')",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect({\"a\": 1}).toHaveProperty('a.b.c.d')",
+              "name": "{pass: false} expect({"a": 1}).toHaveProperty('a.b.c.d')",
               "result": "success",
               "time": 0,
             },
@@ -17200,7 +17218,7 @@ Is good for you.\")",
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect(\"abc\").toHaveProperty('a.b.c')",
+              "name": "{pass: false} expect("abc").toHaveProperty('a.b.c')",
               "result": "success",
               "time": 0,
             },
@@ -17218,7 +17236,7 @@ Is good for you.\")",
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect(\"\").toHaveProperty('key')",
+              "name": "{pass: false} expect("").toHaveProperty('key')",
               "result": "success",
               "time": 0,
             },
@@ -17230,7 +17248,7 @@ Is good for you.\")",
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect({\"key\": 1}).toHaveProperty('not')",
+              "name": "{pass: false} expect({"key": 1}).toHaveProperty('not')",
               "result": "success",
               "time": 0,
             },
@@ -17248,19 +17266,19 @@ Is good for you.\")",
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{error} expect({\"a\": {\"b\": {}}}).toHaveProperty('undefined')",
+              "name": "{error} expect({"a": {"b": {}}}).toHaveProperty('undefined')",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{error} expect({\"a\": {\"b\": {}}}).toHaveProperty('null')",
+              "name": "{error} expect({"a": {"b": {}}}).toHaveProperty('null')",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{error} expect({\"a\": {\"b\": {}}}).toHaveProperty('1')",
+              "name": "{error} expect({"a": {"b": {}}}).toHaveProperty('1')",
               "result": "success",
               "time": 0,
             },
@@ -17277,31 +17295,31 @@ Is good for you.\")",
           "tests": [
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect({\"a\": \"hello\", \"ref\": [Circular]}).toMatchObject({})",
+              "name": "{pass: true} expect({"a": "hello", "ref": [Circular]}).toMatchObject({})",
               "result": "success",
               "time": 3,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect({\"a\": \"hello\", \"ref\": [Circular]}).toMatchObject({\"a\": \"hello\", \"ref\": [Circular]})",
+              "name": "{pass: true} expect({"a": "hello", "ref": [Circular]}).toMatchObject({"a": "hello", "ref": [Circular]})",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect({}).toMatchObject({\"a\": \"hello\", \"ref\": [Circular]})",
+              "name": "{pass: false} expect({}).toMatchObject({"a": "hello", "ref": [Circular]})",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect({\"a\": \"hello\", \"ref\": [Circular]}).toMatchObject({\"a\": \"world\", \"ref\": [Circular]})",
+              "name": "{pass: false} expect({"a": "hello", "ref": [Circular]}).toMatchObject({"a": "world", "ref": [Circular]})",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect({\"ref\": \"not a ref\"}).toMatchObject({\"a\": \"hello\", \"ref\": [Circular]})",
+              "name": "{pass: false} expect({"ref": "not a ref"}).toMatchObject({"a": "hello", "ref": [Circular]})",
               "result": "success",
               "time": 1,
             },
@@ -17312,31 +17330,31 @@ Is good for you.\")",
           "tests": [
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect({\"a\": \"hello\", \"nestedObj\": {\"parentObj\": [Circular]}}).toMatchObject({})",
+              "name": "{pass: true} expect({"a": "hello", "nestedObj": {"parentObj": [Circular]}}).toMatchObject({})",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect({\"a\": \"hello\", \"nestedObj\": {\"parentObj\": [Circular]}}).toMatchObject({\"a\": \"hello\", \"nestedObj\": {\"parentObj\": [Circular]}})",
+              "name": "{pass: true} expect({"a": "hello", "nestedObj": {"parentObj": [Circular]}}).toMatchObject({"a": "hello", "nestedObj": {"parentObj": [Circular]}})",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect({}).toMatchObject({\"a\": \"hello\", \"nestedObj\": {\"parentObj\": [Circular]}})",
+              "name": "{pass: false} expect({}).toMatchObject({"a": "hello", "nestedObj": {"parentObj": [Circular]}})",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect({\"a\": \"world\", \"nestedObj\": {\"parentObj\": [Circular]}}).toMatchObject({\"a\": \"hello\", \"nestedObj\": {\"parentObj\": [Circular]}})",
+              "name": "{pass: false} expect({"a": "world", "nestedObj": {"parentObj": [Circular]}}).toMatchObject({"a": "hello", "nestedObj": {"parentObj": [Circular]}})",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect({\"nestedObj\": {\"parentObj\": \"not the parent ref\"}}).toMatchObject({\"a\": \"hello\", \"nestedObj\": {\"parentObj\": [Circular]}})",
+              "name": "{pass: false} expect({"nestedObj": {"parentObj": "not the parent ref"}}).toMatchObject({"a": "hello", "nestedObj": {"parentObj": [Circular]}})",
               "result": "success",
               "time": 1,
             },
@@ -17347,49 +17365,49 @@ Is good for you.\")",
           "tests": [
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect({\"a\": \"b\", \"c\": \"d\"}).toMatchObject({\"a\": \"b\"})",
+              "name": "{pass: true} expect({"a": "b", "c": "d"}).toMatchObject({"a": "b"})",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect({\"a\": \"b\", \"c\": \"d\"}).toMatchObject({\"a\": \"b\", \"c\": \"d\"})",
+              "name": "{pass: true} expect({"a": "b", "c": "d"}).toMatchObject({"a": "b", "c": "d"})",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect({\"a\": \"b\", \"t\": {\"x\": {\"r\": \"r\"}, \"z\": \"z\"}}).toMatchObject({\"a\": \"b\", \"t\": {\"z\": \"z\"}})",
+              "name": "{pass: true} expect({"a": "b", "t": {"x": {"r": "r"}, "z": "z"}}).toMatchObject({"a": "b", "t": {"z": "z"}})",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect({\"a\": \"b\", \"t\": {\"x\": {\"r\": \"r\"}, \"z\": \"z\"}}).toMatchObject({\"t\": {\"x\": {\"r\": \"r\"}}})",
+              "name": "{pass: true} expect({"a": "b", "t": {"x": {"r": "r"}, "z": "z"}}).toMatchObject({"t": {"x": {"r": "r"}}})",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect({\"a\": [3, 4, 5], \"b\": \"b\"}).toMatchObject({\"a\": [3, 4, 5]})",
+              "name": "{pass: true} expect({"a": [3, 4, 5], "b": "b"}).toMatchObject({"a": [3, 4, 5]})",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect({\"a\": [3, 4, 5, \"v\"], \"b\": \"b\"}).toMatchObject({\"a\": [3, 4, 5, \"v\"]})",
+              "name": "{pass: true} expect({"a": [3, 4, 5, "v"], "b": "b"}).toMatchObject({"a": [3, 4, 5, "v"]})",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect({\"a\": 1, \"c\": 2}).toMatchObject({\"a\": Any<Number>})",
+              "name": "{pass: true} expect({"a": 1, "c": 2}).toMatchObject({"a": Any<Number>})",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect({\"a\": {\"x\": \"x\", \"y\": \"y\"}}).toMatchObject({\"a\": {\"x\": Any<String>}})",
+              "name": "{pass: true} expect({"a": {"x": "x", "y": "y"}}).toMatchObject({"a": {"x": Any<String>}})",
               "result": "success",
               "time": 0,
             },
@@ -17413,25 +17431,25 @@ Is good for you.\")",
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect({\"a\": 2015-11-30T00:00:00.000Z, \"b\": \"b\"}).toMatchObject({\"a\": 2015-11-30T00:00:00.000Z})",
+              "name": "{pass: true} expect({"a": 2015-11-30T00:00:00.000Z, "b": "b"}).toMatchObject({"a": 2015-11-30T00:00:00.000Z})",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect({\"a\": null, \"b\": \"b\"}).toMatchObject({\"a\": null})",
+              "name": "{pass: true} expect({"a": null, "b": "b"}).toMatchObject({"a": null})",
               "result": "success",
               "time": 2,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect({\"a\": undefined, \"b\": \"b\"}).toMatchObject({\"a\": undefined})",
+              "name": "{pass: true} expect({"a": undefined, "b": "b"}).toMatchObject({"a": undefined})",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect({\"a\": [{\"a\": \"a\", \"b\": \"b\"}]}).toMatchObject({\"a\": [{\"a\": \"a\"}]})",
+              "name": "{pass: true} expect({"a": [{"a": "a", "b": "b"}]}).toMatchObject({"a": [{"a": "a"}]})",
               "result": "success",
               "time": 1,
             },
@@ -17443,7 +17461,7 @@ Is good for you.\")",
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect({\"a\": undefined}).toMatchObject({\"a\": undefined})",
+              "name": "{pass: true} expect({"a": undefined}).toMatchObject({"a": undefined})",
               "result": "success",
               "time": 1,
             },
@@ -17461,109 +17479,109 @@ Is good for you.\")",
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect([Error: bar]).toMatchObject({\"message\": \"bar\"})",
+              "name": "{pass: true} expect([Error: bar]).toMatchObject({"message": "bar"})",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect({}).toMatchObject({\"a\": undefined, \"b\": \"b\"})",
+              "name": "{pass: true} expect({}).toMatchObject({"a": undefined, "b": "b"})",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect({\"a\": \"b\"}).toMatchObject({\"a\": \"b\"})",
+              "name": "{pass: true} expect({"a": "b"}).toMatchObject({"a": "b"})",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect({\"a\": \"b\", \"c\": \"d\", Symbol(jest): \"jest\"}).toMatchObject({\"a\": \"b\", Symbol(jest): \"jest\"})",
+              "name": "{pass: true} expect({"a": "b", "c": "d", Symbol(jest): "jest"}).toMatchObject({"a": "b", Symbol(jest): "jest"})",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect({\"a\": \"b\", \"c\": \"d\", Symbol(jest): \"jest\"}).toMatchObject({\"a\": \"b\", \"c\": \"d\", Symbol(jest): \"jest\"})",
+              "name": "{pass: true} expect({"a": "b", "c": "d", Symbol(jest): "jest"}).toMatchObject({"a": "b", "c": "d", Symbol(jest): "jest"})",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect({}).toMatchObject({\"a\": undefined, \"b\": \"b\", \"c\": \"c\"})",
+              "name": "{pass: true} expect({}).toMatchObject({"a": undefined, "b": "b", "c": "c"})",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect({}).toMatchObject({\"d\": 4})",
+              "name": "{pass: true} expect({}).toMatchObject({"d": 4})",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: true} expect({\"a\": \"b\", \"toString\": [Function toString]}).toMatchObject({\"toString\": Any<Function>})",
+              "name": "{pass: true} expect({"a": "b", "toString": [Function toString]}).toMatchObject({"toString": Any<Function>})",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect({\"a\": \"b\", \"c\": \"d\"}).toMatchObject({\"e\": \"b\"})",
+              "name": "{pass: false} expect({"a": "b", "c": "d"}).toMatchObject({"e": "b"})",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect({\"a\": \"b\", \"c\": \"d\"}).toMatchObject({\"a\": \"b!\", \"c\": \"d\"})",
+              "name": "{pass: false} expect({"a": "b", "c": "d"}).toMatchObject({"a": "b!", "c": "d"})",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect({\"a\": \"a\", \"c\": \"d\"}).toMatchObject({\"a\": Any<Number>})",
+              "name": "{pass: false} expect({"a": "a", "c": "d"}).toMatchObject({"a": Any<Number>})",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect({\"a\": \"b\", \"t\": {\"x\": {\"r\": \"r\"}, \"z\": \"z\"}}).toMatchObject({\"a\": \"b\", \"t\": {\"z\": [3]}})",
+              "name": "{pass: false} expect({"a": "b", "t": {"x": {"r": "r"}, "z": "z"}}).toMatchObject({"a": "b", "t": {"z": [3]}})",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect({\"a\": \"b\", \"t\": {\"x\": {\"r\": \"r\"}, \"z\": \"z\"}}).toMatchObject({\"t\": {\"l\": {\"r\": \"r\"}}})",
+              "name": "{pass: false} expect({"a": "b", "t": {"x": {"r": "r"}, "z": "z"}}).toMatchObject({"t": {"l": {"r": "r"}}})",
               "result": "success",
               "time": 2,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect({\"a\": [3, 4, 5], \"b\": \"b\"}).toMatchObject({\"a\": [3, 4, 5, 6]})",
+              "name": "{pass: false} expect({"a": [3, 4, 5], "b": "b"}).toMatchObject({"a": [3, 4, 5, 6]})",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect({\"a\": [3, 4, 5], \"b\": \"b\"}).toMatchObject({\"a\": [3, 4]})",
+              "name": "{pass: false} expect({"a": [3, 4, 5], "b": "b"}).toMatchObject({"a": [3, 4]})",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect({\"a\": [3, 4, \"v\"], \"b\": \"b\"}).toMatchObject({\"a\": [\"v\"]})",
+              "name": "{pass: false} expect({"a": [3, 4, "v"], "b": "b"}).toMatchObject({"a": ["v"]})",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect({\"a\": [3, 4, 5], \"b\": \"b\"}).toMatchObject({\"a\": {\"b\": 4}})",
+              "name": "{pass: false} expect({"a": [3, 4, 5], "b": "b"}).toMatchObject({"a": {"b": 4}})",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect({\"a\": [3, 4, 5], \"b\": \"b\"}).toMatchObject({\"a\": {\"b\": Any<String>}})",
+              "name": "{pass: false} expect({"a": [3, 4, 5], "b": "b"}).toMatchObject({"a": {"b": Any<String>}})",
               "result": "success",
               "time": 1,
             },
@@ -17593,43 +17611,43 @@ Is good for you.\")",
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect({\"a\": 2015-11-30T00:00:00.000Z, \"b\": \"b\"}).toMatchObject({\"a\": 2015-10-10T00:00:00.000Z})",
+              "name": "{pass: false} expect({"a": 2015-11-30T00:00:00.000Z, "b": "b"}).toMatchObject({"a": 2015-10-10T00:00:00.000Z})",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect({\"a\": null, \"b\": \"b\"}).toMatchObject({\"a\": \"4\"})",
+              "name": "{pass: false} expect({"a": null, "b": "b"}).toMatchObject({"a": "4"})",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect({\"a\": null, \"b\": \"b\"}).toMatchObject({\"a\": undefined})",
+              "name": "{pass: false} expect({"a": null, "b": "b"}).toMatchObject({"a": undefined})",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect({\"a\": undefined}).toMatchObject({\"a\": null})",
+              "name": "{pass: false} expect({"a": undefined}).toMatchObject({"a": null})",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect({\"a\": [{\"a\": \"a\", \"b\": \"b\"}]}).toMatchObject({\"a\": [{\"a\": \"c\"}]})",
+              "name": "{pass: false} expect({"a": [{"a": "a", "b": "b"}]}).toMatchObject({"a": [{"a": "c"}]})",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect({\"a\": 1, \"b\": 1, \"c\": 1, \"d\": {\"e\": {\"f\": 555}}}).toMatchObject({\"d\": {\"e\": {\"f\": 222}}})",
+              "name": "{pass: false} expect({"a": 1, "b": 1, "c": 1, "d": {"e": {"f": 555}}}).toMatchObject({"d": {"e": {"f": 222}}})",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect({}).toMatchObject({\"a\": undefined})",
+              "name": "{pass: false} expect({}).toMatchObject({"a": undefined})",
               "result": "success",
               "time": 0,
             },
@@ -17653,19 +17671,19 @@ Is good for you.\")",
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect({\"a\": \"b\"}).toMatchObject({\"c\": \"d\"})",
+              "name": "{pass: false} expect({"a": "b"}).toMatchObject({"c": "d"})",
               "result": "success",
               "time": 4,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect({\"a\": \"b\", \"c\": \"d\", Symbol(jest): \"jest\"}).toMatchObject({\"a\": \"c\", Symbol(jest): Any<String>})",
+              "name": "{pass: false} expect({"a": "b", "c": "d", Symbol(jest): "jest"}).toMatchObject({"a": "c", Symbol(jest): Any<String>})",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "{pass: false} expect({\"a\": \"b\"}).toMatchObject({\"toString\": Any<Function>})",
+              "name": "{pass: false} expect({"a": "b"}).toMatchObject({"toString": Any<Function>})",
               "result": "success",
               "time": 0,
             },
@@ -17683,7 +17701,7 @@ Is good for you.\")",
             },
             TestCaseResult {
               "error": undefined,
-              "name": "throws expect(\"44\").toMatchObject({})",
+              "name": "throws expect("44").toMatchObject({})",
               "result": "success",
               "time": 0,
             },
@@ -17713,7 +17731,7 @@ Is good for you.\")",
             },
             TestCaseResult {
               "error": undefined,
-              "name": "throws expect({}).toMatchObject(\"some string\")",
+              "name": "throws expect({}).toMatchObject("some string")",
               "result": "success",
               "time": 0,
             },
@@ -18155,43 +18173,43 @@ Is good for you.\")",
             },
             TestCaseResult {
               "error": undefined,
-              "name": "Pressing \"o\" runs test in \"only changed files\" mode",
+              "name": "Pressing "o" runs test in "only changed files" mode",
               "result": "success",
               "time": 69,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "Pressing \"a\" runs test in \"watch all\" mode",
+              "name": "Pressing "a" runs test in "watch all" mode",
               "result": "success",
               "time": 62,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "Pressing \"ENTER\" reruns the tests",
+              "name": "Pressing "ENTER" reruns the tests",
               "result": "success",
               "time": 108,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "Pressing \"t\" reruns the tests in \"test name pattern\" mode",
+              "name": "Pressing "t" reruns the tests in "test name pattern" mode",
               "result": "success",
               "time": 93,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "Pressing \"p\" reruns the tests in \"filename pattern\" mode",
+              "name": "Pressing "p" reruns the tests in "filename pattern" mode",
               "result": "success",
               "time": 80,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "Can combine \"p\" and \"t\" filters",
+              "name": "Can combine "p" and "t" filters",
               "result": "success",
               "time": 68,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "Pressing \"u\" reruns the tests in \"update snapshot\" mode",
+              "name": "Pressing "u" reruns the tests in "update snapshot" mode",
               "result": "success",
               "time": 67,
             },
@@ -18203,7 +18221,7 @@ Is good for you.\")",
             },
             TestCaseResult {
               "error": undefined,
-              "name": "shows the correct usage for the f key in \"only failed tests\" mode",
+              "name": "shows the correct usage for the f key in "only failed tests" mode",
               "result": "success",
               "time": 62,
             },
@@ -18427,7 +18445,7 @@ Is good for you.\")",
             },
             TestCaseResult {
               "error": undefined,
-              "name": "throws on duplicate module ids if \"throwOnModuleCollision\" is set to true",
+              "name": "throws on duplicate module ids if "throwOnModuleCollision" is set to true",
               "result": "success",
               "time": 5,
             },
@@ -19366,31 +19384,31 @@ Is good for you.\")",
             },
             TestCaseResult {
               "error": undefined,
-              "name": "allows using \"js\" file for --config option",
+              "name": "allows using "js" file for --config option",
               "result": "success",
               "time": 10,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "allows using \"ts\" file for --config option",
+              "name": "allows using "ts" file for --config option",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "allows using \"mjs\" file for --config option",
+              "name": "allows using "mjs" file for --config option",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "allows using \"cjs\" file for --config option",
+              "name": "allows using "cjs" file for --config option",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "allows using \"json\" file for --config option",
+              "name": "allows using "json" file for --config option",
               "result": "success",
               "time": 0,
             },
@@ -19658,7 +19676,7 @@ Is good for you.\")",
           "tests": [
             TestCaseResult {
               "error": undefined,
-              "name": "'\"a\"' and '\"a\"'",
+              "name": "'"a"' and '"a"'",
               "result": "success",
               "time": 2,
             },
@@ -19724,13 +19742,13 @@ Is good for you.\")",
             },
             TestCaseResult {
               "error": undefined,
-              "name": "'{\"a\":1}' and '{\"a\":1}'",
+              "name": "'{"a":1}' and '{"a":1}'",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "'{\"a\":{\"b\":5}}' and '{\"a\":{\"b\":5}}'",
+              "name": "'{"a":{"b":5}}' and '{"a":{"b":5}}'",
               "result": "success",
               "time": 0,
             },
@@ -20456,7 +20474,7 @@ Is good for you.\")",
           "tests": [
             TestCaseResult {
               "error": undefined,
-              "name": "Pressing \"T\" enters pattern mode",
+              "name": "Pressing "T" enters pattern mode",
               "result": "success",
               "time": 8,
             },
@@ -22133,7 +22151,7 @@ Is good for you.\")",
             },
             TestCaseResult {
               "error": undefined,
-              "name": "handles a bad revision for \"changedSince\", for git",
+              "name": "handles a bad revision for "changedSince", for git",
               "result": "success",
               "time": 878,
             },
@@ -22165,7 +22183,7 @@ Is good for you.\")",
             },
             TestCaseResult {
               "error": undefined,
-              "name": "handles a bad revision for \"changedSince\", for hg",
+              "name": "handles a bad revision for "changedSince", for hg",
               "result": "success",
               "time": 949,
             },
@@ -22224,7 +22242,7 @@ Is good for you.\")",
             },
             TestCaseResult {
               "error": undefined,
-              "name": "\"abc\"",
+              "name": ""abc"",
               "result": "success",
               "time": 0,
             },
@@ -22254,7 +22272,7 @@ Is good for you.\")",
             },
             TestCaseResult {
               "error": undefined,
-              "name": "/ab\\\.c/gi",
+              "name": "/ab\\.c/gi",
               "result": "success",
               "time": 0,
             },
@@ -22516,13 +22534,13 @@ Is good for you.\")",
           "tests": [
             TestCaseResult {
               "error": undefined,
-              "name": "Pressing \"P\" enters pattern mode",
+              "name": "Pressing "P" enters pattern mode",
               "result": "success",
               "time": 7,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "Pressing \"c\" clears the filters",
+              "name": "Pressing "c" clears the filters",
               "result": "success",
               "time": 1,
             },
@@ -23490,7 +23508,7 @@ Is good for you.\")",
             },
             TestCaseResult {
               "error": undefined,
-              "name": "injects \"extra globals\"",
+              "name": "injects "extra globals"",
               "result": "success",
               "time": 43,
             },
@@ -23985,7 +24003,7 @@ Is good for you.\")",
     TestSuiteResult {
       "groups": [
         TestGroupResult {
-          "name": "init project with package.json and no jest config all questions answered with answer: \"No\"",
+          "name": "init project with package.json and no jest config all questions answered with answer: "No"",
           "tests": [
             TestCaseResult {
               "error": undefined,
@@ -24002,7 +24020,7 @@ Is good for you.\")",
           ],
         },
         TestGroupResult {
-          "name": "init project with package.json and no jest config some questions answered with answer: \"Yes\"",
+          "name": "init project with package.json and no jest config some questions answered with answer: "Yes"",
           "tests": [
             TestCaseResult {
               "error": undefined,
@@ -24018,25 +24036,25 @@ Is good for you.\")",
             },
             TestCaseResult {
               "error": undefined,
-              "name": "should create configuration for {coverageProvider: \"babel\"}",
+              "name": "should create configuration for {coverageProvider: "babel"}",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "should create configuration for {coverageProvider: \"v8\"}",
+              "name": "should create configuration for {coverageProvider: "v8"}",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "should create configuration for {environment: \"jsdom\"}",
+              "name": "should create configuration for {environment: "jsdom"}",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "should create configuration for {environment: \"node\"}",
+              "name": "should create configuration for {environment: "node"}",
               "result": "success",
               "time": 1,
             },
@@ -24064,13 +24082,13 @@ Is good for you.\")",
           "tests": [
             TestCaseResult {
               "error": undefined,
-              "name": "user answered with \"Yes\"",
+              "name": "user answered with "Yes"",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "user answered with \"No\"",
+              "name": "user answered with "No"",
               "result": "success",
               "time": 0,
             },
@@ -24081,13 +24099,13 @@ Is good for you.\")",
           "tests": [
             TestCaseResult {
               "error": undefined,
-              "name": "user answered with \"Yes\"",
+              "name": "user answered with "Yes"",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "user answered with \"No\"",
+              "name": "user answered with "No"",
               "result": "success",
               "time": 0,
             },
@@ -24098,13 +24116,13 @@ Is good for you.\")",
           "tests": [
             TestCaseResult {
               "error": undefined,
-              "name": "user answered with \"Yes\"",
+              "name": "user answered with "Yes"",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "user answered with \"No\"",
+              "name": "user answered with "No"",
               "result": "success",
               "time": 1,
             },
@@ -24115,13 +24133,13 @@ Is good for you.\")",
           "tests": [
             TestCaseResult {
               "error": undefined,
-              "name": "user answered with \"Yes\"",
+              "name": "user answered with "Yes"",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "user answered with \"No\"",
+              "name": "user answered with "No"",
               "result": "success",
               "time": 1,
             },
@@ -24132,13 +24150,13 @@ Is good for you.\")",
           "tests": [
             TestCaseResult {
               "error": undefined,
-              "name": "user answered with \"Yes\"",
+              "name": "user answered with "Yes"",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "user answered with \"No\"",
+              "name": "user answered with "No"",
               "result": "success",
               "time": 0,
             },
@@ -24149,13 +24167,13 @@ Is good for you.\")",
           "tests": [
             TestCaseResult {
               "error": undefined,
-              "name": "user answered with \"Yes\"",
+              "name": "user answered with "Yes"",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "user answered with \"No\"",
+              "name": "user answered with "No"",
               "result": "success",
               "time": 1,
             },
@@ -24173,11 +24191,11 @@ Is good for you.\")",
           ],
         },
         TestGroupResult {
-          "name": "init already has \"jest\" in packageJson.scripts.test",
+          "name": "init already has "jest" in packageJson.scripts.test",
           "tests": [
             TestCaseResult {
               "error": undefined,
-              "name": "should not ask \"test script question\"",
+              "name": "should not ask "test script question"",
               "result": "success",
               "time": 0,
             },
@@ -24317,7 +24335,7 @@ Is good for you.\")",
             },
             TestCaseResult {
               "error": undefined,
-              "name": "fakes require(\"process\") so it is equal to \"global.process\"",
+              "name": "fakes require("process") so it is equal to "global.process"",
               "result": "success",
               "time": 0,
             },
@@ -24890,19 +24908,19 @@ Is good for you.\")",
           "tests": [
             TestCaseResult {
               "error": undefined,
-              "name": "expect(getObjectSubset({\"a\": \"b\", \"c\": \"d\"}, {\"a\": \"d\"})).toEqual({\"a\": \"b\"})",
+              "name": "expect(getObjectSubset({"a": "b", "c": "d"}, {"a": "d"})).toEqual({"a": "b"})",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "expect(getObjectSubset({\"a\": [1, 2], \"b\": \"b\"}, {\"a\": [3, 4]})).toEqual({\"a\": [1, 2]})",
+              "name": "expect(getObjectSubset({"a": [1, 2], "b": "b"}, {"a": [3, 4]})).toEqual({"a": [1, 2]})",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "expect(getObjectSubset([{\"a\": \"b\", \"c\": \"d\"}], [{\"a\": \"z\"}])).toEqual([{\"a\": \"b\"}])",
+              "name": "expect(getObjectSubset([{"a": "b", "c": "d"}], [{"a": "z"}])).toEqual([{"a": "b"}])",
               "result": "success",
               "time": 1,
             },
@@ -24914,7 +24932,7 @@ Is good for you.\")",
             },
             TestCaseResult {
               "error": undefined,
-              "name": "expect(getObjectSubset({\"a\": [1]}, {\"a\": [1, 2]})).toEqual({\"a\": [1]})",
+              "name": "expect(getObjectSubset({"a": [1]}, {"a": [1, 2]})).toEqual({"a": [1]})",
               "result": "success",
               "time": 0,
             },
@@ -25353,7 +25371,7 @@ Is good for you.\")",
             },
             TestCaseResult {
               "error": undefined,
-              "name": "returns false when given non primitive value of: \"2021-01-24T19:22:19.272Z\"",
+              "name": "returns false when given non primitive value of: "2021-01-24T19:22:19.272Z"",
               "result": "success",
               "time": 0,
             },
@@ -25406,7 +25424,7 @@ Is good for you.\")",
             },
             TestCaseResult {
               "error": undefined,
-              "name": "uses node fs APIs if \"forceNodeFilesystemAPI\" is set to true, regardless of platform",
+              "name": "uses node fs APIs if "forceNodeFilesystemAPI" is set to true, regardless of platform",
               "result": "success",
               "time": 6,
             },
@@ -25452,7 +25470,7 @@ Is good for you.\")",
           "tests": [
             TestCaseResult {
               "error": undefined,
-              "name": "run for \"onlyChanged\" and \"changedSince\"",
+              "name": "run for "onlyChanged" and "changedSince"",
               "result": "success",
               "time": 1464,
             },
@@ -25497,10 +25515,10 @@ Is good for you.\")",
                 "details": "Error: expect(received).toMatch(expected)
 
 Expected pattern: /PASS __tests__(\\/|\\\\)file2.test.js/
-Received string:  \"·
+Received string:  "·
   ● Test suite failed to run·
     abort: empty revision range
-\"
+"
     at Object.toMatch (/home/dorny/dorny/jest/e2e/__tests__/onlyChanged.test.ts:360:18)
     at Promise.then.completed (/home/dorny/dorny/jest/packages/jest-circus/build/utils.js:307:28)
     at new Promise (<anonymous>)
@@ -26620,7 +26638,7 @@ Received string:  \"·
             },
             TestCaseResult {
               "error": undefined,
-              "name": "\"1337\"",
+              "name": ""1337"",
               "result": "success",
               "time": 0,
             },
@@ -26909,7 +26927,7 @@ Received string:  \"·
             },
             TestCaseResult {
               "error": undefined,
-              "name": "\"No tests found\" message for projects",
+              "name": ""No tests found" message for projects",
               "result": "success",
               "time": 977,
             },
@@ -28357,7 +28375,7 @@ Received string:  \"·
           "tests": [
             TestCaseResult {
               "error": undefined,
-              "name": "useRealTimers cancels \"timers\": \"fake\" for whole test file",
+              "name": "useRealTimers cancels "timers": "fake" for whole test file",
               "result": "success",
               "time": 986,
             },
@@ -30599,13 +30617,13 @@ Received string:  \"·
           "tests": [
             TestCaseResult {
               "error": undefined,
-              "name": "can press \"p\" to filter by file name",
+              "name": "can press "p" to filter by file name",
               "result": "success",
               "time": 1471,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "can press \"t\" to filter by test name",
+              "name": "can press "t" to filter by test name",
               "result": "success",
               "time": 1775,
             },
@@ -30886,7 +30904,7 @@ Received string:  \"·
           "tests": [
             TestCaseResult {
               "error": undefined,
-              "name": "runs only \"it.only\" tests",
+              "name": "runs only "it.only" tests",
               "result": "success",
               "time": 834,
             },
@@ -30903,7 +30921,7 @@ Received string:  \"·
           "tests": [
             TestCaseResult {
               "error": undefined,
-              "name": "can press \"f\" to run only failed tests",
+              "name": "can press "f" to run only failed tests",
               "result": "success",
               "time": 1341,
             },
@@ -31119,7 +31137,7 @@ Received string:  \"·
           "tests": [
             TestCaseResult {
               "error": undefined,
-              "name": "can press \"u\" to update snapshots",
+              "name": "can press "u" to update snapshots",
               "result": "success",
               "time": 993,
             },

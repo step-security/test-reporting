@@ -25,7 +25,7 @@ TestRunResult {
                 "details": "Error: Some error
     at Object.throwError (lib/main.js:2:9)
     at Context.<anonymous> (test/main.test.js:15:11)
-    at processImmediate (node:internal/timers:464:21)",
+    at process.processImmediate (node:internal/timers:505:21)",
                 "line": 2,
                 "message": "Some error",
                 "path": "lib/main.js",
@@ -41,7 +41,7 @@ TestRunResult {
 false !== true
 
     at Context.<anonymous> (test/main.test.js:11:14)
-    at processImmediate (node:internal/timers:464:21)",
+    at process.processImmediate (node:internal/timers:505:21)",
                 "line": 11,
                 "message": "Expected values to be strictly equal:
 
@@ -51,7 +51,7 @@ false !== true
               },
               "name": "Failing test",
               "result": "failed",
-              "time": 3,
+              "time": 0,
             },
           ],
         },
@@ -62,7 +62,7 @@ false !== true
               "error": {
                 "details": "Error: Some error
     at Context.<anonymous> (test/main.test.js:22:11)
-    at processImmediate (node:internal/timers:464:21)",
+    at process.processImmediate (node:internal/timers:505:21)",
                 "line": 22,
                 "message": "Some error",
                 "path": "test/main.test.js",
@@ -90,16 +90,16 @@ false !== true
             },
             TestCaseResult {
               "error": {
-                "details": "Error: Timeout of 1ms exceeded. For async tests and hooks, ensure \"done()\" is called; if returning a Promise, ensure it resolves. (/Users/work/Source/Repos/thirdparty/phoenix-test-reporter/reports/mocha/test/second.test.js)
-    at listOnTimeout (node:internal/timers:557:17)
-    at processTimers (node:internal/timers:500:7)",
+                "details": "Error: Timeout of 1ms exceeded. For async tests and hooks, ensure "done()" is called; if returning a Promise, ensure it resolves. (/Users/noobie_doobie_doo/Desktop/step/maintained-actions/test-reporting/reports/mocha/test/second.test.js)
+    at listOnTimeout (node:internal/timers:608:17)
+    at process.processTimers (node:internal/timers:543:7)",
                 "line": undefined,
-                "message": "Timeout of 1ms exceeded. For async tests and hooks, ensure \"done()\" is called; if returning a Promise, ensure it resolves. (/Users/work/Source/Repos/thirdparty/phoenix-test-reporter/reports/mocha/test/second.test.js)",
+                "message": "Timeout of 1ms exceeded. For async tests and hooks, ensure "done()" is called; if returning a Promise, ensure it resolves. (/Users/noobie_doobie_doo/Desktop/step/maintained-actions/test-reporting/reports/mocha/test/second.test.js)",
                 "path": undefined,
               },
               "name": "Timeout test",
               "result": "failed",
-              "time": 2,
+              "time": 1,
             },
           ],
         },
@@ -108,7 +108,7 @@ false !== true
       "totalTime": undefined,
     },
   ],
-  "totalTime": 11,
+  "totalTime": 2,
 }
 `;
 
@@ -184,7 +184,7 @@ TestRunResult {
           "tests": [
             TestCaseResult {
               "error": undefined,
-              "name": "should delegate to the underlying pool w/ \"force\" behavior",
+              "name": "should delegate to the underlying pool w/ "force" behavior",
               "result": "success",
               "time": 1,
             },
@@ -195,7 +195,7 @@ TestRunResult {
           "tests": [
             TestCaseResult {
               "error": undefined,
-              "name": "should delegate to the underlying pool w/o \"force\" behavior",
+              "name": "should delegate to the underlying pool w/o "force" behavior",
               "result": "success",
               "time": 1,
             },
@@ -297,7 +297,7 @@ TestRunResult {
           ],
         },
         TestGroupResult {
-          "name": "cli/config loadConfig() when parsing succeeds when supplied a filepath with \".cjs\" extension",
+          "name": "cli/config loadConfig() when parsing succeeds when supplied a filepath with ".cjs" extension",
           "tests": [
             TestCaseResult {
               "error": undefined,
@@ -308,7 +308,7 @@ TestRunResult {
           ],
         },
         TestGroupResult {
-          "name": "cli/config loadConfig() when parsing succeeds when supplied a filepath with \".js\" extension",
+          "name": "cli/config loadConfig() when parsing succeeds when supplied a filepath with ".js" extension",
           "tests": [
             TestCaseResult {
               "error": undefined,
@@ -319,7 +319,7 @@ TestRunResult {
           ],
         },
         TestGroupResult {
-          "name": "cli/config loadConfig() when parsing succeeds when supplied a filepath with \".json\" extension",
+          "name": "cli/config loadConfig() when parsing succeeds when supplied a filepath with ".json" extension",
           "tests": [
             TestCaseResult {
               "error": undefined,
@@ -330,7 +330,7 @@ TestRunResult {
           ],
         },
         TestGroupResult {
-          "name": "cli/config loadConfig() when parsing succeeds when supplied a filepath with \".jsonc\" extension",
+          "name": "cli/config loadConfig() when parsing succeeds when supplied a filepath with ".jsonc" extension",
           "tests": [
             TestCaseResult {
               "error": undefined,
@@ -341,7 +341,7 @@ TestRunResult {
           ],
         },
         TestGroupResult {
-          "name": "cli/config loadConfig() when parsing succeeds when supplied a filepath with \".yaml\" extension",
+          "name": "cli/config loadConfig() when parsing succeeds when supplied a filepath with ".yaml" extension",
           "tests": [
             TestCaseResult {
               "error": undefined,
@@ -352,7 +352,7 @@ TestRunResult {
           ],
         },
         TestGroupResult {
-          "name": "cli/config loadConfig() when parsing succeeds when supplied a filepath with \".yml\" extension",
+          "name": "cli/config loadConfig() when parsing succeeds when supplied a filepath with ".yml" extension",
           "tests": [
             TestCaseResult {
               "error": undefined,
@@ -963,49 +963,49 @@ TestRunResult {
           "tests": [
             TestCaseResult {
               "error": undefined,
-              "name": "should return true for \"es-staging\"",
+              "name": "should return true for "es-staging"",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "should return true for \"gc-global\"",
+              "name": "should return true for "gc-global"",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "should return true for \"harmony\" itself",
+              "name": "should return true for "harmony" itself",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "should return true for \"use-strict\"",
+              "name": "should return true for "use-strict"",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "should return true for flags starting with \"--v8-\"",
+              "name": "should return true for flags starting with "--v8-"",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "should return true for flags starting with \"harmony-\" or \"harmony_\"",
+              "name": "should return true for flags starting with "harmony-" or "harmony_"",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "should return true for flags starting with \"preserve-symlinks\"",
+              "name": "should return true for flags starting with "preserve-symlinks"",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "should return true for flags starting with \"trace-\" or \"trace_\"",
+              "name": "should return true for flags starting with "trace-" or "trace_"",
               "result": "success",
               "time": 0,
             },
@@ -1046,7 +1046,7 @@ TestRunResult {
     TestSuiteResult {
       "groups": [
         TestGroupResult {
-          "name": "options loadOptions() \"extension\" handling when user does not supply \"extension\" option",
+          "name": "options loadOptions() "extension" handling when user does not supply "extension" option",
           "tests": [
             TestCaseResult {
               "error": undefined,
@@ -1057,7 +1057,7 @@ TestRunResult {
           ],
         },
         TestGroupResult {
-          "name": "options loadOptions() \"extension\" handling when user supplies \"extension\" option",
+          "name": "options loadOptions() "extension" handling when user supplies "extension" option",
           "tests": [
             TestCaseResult {
               "error": undefined,
@@ -1068,7 +1068,7 @@ TestRunResult {
           ],
         },
         TestGroupResult {
-          "name": "options loadOptions() \"ignore\" handling",
+          "name": "options loadOptions() "ignore" handling",
           "tests": [
             TestCaseResult {
               "error": undefined,
@@ -1079,7 +1079,7 @@ TestRunResult {
           ],
         },
         TestGroupResult {
-          "name": "options loadOptions() \"spec\" handling when user supplies \"spec\" in config and positional arguments",
+          "name": "options loadOptions() "spec" handling when user supplies "spec" in config and positional arguments",
           "tests": [
             TestCaseResult {
               "error": undefined,
@@ -1113,7 +1113,7 @@ TestRunResult {
           ],
         },
         TestGroupResult {
-          "name": "options loadOptions() when called with a one-and-done arg \"h\"",
+          "name": "options loadOptions() when called with a one-and-done arg "h"",
           "tests": [
             TestCaseResult {
               "error": undefined,
@@ -1124,7 +1124,7 @@ TestRunResult {
           ],
         },
         TestGroupResult {
-          "name": "options loadOptions() when called with a one-and-done arg \"help\"",
+          "name": "options loadOptions() when called with a one-and-done arg "help"",
           "tests": [
             TestCaseResult {
               "error": undefined,
@@ -1135,7 +1135,7 @@ TestRunResult {
           ],
         },
         TestGroupResult {
-          "name": "options loadOptions() when called with a one-and-done arg \"list-interfaces\"",
+          "name": "options loadOptions() when called with a one-and-done arg "list-interfaces"",
           "tests": [
             TestCaseResult {
               "error": undefined,
@@ -1146,7 +1146,7 @@ TestRunResult {
           ],
         },
         TestGroupResult {
-          "name": "options loadOptions() when called with a one-and-done arg \"list-reporters\"",
+          "name": "options loadOptions() when called with a one-and-done arg "list-reporters"",
           "tests": [
             TestCaseResult {
               "error": undefined,
@@ -1157,7 +1157,7 @@ TestRunResult {
           ],
         },
         TestGroupResult {
-          "name": "options loadOptions() when called with a one-and-done arg \"V\"",
+          "name": "options loadOptions() when called with a one-and-done arg "V"",
           "tests": [
             TestCaseResult {
               "error": undefined,
@@ -1168,7 +1168,7 @@ TestRunResult {
           ],
         },
         TestGroupResult {
-          "name": "options loadOptions() when called with a one-and-done arg \"version\"",
+          "name": "options loadOptions() when called with a one-and-done arg "version"",
           "tests": [
             TestCaseResult {
               "error": undefined,
@@ -1412,7 +1412,7 @@ TestRunResult {
           ],
         },
         TestGroupResult {
-          "name": "helpers validateLegacyPlugin() when used with \"reporter\" key",
+          "name": "helpers validateLegacyPlugin() when used with "reporter" key",
           "tests": [
             TestCaseResult {
               "error": undefined,
@@ -1429,7 +1429,7 @@ TestRunResult {
           ],
         },
         TestGroupResult {
-          "name": "helpers validateLegacyPlugin() when used with an \"interfaces\" key",
+          "name": "helpers validateLegacyPlugin() when used with an "interfaces" key",
           "tests": [
             TestCaseResult {
               "error": undefined,
@@ -1862,7 +1862,7 @@ TestRunResult {
           ],
         },
         TestGroupResult {
-          "name": "Mocha instance method reporter() when a reporter exists relative to the \"mocha\" module path",
+          "name": "Mocha instance method reporter() when a reporter exists relative to the "mocha" module path",
           "tests": [
             TestCaseResult {
               "error": undefined,
@@ -1873,11 +1873,11 @@ TestRunResult {
           ],
         },
         TestGroupResult {
-          "name": "Mocha instance method reporter() when a reporter exists relative to the \"mocha\" module path when the reporter throws upon load",
+          "name": "Mocha instance method reporter() when a reporter exists relative to the "mocha" module path when the reporter throws upon load",
           "tests": [
             TestCaseResult {
               "error": undefined,
-              "name": "should throw \"invalid reporter\" exception",
+              "name": "should throw "invalid reporter" exception",
               "result": "success",
               "time": 2,
             },
@@ -1905,7 +1905,7 @@ TestRunResult {
           "tests": [
             TestCaseResult {
               "error": undefined,
-              "name": "should throw \"invalid reporter\" exception",
+              "name": "should throw "invalid reporter" exception",
               "result": "success",
               "time": 2,
             },
@@ -1968,7 +1968,7 @@ TestRunResult {
           "tests": [
             TestCaseResult {
               "error": undefined,
-              "name": "should start in \"IDLE\" state",
+              "name": "should start in "IDLE" state",
               "result": "success",
               "time": 1,
             },
@@ -2318,7 +2318,7 @@ TestRunResult {
           "tests": [
             TestCaseResult {
               "error": undefined,
-              "name": "should throw \"invalid arg type\" error",
+              "name": "should throw "invalid arg type" error",
               "result": "success",
               "time": 1,
             },
@@ -2329,7 +2329,7 @@ TestRunResult {
           "tests": [
             TestCaseResult {
               "error": undefined,
-              "name": "should throw \"invalid arg value\" error",
+              "name": "should throw "invalid arg value" error",
               "result": "success",
               "time": 0,
             },
@@ -2468,7 +2468,7 @@ TestRunResult {
           "tests": [
             TestCaseResult {
               "error": undefined,
-              "name": "should throw \"invalid arg type\" error",
+              "name": "should throw "invalid arg type" error",
               "result": "success",
               "time": 0,
             },
@@ -2508,7 +2508,7 @@ TestRunResult {
           ],
         },
         TestGroupResult {
-          "name": "serializer SerializableEvent static method deserialize when passed value data contains a prop beginning with \"$$\"",
+          "name": "serializer SerializableEvent static method deserialize when passed value data contains a prop beginning with "$$"",
           "tests": [
             TestCaseResult {
               "error": undefined,
@@ -2524,7 +2524,7 @@ TestRunResult {
             },
             TestCaseResult {
               "error": undefined,
-              "name": "should remove the prop with the \"$$\" prefix",
+              "name": "should remove the prop with the "$$" prefix",
               "result": "success",
               "time": 0,
             },
@@ -2698,13 +2698,13 @@ TestRunResult {
           "tests": [
             TestCaseResult {
               "error": undefined,
-              "name": "should return \"asyncfunction\" if the parameter is an async function",
+              "name": "should return "asyncfunction" if the parameter is an async function",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "should return \"buffer\" if the parameter is a Buffer",
+              "name": "should return "buffer" if the parameter is a Buffer",
               "result": "success",
               "time": 0,
             },
@@ -2726,13 +2726,13 @@ TestRunResult {
           "tests": [
             TestCaseResult {
               "error": undefined,
-              "name": "should return \"error\" if the parameter is an Error",
+              "name": "should return "error" if the parameter is an Error",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "should return \"function\" if the parameter is an async function",
+              "name": "should return "function" if the parameter is an async function",
               "result": "success",
               "time": 0,
             },
@@ -2767,7 +2767,7 @@ TestRunResult {
           ],
         },
         TestGroupResult {
-          "name": "worker when run as worker process function run() when called with empty \"filepath\" argument",
+          "name": "worker when run as worker process function run() when called with empty "filepath" argument",
           "tests": [
             TestCaseResult {
               "error": undefined,
@@ -2811,7 +2811,7 @@ TestRunResult {
           ],
         },
         TestGroupResult {
-          "name": "worker when run as worker process function run() when the file at \"filepath\" argument is unloadable",
+          "name": "worker when run as worker process function run() when the file at "filepath" argument is unloadable",
           "tests": [
             TestCaseResult {
               "error": undefined,
@@ -2822,7 +2822,7 @@ TestRunResult {
           ],
         },
         TestGroupResult {
-          "name": "worker when run as worker process function run() when the file at \"filepath\" is loadable",
+          "name": "worker when run as worker process function run() when the file at "filepath" is loadable",
           "tests": [
             TestCaseResult {
               "error": undefined,
@@ -2832,13 +2832,13 @@ TestRunResult {
             },
             TestCaseResult {
               "error": undefined,
-              "name": "should handle \"--require\"",
+              "name": "should handle "--require"",
               "result": "success",
               "time": 2,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "should handle \"--ui\"",
+              "name": "should handle "--ui"",
               "result": "success",
               "time": 3,
             },
@@ -2857,7 +2857,7 @@ TestRunResult {
           ],
         },
         TestGroupResult {
-          "name": "worker when run as worker process function run() when the file at \"filepath\" is loadable when run twice",
+          "name": "worker when run as worker process function run() when the file at "filepath" is loadable when run twice",
           "tests": [
             TestCaseResult {
               "error": undefined,
@@ -2868,7 +2868,7 @@ TestRunResult {
           ],
         },
         TestGroupResult {
-          "name": "worker when run as worker process function run() when the file at \"filepath\" is loadable when serialization fails",
+          "name": "worker when run as worker process function run() when the file at "filepath" is loadable when serialization fails",
           "tests": [
             TestCaseResult {
               "error": undefined,
@@ -2879,7 +2879,7 @@ TestRunResult {
           ],
         },
         TestGroupResult {
-          "name": "worker when run as worker process function run() when the file at \"filepath\" is loadable when serialization succeeds",
+          "name": "worker when run as worker process function run() when the file at "filepath" is loadable when serialization succeeds",
           "tests": [
             TestCaseResult {
               "error": undefined,
@@ -3164,7 +3164,7 @@ TestRunResult {
             },
             TestCaseResult {
               "error": undefined,
-              "name": "should pass when prefixed \"mocha-\"",
+              "name": "should pass when prefixed "mocha-"",
               "result": "success",
               "time": 0,
             },
@@ -3212,7 +3212,7 @@ TestRunResult {
           ],
         },
         TestGroupResult {
-          "name": "Mocha \"fgrep\" option",
+          "name": "Mocha "fgrep" option",
           "tests": [
             TestCaseResult {
               "error": undefined,
@@ -3223,7 +3223,7 @@ TestRunResult {
           ],
         },
         TestGroupResult {
-          "name": "Mocha \"grep\" option",
+          "name": "Mocha "grep" option",
           "tests": [
             TestCaseResult {
               "error": undefined,
@@ -3240,7 +3240,7 @@ TestRunResult {
           ],
         },
         TestGroupResult {
-          "name": "Mocha \"invert\" option",
+          "name": "Mocha "invert" option",
           "tests": [
             TestCaseResult {
               "error": undefined,
@@ -3627,7 +3627,7 @@ TestRunResult {
           "tests": [
             TestCaseResult {
               "error": undefined,
-              "name": "should unset the \"bail\" flag on the root suite",
+              "name": "should unset the "bail" flag on the root suite",
               "result": "success",
               "time": 1,
             },
@@ -3638,7 +3638,7 @@ TestRunResult {
           "tests": [
             TestCaseResult {
               "error": undefined,
-              "name": "should set the \"bail\" flag on the root suite",
+              "name": "should set the "bail" flag on the root suite",
               "result": "success",
               "time": 1,
             },
@@ -4069,7 +4069,7 @@ TestRunResult {
           ],
         },
         TestGroupResult {
-          "name": "Mocha instance method rootHooks() when provided a single \"after all\" hook",
+          "name": "Mocha instance method rootHooks() when provided a single "after all" hook",
           "tests": [
             TestCaseResult {
               "error": undefined,
@@ -4080,7 +4080,7 @@ TestRunResult {
           ],
         },
         TestGroupResult {
-          "name": "Mocha instance method rootHooks() when provided a single \"after each\" hook",
+          "name": "Mocha instance method rootHooks() when provided a single "after each" hook",
           "tests": [
             TestCaseResult {
               "error": undefined,
@@ -4091,7 +4091,7 @@ TestRunResult {
           ],
         },
         TestGroupResult {
-          "name": "Mocha instance method rootHooks() when provided a single \"before all\" hook",
+          "name": "Mocha instance method rootHooks() when provided a single "before all" hook",
           "tests": [
             TestCaseResult {
               "error": undefined,
@@ -4102,7 +4102,7 @@ TestRunResult {
           ],
         },
         TestGroupResult {
-          "name": "Mocha instance method rootHooks() when provided a single \"before each\" hook",
+          "name": "Mocha instance method rootHooks() when provided a single "before each" hook",
           "tests": [
             TestCaseResult {
               "error": undefined,
@@ -4113,7 +4113,7 @@ TestRunResult {
           ],
         },
         TestGroupResult {
-          "name": "Mocha instance method rootHooks() when provided multiple \"after all\" hooks",
+          "name": "Mocha instance method rootHooks() when provided multiple "after all" hooks",
           "tests": [
             TestCaseResult {
               "error": undefined,
@@ -4124,7 +4124,7 @@ TestRunResult {
           ],
         },
         TestGroupResult {
-          "name": "Mocha instance method rootHooks() when provided multiple \"after each\" hooks",
+          "name": "Mocha instance method rootHooks() when provided multiple "after each" hooks",
           "tests": [
             TestCaseResult {
               "error": undefined,
@@ -4135,7 +4135,7 @@ TestRunResult {
           ],
         },
         TestGroupResult {
-          "name": "Mocha instance method rootHooks() when provided multiple \"before all\" hooks",
+          "name": "Mocha instance method rootHooks() when provided multiple "before all" hooks",
           "tests": [
             TestCaseResult {
               "error": undefined,
@@ -4146,7 +4146,7 @@ TestRunResult {
           ],
         },
         TestGroupResult {
-          "name": "Mocha instance method rootHooks() when provided multiple \"before each\" hooks",
+          "name": "Mocha instance method rootHooks() when provided multiple "before each" hooks",
           "tests": [
             TestCaseResult {
               "error": undefined,
@@ -4191,7 +4191,7 @@ TestRunResult {
           ],
         },
         TestGroupResult {
-          "name": "Mocha instance method run() Base reporter initialization when \"color\" options is set",
+          "name": "Mocha instance method run() Base reporter initialization when "color" options is set",
           "tests": [
             TestCaseResult {
               "error": undefined,
@@ -4213,7 +4213,7 @@ TestRunResult {
           ],
         },
         TestGroupResult {
-          "name": "Mocha instance method run() Runner initialization when \"global\" option is present",
+          "name": "Mocha instance method run() Runner initialization when "global" option is present",
           "tests": [
             TestCaseResult {
               "error": undefined,
@@ -4224,18 +4224,18 @@ TestRunResult {
           ],
         },
         TestGroupResult {
-          "name": "Mocha instance method run() Runner initialization when \"grep\" option is present",
+          "name": "Mocha instance method run() Runner initialization when "grep" option is present",
           "tests": [
             TestCaseResult {
               "error": undefined,
-              "name": "should configure \"grep\"",
+              "name": "should configure "grep"",
               "result": "success",
               "time": 1,
             },
           ],
         },
         TestGroupResult {
-          "name": "Mocha instance method run() when \"growl\" option is present",
+          "name": "Mocha instance method run() when "growl" option is present",
           "tests": [
             TestCaseResult {
               "error": undefined,
@@ -4246,11 +4246,11 @@ TestRunResult {
           ],
         },
         TestGroupResult {
-          "name": "Mocha instance method run() when a reporter instance has a \"done\" method",
+          "name": "Mocha instance method run() when a reporter instance has a "done" method",
           "tests": [
             TestCaseResult {
               "error": undefined,
-              "name": "should call the reporter \"done\" method",
+              "name": "should call the reporter "done" method",
               "result": "success",
               "time": 1,
             },
@@ -4546,7 +4546,7 @@ TestRunResult {
             },
             TestCaseResult {
               "error": undefined,
-              "name": "should parse \"+\" as a space",
+              "name": "should parse "+" as a space",
               "result": "success",
               "time": 0,
             },
@@ -4592,7 +4592,7 @@ TestRunResult {
           ],
         },
         TestGroupResult {
-          "name": "plugin module class PluginLoader instance method finalize() when a plugin has no \"finalize\" function",
+          "name": "plugin module class PluginLoader instance method finalize() when a plugin has no "finalize" function",
           "tests": [
             TestCaseResult {
               "error": undefined,
@@ -5142,7 +5142,7 @@ TestRunResult {
           "tests": [
             TestCaseResult {
               "error": undefined,
-              "name": "should emit a single \"error\" event",
+              "name": "should emit a single "error" event",
               "result": "success",
               "time": 1,
             },
@@ -5153,7 +5153,7 @@ TestRunResult {
           "tests": [
             TestCaseResult {
               "error": undefined,
-              "name": "should emit a single \"error\" event",
+              "name": "should emit a single "error" event",
               "result": "success",
               "time": 1,
             },
@@ -5639,19 +5639,19 @@ TestRunResult {
             },
             TestCaseResult {
               "error": undefined,
-              "name": "should emit \"fail\" when a global beginning with \"d\" is introduced",
+              "name": "should emit "fail" when a global beginning with "d" is introduced",
               "result": "success",
               "time": 0,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "should emit \"fail\" when a new global is introduced",
+              "name": "should emit "fail" when a new global is introduced",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "should emit \"fail\" when a single new disallowed global is introduced after a single extra global is allowed",
+              "name": "should emit "fail" when a single new disallowed global is introduced after a single extra global is allowed",
               "result": "success",
               "time": 0,
             },
@@ -5686,13 +5686,13 @@ TestRunResult {
           "tests": [
             TestCaseResult {
               "error": undefined,
-              "name": "should remove \"error\" listeners from a test",
+              "name": "should remove "error" listeners from a test",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "should remove \"uncaughtException\" listeners from the process",
+              "name": "should remove "uncaughtException" listeners from the process",
               "result": "success",
               "time": 0,
             },
@@ -5709,13 +5709,13 @@ TestRunResult {
           "tests": [
             TestCaseResult {
               "error": undefined,
-              "name": "should emit \"fail\"",
+              "name": "should emit "fail"",
               "result": "success",
               "time": 1,
             },
             TestCaseResult {
               "error": undefined,
-              "name": "should emit \"fail\"",
+              "name": "should emit "fail"",
               "result": "success",
               "time": 0,
             },
@@ -5763,7 +5763,7 @@ TestRunResult {
             },
             TestCaseResult {
               "error": undefined,
-              "name": "should not emit \"end\" if suite bail is not true",
+              "name": "should not emit "end" if suite bail is not true",
               "result": "success",
               "time": 1,
             },
@@ -5781,29 +5781,29 @@ TestRunResult {
             },
             TestCaseResult {
               "error": undefined,
-              "name": "should set \`Test#state\` to \"failed\"",
+              "name": "should set \`Test#state\` to "failed"",
               "result": "success",
               "time": 0,
             },
           ],
         },
         TestGroupResult {
-          "name": "Runner instance method fail() when Runner has stopped when test is not pending when error is not of the \"multiple done\" variety",
+          "name": "Runner instance method fail() when Runner has stopped when test is not pending when error is not of the "multiple done" variety",
           "tests": [
             TestCaseResult {
               "error": undefined,
-              "name": "should throw a \"fatal\" error",
+              "name": "should throw a "fatal" error",
               "result": "success",
               "time": 1,
             },
           ],
         },
         TestGroupResult {
-          "name": "Runner instance method fail() when Runner has stopped when test is not pending when error is the \"multiple done\" variety",
+          "name": "Runner instance method fail() when Runner has stopped when test is not pending when error is the "multiple done" variety",
           "tests": [
             TestCaseResult {
               "error": undefined,
-              "name": "should throw the \"multiple done\" error",
+              "name": "should throw the "multiple done" error",
               "result": "success",
               "time": 1,
             },
@@ -5921,7 +5921,7 @@ TestRunResult {
             },
             TestCaseResult {
               "error": undefined,
-              "name": "should emit \"retry\" when a retryable test fails",
+              "name": "should emit "retry" when a retryable test fails",
               "result": "success",
               "time": 1,
             },
@@ -6039,7 +6039,7 @@ TestRunResult {
           "tests": [
             TestCaseResult {
               "error": undefined,
-              "name": "should add the \"uncaught\" property to the Error",
+              "name": "should add the "uncaught" property to the Error",
               "result": "success",
               "time": 1,
             },
@@ -7046,7 +7046,7 @@ TestRunResult {
           ],
         },
         TestGroupResult {
-          "name": "lib/utils castArray() when provided an \"arguments\" value",
+          "name": "lib/utils castArray() when provided an "arguments" value",
           "tests": [
             TestCaseResult {
               "error": undefined,
@@ -7269,7 +7269,7 @@ TestRunResult {
             },
             TestCaseResult {
               "error": undefined,
-              "name": "should return false if the value is an object w/o a \"then\" function",
+              "name": "should return false if the value is an object w/o a "then" function",
               "result": "success",
               "time": 0,
             },

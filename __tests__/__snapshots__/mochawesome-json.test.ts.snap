@@ -11,19 +11,25 @@ TestRunResult {
           "tests": [
             TestCaseResult {
               "error": {
-                "details": "Error: Timeout of 1ms exceeded. For async tests and hooks, ensure \"done()\" is called; if returning a Promise, ensure it resolves. (/Users/work/Source/Repos/thirdparty/phoenix-test-reporter/reports/mochawesome/test/second.test.js)
-    at listOnTimeout (node:internal/timers:557:17)
-    at processTimers (node:internal/timers:500:7)",
+                "details": "Error: Timeout of 1ms exceeded. For async tests and hooks, ensure "done()" is called; if returning a Promise, ensure it resolves. (/Users/noobie_doobie_doo/Desktop/step/maintained-actions/test-reporting/reports/mochawesome/test/second.test.js)
+    at listOnTimeout (node:internal/timers:608:17)
+    at process.processTimers (node:internal/timers:543:7)",
                 "line": undefined,
-                "message": "Error: Timeout of 1ms exceeded. For async tests and hooks, ensure \"done()\" is called; if returning a Promise, ensure it resolves. (/Users/work/Source/Repos/thirdparty/phoenix-test-reporter/reports/mochawesome/test/second.test.js)",
+                "message": "Error: Timeout of 1ms exceeded. For async tests and hooks, ensure "done()" is called; if returning a Promise, ensure it resolves. (/Users/noobie_doobie_doo/Desktop/step/maintained-actions/test-reporting/reports/mochawesome/test/second.test.js)",
                 "path": undefined,
               },
               "name": "Timeout test",
               "result": "failed",
-              "time": 3,
+              "time": 1,
             },
           ],
         },
+      ],
+      "name": "",
+      "totalTime": undefined,
+    },
+    TestSuiteResult {
+      "groups": [
         TestGroupResult {
           "name": "Test 1",
           "tests": [
@@ -43,7 +49,7 @@ TestRunResult {
                 "details": "Error: Some error
     at Object.throwError (lib/main.js:2:9)
     at Context.<anonymous> (test/main.test.js:15:11)
-    at processImmediate (node:internal/timers:464:21)",
+    at process.processImmediate (node:internal/timers:505:21)",
                 "line": 2,
                 "message": "Error: Some error",
                 "path": "lib/main.js",
@@ -59,7 +65,7 @@ TestRunResult {
 false !== true
 
     at Context.<anonymous> (test/main.test.js:11:14)
-    at processImmediate (node:internal/timers:464:21)",
+    at process.processImmediate (node:internal/timers:505:21)",
                 "line": 11,
                 "message": "AssertionError: Expected values to be strictly equal:
 
@@ -69,10 +75,16 @@ false !== true
               },
               "name": "Failing test",
               "result": "failed",
-              "time": 2,
+              "time": 0,
             },
           ],
         },
+      ],
+      "name": "Test 1",
+      "totalTime": undefined,
+    },
+    TestSuiteResult {
+      "groups": [
         TestGroupResult {
           "name": "Test 2",
           "tests": [
@@ -80,7 +92,7 @@ false !== true
               "error": {
                 "details": "Error: Some error
     at Context.<anonymous> (test/main.test.js:22:11)
-    at processImmediate (node:internal/timers:464:21)",
+    at process.processImmediate (node:internal/timers:505:21)",
                 "line": 22,
                 "message": "Error: Some error",
                 "path": "test/main.test.js",
@@ -92,10 +104,10 @@ false !== true
           ],
         },
       ],
-      "name": "nofile",
+      "name": "Test 2",
       "totalTime": undefined,
     },
   ],
-  "totalTime": 14,
+  "totalTime": 4,
 }
 `;
