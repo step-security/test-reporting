@@ -9,7 +9,7 @@
   "author": "step-security",
   "license": "MIT",
   "devDependencies": {
-    "cypress": "^14.5.4",
+    "cypress": "^15.3.0",
     "mocha": "^9.2.0",
     "mochawesome": "^7.0.1"
   }
