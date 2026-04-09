@@ -1,0 +1,19 @@
+[[IgnoredVulns]]
+id = "GHSA-g9mf-h72j-4rw9"
+reason = "undici - Low risk; requires malicious GitHub API response; action only calls trusted GitHub endpoints"
+
+[[IgnoredVulns]]
+id = "GHSA-2mjp-6q6p-2qxm"
+reason = "undici - Low risk; requires proxy misconfiguration; action runs in GitHub-hosted environment"
+
+[[IgnoredVulns]]
+id = "GHSA-vrm6-8vpv-qv8q"
+reason = "undici - Not exploitable; WebSocket functionality not used by this action"
+
+[[IgnoredVulns]]
+id = "GHSA-v9p9-hfj2-hcw8"
+reason = "undici - Not exploitable; WebSocket functionality not used by this action"
+
+[[IgnoredVulns]]
+id = "GHSA-4992-7rv2-5pvq"
+reason = "undici - Not exploitable; upgrade option not used by this action"
