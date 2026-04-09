@@ -9,3 +9,11 @@ reason = "Test dependency"
 [[IgnoredVulns]]
 id = "GHSA-73rr-hh4g-fpgx"
 reason = "Test dependency"
+
+[[IgnoredVulns]]
+id = "GHSA-5c6j-r48x-rmvq"
+reason = "Test dependency - serialize-javascript transitive dep of mocha, unfixable (mocha 8-12 all depend on it)"
+
+[[IgnoredVulns]]
+id = "GHSA-qj8w-gfj5-8c6v"
+reason = "Test dependency - serialize-javascript transitive dep of mocha, unfixable (mocha 8-12 all depend on it)"
