@@ -1,0 +1,19 @@
+[[IgnoredVulns]]
+id = "GHSA-2mjp-6q6p-2qxm"
+reason = "undici@5.29.0 - Not exploitable: undici is a transitive dep via @actions/http-client. Action does not pass user-controlled headers to undici's low-level APIs."
+
+[[IgnoredVulns]]
+id = "GHSA-4992-7rv2-5pvq"
+reason = "undici@5.29.0 - Not exploitable: action never uses undici's upgrade option. All HTTP calls go through @actions/http-client."
+
+[[IgnoredVulns]]
+id = "GHSA-g9mf-h72j-4rw9"
+reason = "undici@5.29.0 - Not exploitable: action only communicates with trusted GitHub API servers. No malicious server can send crafted Content-Encoding responses."
+
+[[IgnoredVulns]]
+id = "GHSA-v9p9-hfj2-hcw8"
+reason = "undici@5.29.0 - Not exploitable: action does not use WebSockets. The vulnerable WebSocket client code is never invoked."
+
+[[IgnoredVulns]]
+id = "GHSA-vrm6-8vpv-qv8q"
+reason = "undici@5.29.0 - Not exploitable: action does not use WebSockets. The vulnerable decompression code is never reached."
