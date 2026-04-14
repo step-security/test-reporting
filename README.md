@@ -1,3 +1,5 @@
+[![StepSecurity Maintained Action](https://raw.githubusercontent.com/step-security/maintained-actions-assets/main/assets/maintained-action-banner.png)](https://docs.stepsecurity.io/actions/stepsecurity-maintained-actions)
+
 # Test Reporting
 
 A fork of [Dorny's test reporter](https://github.com/dorny/test-reporter) created primarily to add support for `mochawesome-json`. Also includes several further feature enhancements and bug fixes on the original.

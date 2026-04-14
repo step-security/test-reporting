@@ -40,6 +40,16 @@ const adm_zip_1 = __importDefault(__nccwpck_require__(6761));
 const picomatch_1 = __importDefault(__nccwpck_require__(8569));
 const github_utils_1 = __nccwpck_require__(3522);
 class ArtifactProvider {
+    octokit;
+    artifact;
+    name;
+    pattern;
+    sha;
+    runId;
+    token;
+    artifactNameMatch;
+    fileNameMatch;
+    getReportName;
     constructor(octokit, artifact, name, pattern, sha, runId, token) {
         this.octokit = octokit;
         this.artifact = artifact;
@@ -169,6 +179,8 @@ const fs = __importStar(__nccwpck_require__(7147));
 const fast_glob_1 = __importDefault(__nccwpck_require__(3664));
 const git_1 = __nccwpck_require__(9844);
 class LocalFileProvider {
+    name;
+    pattern;
     constructor(name, pattern) {
         this.name = name;
         this.pattern = pattern;
@@ -224,6 +236,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(2186));
 const github = __importStar(__nccwpck_require__(5438));
+const fs = __importStar(__nccwpck_require__(7147));
 const crypto_1 = __nccwpck_require__(6113);
 const axios_1 = __importStar(__nccwpck_require__(8757));
 const artifact_provider_1 = __nccwpck_require__(7171);
@@ -240,19 +253,38 @@ const path_utils_1 = __nccwpck_require__(4070);
 const github_utils_1 = __nccwpck_require__(3522);
 const constants_1 = __nccwpck_require__(2842);
 async function validateSubscription() {
-    var _a;
-    const API_URL = `https://agent.api.stepsecurity.io/v1/github/${process.env.GITHUB_REPOSITORY}/actions/subscription`;
+    const eventPath = process.env.GITHUB_EVENT_PATH;
+    let repoPrivate;
+    if (eventPath && fs.existsSync(eventPath)) {
+        const eventData = JSON.parse(fs.readFileSync(eventPath, 'utf8'));
+        repoPrivate = eventData?.repository?.private;
+    }
+    const upstream = 'dorny/test-reporter';
+    const action = process.env.GITHUB_ACTION_REPOSITORY;
+    const docsUrl = 'https://docs.stepsecurity.io/actions/stepsecurity-maintained-actions';
+    core.info('');
+    core.info('\u001b[1;36mStepSecurity Maintained Action\u001b[0m');
+    core.info(`Secure drop-in replacement for ${upstream}`);
+    if (repoPrivate === false)
+        core.info('\u001b[32m\u2713 Free for public repositories\u001b[0m');
+    core.info(`\u001b[36mLearn more:\u001b[0m ${docsUrl}`);
+    core.info('');
+    if (repoPrivate === false)
+        return;
+    const serverUrl = process.env.GITHUB_SERVER_URL || 'https://github.com';
+    const body = { action: action || '' };
+    if (serverUrl !== 'https://github.com')
+        body.ghes_server = serverUrl;
     try {
-        await axios_1.default.get(API_URL, { timeout: 3000 });
+        await axios_1.default.post(`https://agent.api.stepsecurity.io/v1/github/${process.env.GITHUB_REPOSITORY}/actions/maintained-actions-subscription`, body, { timeout: 3000 });
     }
     catch (error) {
-        if ((0, axios_1.isAxiosError)(error) && ((_a = error.response) === null || _a === void 0 ? void 0 : _a.status) === 403) {
-            core.error('Subscription is not valid. Reach out to support@stepsecurity.io');
+        if ((0, axios_1.isAxiosError)(error) && error.response?.status === 403) {
+            core.error(`\u001b[1;31mThis action requires a StepSecurity subscription for private repositories.\u001b[0m`);
+            core.error(`\u001b[31mLearn how to enable a subscription: ${docsUrl}\u001b[0m`);
             process.exit(1);
         }
-        else {
-            core.info('Timeout or API not reachable. Continuing to next step.');
-        }
+        core.info('Timeout or API not reachable. Continuing to next step.');
     }
 }
 async function main() {
@@ -275,22 +307,23 @@ function createSlugPrefix() {
     return hash.digest('hex').substring(0, 8);
 }
 class TestReporter {
+    artifact = core.getInput('artifact', { required: false });
+    name = core.getInput('name', { required: true });
+    path = core.getInput('path', { required: true });
+    pathReplaceBackslashes = core.getInput('path-replace-backslashes', { required: false }) === 'true';
+    reporter = core.getInput('reporter', { required: true });
+    listSuites = core.getInput('list-suites', { required: true });
+    listTests = core.getInput('list-tests', { required: true });
+    maxAnnotations = parseInt(core.getInput('max-annotations', { required: true }));
+    failOnError = core.getInput('fail-on-error', { required: true }) === 'true';
+    workDirInput = core.getInput('working-directory', { required: false });
+    onlySummary = core.getInput('only-summary', { required: false }) === 'true';
+    outputTo = core.getInput('output-to', { required: false });
+    token = core.getInput('token', { required: true });
+    slugPrefix = '';
+    octokit;
+    context = (0, github_utils_1.getCheckRunContext)();
     constructor() {
-        this.artifact = core.getInput('artifact', { required: false });
-        this.name = core.getInput('name', { required: true });
-        this.path = core.getInput('path', { required: true });
-        this.pathReplaceBackslashes = core.getInput('path-replace-backslashes', { required: false }) === 'true';
-        this.reporter = core.getInput('reporter', { required: true });
-        this.listSuites = core.getInput('list-suites', { required: true });
-        this.listTests = core.getInput('list-tests', { required: true });
-        this.maxAnnotations = parseInt(core.getInput('max-annotations', { required: true }));
-        this.failOnError = core.getInput('fail-on-error', { required: true }) === 'true';
-        this.workDirInput = core.getInput('working-directory', { required: false });
-        this.onlySummary = core.getInput('only-summary', { required: false }) === 'true';
-        this.outputTo = core.getInput('output-to', { required: false });
-        this.token = core.getInput('token', { required: true });
-        this.slugPrefix = '';
-        this.context = (0, github_utils_1.getCheckRunContext)();
         this.octokit = github.getOctokit(this.token);
         if (this.listSuites !== 'all' && this.listSuites !== 'failed') {
             core.setFailed(`Input parameter 'list-suites' has invalid value`);
@@ -369,7 +402,6 @@ class TestReporter {
         }
     }
     async createReport(parser, name, files) {
-        var _a;
         if (files.length === 0) {
             core.warning(`No file matches path ${this.path}`);
             return [];
@@ -401,7 +433,7 @@ class TestReporter {
                 break;
             }
             case 'step-summary': {
-                const run_attempt = (_a = process.env['GITHUB_RUN_ATTEMPT']) !== null && _a !== void 0 ? _a : 1;
+                const run_attempt = process.env['GITHUB_RUN_ATTEMPT'] ?? 1;
                 baseUrl = `https://github.com/${github.context.repo.owner}/${github.context.repo.repo}/actions/runs/${github.context.runId}/attempts/${run_attempt}`;
                 break;
             }
@@ -507,6 +539,10 @@ const path_utils_1 = __nccwpck_require__(4070);
 const dart_json_types_1 = __nccwpck_require__(7887);
 const test_results_1 = __nccwpck_require__(2768);
 class TestRun {
+    path;
+    suites;
+    success;
+    time;
     constructor(path, suites, success, time) {
         this.path = path;
         this.suites = suites;
@@ -515,32 +551,37 @@ class TestRun {
     }
 }
 class TestSuite {
+    suite;
     constructor(suite) {
         this.suite = suite;
-        this.groups = {};
     }
+    groups = {};
 }
 class TestGroup {
+    group;
     constructor(group) {
         this.group = group;
-        this.tests = [];
     }
+    tests = [];
 }
 class TestCase {
+    testStart;
     constructor(testStart) {
         this.testStart = testStart;
-        this.print = [];
         this.groupId = testStart.test.groupIDs[testStart.test.groupIDs.length - 1];
     }
+    groupId;
+    print = [];
+    testDone;
+    error;
     get result() {
-        var _a, _b, _c, _d;
-        if ((_a = this.testDone) === null || _a === void 0 ? void 0 : _a.skipped) {
+        if (this.testDone?.skipped) {
             return 'skipped';
         }
-        if (((_b = this.testDone) === null || _b === void 0 ? void 0 : _b.result) === 'success') {
+        if (this.testDone?.result === 'success') {
             return 'success';
         }
-        if (((_c = this.testDone) === null || _c === void 0 ? void 0 : _c.result) === 'error' || ((_d = this.testDone) === null || _d === void 0 ? void 0 : _d.result) === 'failure') {
+        if (this.testDone?.result === 'error' || this.testDone?.result === 'failure') {
             return 'failed';
         }
         return undefined;
@@ -550,6 +591,9 @@ class TestCase {
     }
 }
 class DartJsonParser {
+    options;
+    sdk;
+    assumedWorkDir;
     constructor(options, sdk) {
         this.options = options;
         this.sdk = sdk;
@@ -617,11 +661,11 @@ class DartJsonParser {
     }
     getGroups(suite) {
         const groups = Object.values(suite.groups).filter(grp => grp.tests.length > 0);
-        groups.sort((a, b) => { var _a, _b; return ((_a = a.group.line) !== null && _a !== void 0 ? _a : 0) - ((_b = b.group.line) !== null && _b !== void 0 ? _b : 0); });
+        groups.sort((a, b) => (a.group.line ?? 0) - (b.group.line ?? 0));
         return groups.map(group => {
-            group.tests.sort((a, b) => { var _a, _b; return ((_a = a.testStart.test.line) !== null && _a !== void 0 ? _a : 0) - ((_b = b.testStart.test.line) !== null && _b !== void 0 ? _b : 0); });
+            group.tests.sort((a, b) => (a.testStart.test.line ?? 0) - (b.testStart.test.line ?? 0));
             const tests = group.tests
-                .filter(tc => { var _a; return !((_a = tc.testDone) === null || _a === void 0 ? void 0 : _a.hidden); })
+                .filter(tc => !tc.testDone?.hidden)
                 .map(tc => {
                 const error = this.getError(suite, tc);
                 const testName = group.group.name !== undefined && tc.testStart.test.name.startsWith(group.group.name)
@@ -633,19 +677,18 @@ class DartJsonParser {
         });
     }
     getError(testSuite, test) {
-        var _a, _b, _c, _d, _e, _f;
         if (!this.options.parseErrors || !test.error) {
             return undefined;
         }
         const { trackedFiles } = this.options;
-        const stackTrace = (_b = (_a = test.error) === null || _a === void 0 ? void 0 : _a.stackTrace) !== null && _b !== void 0 ? _b : '';
+        const stackTrace = test.error?.stackTrace ?? '';
         const print = test.print
             .filter(p => p.messageType === 'print')
             .map(p => p.message)
             .join('\n');
         const details = [print, stackTrace].filter(str => str !== '').join('\n');
         const src = this.exceptionThrowSource(details, trackedFiles);
-        const message = this.getErrorMessage((_d = (_c = test.error) === null || _c === void 0 ? void 0 : _c.error) !== null && _d !== void 0 ? _d : '', print);
+        const message = this.getErrorMessage(test.error?.error ?? '', print);
         let path;
         let line;
         if (src !== undefined) {
@@ -656,7 +699,7 @@ class DartJsonParser {
             const testStartPath = this.getRelativePath(testSuite.suite.path);
             if (trackedFiles.includes(testStartPath)) {
                 path = testStartPath;
-                line = (_f = (_e = test.testStart.test.root_line) !== null && _e !== void 0 ? _e : test.testStart.test.line) !== null && _f !== void 0 ? _f : undefined;
+                line = test.testStart.test.root_line ?? test.testStart.test.line ?? undefined;
             }
         }
         return {
@@ -710,8 +753,9 @@ class DartJsonParser {
         return path;
     }
     getWorkDir(path) {
-        var _a, _b;
-        return ((_b = (_a = this.options.workDir) !== null && _a !== void 0 ? _a : this.assumedWorkDir) !== null && _b !== void 0 ? _b : (this.assumedWorkDir = (0, path_utils_1.getBasePath)(path, this.options.trackedFiles)));
+        return (this.options.workDir ??
+            this.assumedWorkDir ??
+            (this.assumedWorkDir = (0, path_utils_1.getBasePath)(path, this.options.trackedFiles)));
     }
 }
 exports.DartJsonParser = DartJsonParser;
@@ -771,12 +815,17 @@ const path_utils_1 = __nccwpck_require__(4070);
 const parse_utils_1 = __nccwpck_require__(7811);
 const test_results_1 = __nccwpck_require__(2768);
 class TestClass {
+    name;
     constructor(name) {
         this.name = name;
-        this.tests = [];
     }
+    tests = [];
 }
 class Test {
+    name;
+    outcome;
+    duration;
+    error;
     constructor(name, outcome, duration, error) {
         this.name = name;
         this.outcome = outcome;
@@ -795,6 +844,8 @@ class Test {
     }
 }
 class DotnetTrxParser {
+    options;
+    assumedWorkDir;
     constructor(options) {
         this.options = options;
     }
@@ -862,12 +913,11 @@ class DotnetTrxParser {
         return new test_results_1.TestRunResult(path, suites, totalTime);
     }
     getErrorInfo(testResult) {
-        var _a;
         if (testResult.$.outcome !== 'Failed') {
             return undefined;
         }
         const output = testResult.Output;
-        const error = (output === null || output === void 0 ? void 0 : output.length) > 0 && ((_a = output[0].ErrorInfo) === null || _a === void 0 ? void 0 : _a.length) > 0 ? output[0].ErrorInfo[0] : undefined;
+        const error = output?.length > 0 && output[0].ErrorInfo?.length > 0 ? output[0].ErrorInfo[0] : undefined;
         return error;
     }
     getError(test) {
@@ -918,8 +968,9 @@ class DotnetTrxParser {
         }
     }
     getWorkDir(path) {
-        var _a, _b;
-        return ((_b = (_a = this.options.workDir) !== null && _a !== void 0 ? _a : this.assumedWorkDir) !== null && _b !== void 0 ? _b : (this.assumedWorkDir = (0, path_utils_1.getBasePath)(path, this.options.trackedFiles)));
+        return (this.options.workDir ??
+            this.assumedWorkDir ??
+            (this.assumedWorkDir = (0, path_utils_1.getBasePath)(path, this.options.trackedFiles)));
     }
 }
 exports.DotnetTrxParser = DotnetTrxParser;
@@ -962,14 +1013,15 @@ const xml2js_1 = __nccwpck_require__(6189);
 const path_utils_1 = __nccwpck_require__(4070);
 const test_results_1 = __nccwpck_require__(2768);
 class JavaJunitParser {
+    options;
+    trackedFiles;
     constructor(options) {
-        var _a;
         this.options = options;
         // Map to efficient lookup of all paths with given file name
         this.trackedFiles = {};
         for (const filePath of options.trackedFiles) {
             const fileName = path.basename(filePath);
-            const files = (_a = this.trackedFiles[fileName]) !== null && _a !== void 0 ? _a : (this.trackedFiles[fileName] = []);
+            const files = this.trackedFiles[fileName] ?? (this.trackedFiles[fileName] = []);
             files.push((0, path_utils_1.normalizeFilePath)(filePath));
         }
     }
@@ -1004,7 +1056,6 @@ class JavaJunitParser {
         }
     }
     getTestRunResult(filePath, junit) {
-        var _a;
         const suites = junit.testsuites.testsuite === undefined
             ? []
             : junit.testsuites.testsuite.map(ts => {
@@ -1012,7 +1063,7 @@ class JavaJunitParser {
                 const time = parseFloat(ts.$.time) * 1000;
                 return new test_results_1.TestSuiteResult(name, this.getGroups(ts), time);
             });
-        const seconds = parseFloat((_a = junit.testsuites.$) === null || _a === void 0 ? void 0 : _a.time);
+        const seconds = parseFloat(junit.testsuites.$?.time);
         const time = isNaN(seconds) ? undefined : seconds * 1000;
         return new test_results_1.TestRunResult(filePath, suites, time);
     }
@@ -1052,17 +1103,16 @@ class JavaJunitParser {
         return 'success';
     }
     getTestCaseError(tc) {
-        var _a, _b, _c;
         if (!this.options.parseErrors) {
             return undefined;
         }
         // We process <error> and <failure> the same way
-        const failures = (_a = tc.failure) !== null && _a !== void 0 ? _a : tc.error;
+        const failures = tc.failure ?? tc.error;
         if (!failures) {
             return undefined;
         }
         const failure = failures[0];
-        const details = typeof failure === 'object' ? (_b = failure._) !== null && _b !== void 0 ? _b : '' : failure;
+        const details = typeof failure === 'object' ? failure._ ?? '' : failure;
         let filePath;
         let line;
         const src = this.exceptionThrowSource(details);
@@ -1073,7 +1123,7 @@ class JavaJunitParser {
         let message;
         if (typeof failure === 'object') {
             message = failure.$.message;
-            if ((_c = failure.$) === null || _c === void 0 ? void 0 : _c.type) {
+            if (failure.$?.type) {
                 message = failure.$.type + ': ' + message;
             }
         }
@@ -1157,6 +1207,8 @@ const node_utils_1 = __nccwpck_require__(5824);
 const path_utils_1 = __nccwpck_require__(4070);
 const test_results_1 = __nccwpck_require__(2768);
 class JestJunitParser {
+    options;
+    assumedWorkDir;
     constructor(options) {
         this.options = options;
     }
@@ -1245,8 +1297,9 @@ class JestJunitParser {
         return path;
     }
     getWorkDir(path) {
-        var _a, _b;
-        return ((_b = (_a = this.options.workDir) !== null && _a !== void 0 ? _a : this.assumedWorkDir) !== null && _b !== void 0 ? _b : (this.assumedWorkDir = (0, path_utils_1.getBasePath)(path, this.options.trackedFiles)));
+        return (this.options.workDir ??
+            this.assumedWorkDir ??
+            (this.assumedWorkDir = (0, path_utils_1.getBasePath)(path, this.options.trackedFiles)));
     }
 }
 exports.JestJunitParser = JestJunitParser;
@@ -1265,6 +1318,8 @@ const test_results_1 = __nccwpck_require__(2768);
 const node_utils_1 = __nccwpck_require__(5824);
 const path_utils_1 = __nccwpck_require__(4070);
 class MochaJsonParser {
+    options;
+    assumedWorkDir;
     constructor(options) {
         this.options = options;
     }
@@ -1285,9 +1340,8 @@ class MochaJsonParser {
     getTestRunResult(resultsPath, mocha) {
         const suitesMap = {};
         const getSuite = (test) => {
-            var _a;
             const path = this.getRelativePath(test.file);
-            return (_a = suitesMap[path]) !== null && _a !== void 0 ? _a : (suitesMap[path] = new test_results_1.TestSuiteResult(path, []));
+            return suitesMap[path] ?? (suitesMap[path] = new test_results_1.TestSuiteResult(path, []));
         };
         for (const test of mocha.passes) {
             const suite = getSuite(test);
@@ -1305,7 +1359,6 @@ class MochaJsonParser {
         return new test_results_1.TestRunResult(resultsPath, suites, mocha.stats.duration);
     }
     processTest(suite, test, result) {
-        var _a;
         const groupName = test.fullTitle !== test.title
             ? test.fullTitle.substr(0, test.fullTitle.length - test.title.length).trimEnd()
             : null;
@@ -1315,7 +1368,7 @@ class MochaJsonParser {
             suite.groups.push(group);
         }
         const error = this.getTestCaseError(test);
-        const testCase = new test_results_1.TestCaseResult(test.title, result, (_a = test.duration) !== null && _a !== void 0 ? _a : 0, error);
+        const testCase = new test_results_1.TestCaseResult(test.title, result, test.duration ?? 0, error);
         group.tests.push(testCase);
     }
     getTestCaseError(test) {
@@ -1347,8 +1400,9 @@ class MochaJsonParser {
         return path;
     }
     getWorkDir(path) {
-        var _a, _b;
-        return ((_b = (_a = this.options.workDir) !== null && _a !== void 0 ? _a : this.assumedWorkDir) !== null && _b !== void 0 ? _b : (this.assumedWorkDir = (0, path_utils_1.getBasePath)(path, this.options.trackedFiles)));
+        return (this.options.workDir ??
+            this.assumedWorkDir ??
+            (this.assumedWorkDir = (0, path_utils_1.getBasePath)(path, this.options.trackedFiles)));
     }
 }
 exports.MochaJsonParser = MochaJsonParser;
@@ -1367,6 +1421,8 @@ const test_results_1 = __nccwpck_require__(2768);
 const node_utils_1 = __nccwpck_require__(5824);
 const path_utils_1 = __nccwpck_require__(4070);
 class MochawesomeJsonParser {
+    options;
+    assumedWorkDir;
     constructor(options) {
         this.options = options;
     }
@@ -1388,12 +1444,11 @@ class MochawesomeJsonParser {
         const suitesMap = {};
         const results = mochawesome.results;
         const getSuite = (fullFile) => {
-            var _a;
             const path = this.getRelativePath(fullFile);
-            return (_a = suitesMap[path]) !== null && _a !== void 0 ? _a : (suitesMap[path] = new test_results_1.TestSuiteResult(path, []));
+            return suitesMap[path] ?? (suitesMap[path] = new test_results_1.TestSuiteResult(path, []));
         };
         const processPassingTests = (tests, suiteName) => {
-            const passingTests = tests === null || tests === void 0 ? void 0 : tests.filter(test => test.pass);
+            const passingTests = tests?.filter(test => test.pass);
             if (passingTests) {
                 for (const passingTest of passingTests) {
                     const suite = getSuite(suiteName);
@@ -1402,7 +1457,7 @@ class MochawesomeJsonParser {
             }
         };
         const processFailingTests = (tests, suiteName) => {
-            const failingTests = tests === null || tests === void 0 ? void 0 : tests.filter(test => test.fail);
+            const failingTests = tests?.filter(test => test.fail);
             if (failingTests) {
                 for (const failingTest of failingTests) {
                     const suite = getSuite(suiteName);
@@ -1411,7 +1466,7 @@ class MochawesomeJsonParser {
             }
         };
         const processPendingTests = (tests, suiteName) => {
-            const pendingTests = tests === null || tests === void 0 ? void 0 : tests.filter(test => test.skipped);
+            const pendingTests = tests?.filter(test => test.skipped);
             if (pendingTests) {
                 for (const pendingTest of pendingTests) {
                     const suite = getSuite(suiteName);
@@ -1426,17 +1481,16 @@ class MochawesomeJsonParser {
         };
         // Handle nested suites
         const processNestedSuites = (suite, nestedSuiteIndex, suiteName) => {
-            var _a, _b;
             // Process suite tests
             processAllTests(suite.tests, suiteName);
             for (const innerSuite of suite.suites) {
                 // Process inner suite tests
                 processAllTests(innerSuite.tests, suiteName);
-                if (((_a = innerSuite === null || innerSuite === void 0 ? void 0 : innerSuite.suites[nestedSuiteIndex]) === null || _a === void 0 ? void 0 : _a.suites.length) > 0) {
+                if (innerSuite?.suites[nestedSuiteIndex]?.suites.length > 0) {
                     processNestedSuites(innerSuite, 0, suiteName);
                 }
                 else {
-                    processAllTests((_b = innerSuite === null || innerSuite === void 0 ? void 0 : innerSuite.suites[nestedSuiteIndex]) === null || _b === void 0 ? void 0 : _b.tests, suiteName);
+                    processAllTests(innerSuite?.suites[nestedSuiteIndex]?.tests, suiteName);
                     nestedSuiteIndex++;
                     // TODO - Figure out how to get 1.1.1.1.2 - suites with more than one object in them
                 }
@@ -1444,15 +1498,15 @@ class MochawesomeJsonParser {
         };
         // Process Mochawesome Data
         for (const result of results) {
-            const suites = result === null || result === void 0 ? void 0 : result.suites;
-            const filePath = result === null || result === void 0 ? void 0 : result.fullFile;
-            const suitelessTests = result === null || result === void 0 ? void 0 : result.tests;
+            const suites = result?.suites;
+            const filePath = result?.fullFile;
+            const suitelessTests = result?.tests;
             // Process tests that aren't in a suite
-            if ((suitelessTests === null || suitelessTests === void 0 ? void 0 : suitelessTests.length) > 0) {
+            if (suitelessTests?.length > 0) {
                 processAllTests(suitelessTests, filePath);
             }
             // Process tests that are in a suite
-            if ((suites === null || suites === void 0 ? void 0 : suites.length) > 0) {
+            if (suites?.length > 0) {
                 for (const suite of suites) {
                     processNestedSuites(suite, 0, filePath ? filePath : suite.title);
                 }
@@ -1462,7 +1516,6 @@ class MochawesomeJsonParser {
         return new test_results_1.TestRunResult(resultsPath, mappedSuites, mochawesome.stats.duration);
     }
     processTest(suite, test, result) {
-        var _a;
         const groupName = test.fullTitle !== test.title
             ? test.fullTitle.substr(0, test.fullTitle.length - test.title.length).trimEnd()
             : null;
@@ -1472,7 +1525,7 @@ class MochawesomeJsonParser {
             suite.groups.push(group);
         }
         const error = this.getTestCaseError(test);
-        const testCase = new test_results_1.TestCaseResult(test.title, result, (_a = test.duration) !== null && _a !== void 0 ? _a : 0, error);
+        const testCase = new test_results_1.TestCaseResult(test.title, result, test.duration ?? 0, error);
         group.tests.push(testCase);
     }
     getTestCaseError(test) {
@@ -1504,8 +1557,9 @@ class MochawesomeJsonParser {
         return path;
     }
     getWorkDir(path) {
-        var _a, _b;
-        return ((_b = (_a = this.options.workDir) !== null && _a !== void 0 ? _a : this.assumedWorkDir) !== null && _b !== void 0 ? _b : (this.assumedWorkDir = (0, path_utils_1.getBasePath)(path, this.options.trackedFiles)));
+        return (this.options.workDir ??
+            this.assumedWorkDir ??
+            (this.assumedWorkDir = (0, path_utils_1.getBasePath)(path, this.options.trackedFiles)));
     }
 }
 exports.MochawesomeJsonParser = MochawesomeJsonParser;
@@ -1523,7 +1577,6 @@ exports.getAnnotations = void 0;
 const markdown_utils_1 = __nccwpck_require__(6482);
 const parse_utils_1 = __nccwpck_require__(7811);
 function getAnnotations(results, maxCount) {
-    var _a, _b, _c, _d;
     if (maxCount === 0) {
         return [];
     }
@@ -1539,8 +1592,8 @@ function getAnnotations(results, maxCount) {
                     if (err === undefined) {
                         continue;
                     }
-                    const path = (_a = err.path) !== null && _a !== void 0 ? _a : tr.path;
-                    const line = (_b = err.line) !== null && _b !== void 0 ? _b : 0;
+                    const path = err.path ?? tr.path;
+                    const line = err.line ?? 0;
                     if (mergeDup) {
                         const dup = errors.find(e => path === e.path && line === e.line && err.details === e.details);
                         if (dup !== undefined) {
@@ -1553,7 +1606,7 @@ function getAnnotations(results, maxCount) {
                         suiteName: ts.name,
                         testName: tg.name ? `${tg.name} ► ${tc.name}` : tc.name,
                         details: err.details,
-                        message: (_d = (_c = err.message) !== null && _c !== void 0 ? _c : (0, parse_utils_1.getFirstNonEmptyLine)(err.details)) !== null && _d !== void 0 ? _d : 'Test failed',
+                        message: err.message ?? (0, parse_utils_1.getFirstNonEmptyLine)(err.details) ?? 'Test failed',
                         path,
                         line
                     });
@@ -1794,7 +1847,6 @@ function getSuitesReport(tr, runIndex, options) {
     return sections;
 }
 function getTestsReport(ts, runIndex, suiteIndex, options) {
-    var _a, _b, _c;
     if (options.listTests === 'failed' && ts.result !== 'failed') {
         return [];
     }
@@ -1821,7 +1873,9 @@ function getTestsReport(ts, runIndex, suiteIndex, options) {
             const result = getResultIcon(tc.result);
             sections.push(`${space}${result} ${tc.name}`);
             if (tc.error) {
-                const lines = (_c = ((_a = tc.error.message) !== null && _a !== void 0 ? _a : (_b = (0, parse_utils_1.getFirstNonEmptyLine)(tc.error.details)) === null || _b === void 0 ? void 0 : _b.trim())) === null || _c === void 0 ? void 0 : _c.split(/\r?\n/g).map(l => '\t' + l);
+                const lines = (tc.error.message ?? (0, parse_utils_1.getFirstNonEmptyLine)(tc.error.details)?.trim())
+                    ?.split(/\r?\n/g)
+                    .map(l => '\t' + l);
                 if (lines) {
                     sections.push(...lines);
                 }
@@ -1863,6 +1917,9 @@ function getResultIcon(result) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.TestCaseResult = exports.TestGroupResult = exports.TestSuiteResult = exports.TestRunResult = void 0;
 class TestRunResult {
+    path;
+    suites;
+    totalTime;
     constructor(path, suites, totalTime) {
         this.path = path;
         this.suites = suites;
@@ -1881,8 +1938,7 @@ class TestRunResult {
         return this.suites.reduce((sum, g) => sum + g.skipped, 0);
     }
     get time() {
-        var _a;
-        return (_a = this.totalTime) !== null && _a !== void 0 ? _a : this.suites.reduce((sum, g) => sum + g.time, 0);
+        return this.totalTime ?? this.suites.reduce((sum, g) => sum + g.time, 0);
     }
     get result() {
         return this.suites.some(t => t.result === 'failed') ? 'failed' : 'success';
@@ -1901,6 +1957,9 @@ class TestRunResult {
 }
 exports.TestRunResult = TestRunResult;
 class TestSuiteResult {
+    name;
+    groups;
+    totalTime;
     constructor(name, groups, totalTime) {
         this.name = name;
         this.groups = groups;
@@ -1919,8 +1978,7 @@ class TestSuiteResult {
         return this.groups.reduce((sum, g) => sum + g.skipped, 0);
     }
     get time() {
-        var _a;
-        return (_a = this.totalTime) !== null && _a !== void 0 ? _a : this.groups.reduce((sum, g) => sum + g.time, 0);
+        return this.totalTime ?? this.groups.reduce((sum, g) => sum + g.time, 0);
     }
     get result() {
         return this.groups.some(t => t.result === 'failed') ? 'failed' : 'success';
@@ -1929,7 +1987,7 @@ class TestSuiteResult {
         return this.groups.filter(grp => grp.result === 'failed');
     }
     sort(deep) {
-        this.groups.sort((a, b) => { var _a, _b; return ((_a = a.name) !== null && _a !== void 0 ? _a : '').localeCompare((_b = b.name) !== null && _b !== void 0 ? _b : ''); });
+        this.groups.sort((a, b) => (a.name ?? '').localeCompare(b.name ?? ''));
         if (deep) {
             for (const grp of this.groups) {
                 grp.sort();
@@ -1939,6 +1997,8 @@ class TestSuiteResult {
 }
 exports.TestSuiteResult = TestSuiteResult;
 class TestGroupResult {
+    name;
+    tests;
     constructor(name, tests) {
         this.name = name;
         this.tests = tests;
@@ -1967,6 +2027,10 @@ class TestGroupResult {
 }
 exports.TestGroupResult = TestGroupResult;
 class TestCaseResult {
+    name;
+    result;
+    time;
+    error;
     constructor(name, result, time, error) {
         this.name = name;
         this.result = result;
@@ -2264,8 +2328,7 @@ function tableEscape(content) {
 }
 exports.tableEscape = tableEscape;
 function fixEol(text) {
-    var _a;
-    return (_a = text === null || text === void 0 ? void 0 : text.replace(/\r/g, '')) !== null && _a !== void 0 ? _a : '';
+    return text?.replace(/\r/g, '') ?? '';
 }
 exports.fixEol = fixEol;
 function ellipsis(text, maxLength) {
