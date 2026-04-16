@@ -11,6 +11,10 @@ on:
         description: "Specify the build script to run"
         required: true
         default: 'npm run all'
+      node_version:
+        description: "Specify Node.js version (e.g., '18', '20', 'lts/*')"
+        required: false
+        default: "24"
 
 permissions:
   contents: write
@@ -26,3 +30,4 @@ jobs:
       repo-name: "test-reporting"
       base_branch: ${{ inputs.base_branch }}
       script: ${{ inputs.script}}
+      node_version: "${{ inputs.node_version || '24' }}"
