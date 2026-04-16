@@ -259,7 +259,7 @@ async function validateSubscription() {
         const eventData = JSON.parse(fs.readFileSync(eventPath, 'utf8'));
         repoPrivate = eventData?.repository?.private;
     }
-    const upstream = 'dorny/test-reporter';
+    const upstream = 'phoenix-actions/test-reporting';
     const action = process.env.GITHUB_ACTION_REPOSITORY;
     const docsUrl = 'https://docs.stepsecurity.io/actions/stepsecurity-maintained-actions';
     core.info('');
