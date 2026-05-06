@@ -40,6 +40,16 @@ const adm_zip_1 = __importDefault(__nccwpck_require__(6761));
 const picomatch_1 = __importDefault(__nccwpck_require__(8569));
 const github_utils_1 = __nccwpck_require__(3522);
 class ArtifactProvider {
+    octokit;
+    artifact;
+    name;
+    pattern;
+    sha;
+    runId;
+    token;
+    artifactNameMatch;
+    fileNameMatch;
+    getReportName;
     constructor(octokit, artifact, name, pattern, sha, runId, token) {
         this.octokit = octokit;
         this.artifact = artifact;
@@ -169,6 +179,8 @@ const fs = __importStar(__nccwpck_require__(7147));
 const fast_glob_1 = __importDefault(__nccwpck_require__(3664));
 const git_1 = __nccwpck_require__(9844);
 class LocalFileProvider {
+    name;
+    pattern;
     constructor(name, pattern) {
         this.name = name;
         this.pattern = pattern;
@@ -224,6 +236,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(2186));
 const github = __importStar(__nccwpck_require__(5438));
+const fs = __importStar(__nccwpck_require__(7147));
 const crypto_1 = __nccwpck_require__(6113);
 const axios_1 = __importStar(__nccwpck_require__(8757));
 const artifact_provider_1 = __nccwpck_require__(7171);
@@ -240,19 +253,38 @@ const path_utils_1 = __nccwpck_require__(4070);
 const github_utils_1 = __nccwpck_require__(3522);
 const constants_1 = __nccwpck_require__(2842);
 async function validateSubscription() {
-    var _a;
-    const API_URL = `https://agent.api.stepsecurity.io/v1/github/${process.env.GITHUB_REPOSITORY}/actions/subscription`;
+    const eventPath = process.env.GITHUB_EVENT_PATH;
+    let repoPrivate;
+    if (eventPath && fs.existsSync(eventPath)) {
+        const eventData = JSON.parse(fs.readFileSync(eventPath, 'utf8'));
+        repoPrivate = eventData?.repository?.private;
+    }
+    const upstream = 'phoenix-actions/test-reporting';
+    const action = process.env.GITHUB_ACTION_REPOSITORY;
+    const docsUrl = 'https://docs.stepsecurity.io/actions/stepsecurity-maintained-actions';
+    core.info('');
+    core.info('\u001b[1;36mStepSecurity Maintained Action\u001b[0m');
+    core.info(`Secure drop-in replacement for ${upstream}`);
+    if (repoPrivate === false)
+        core.info('\u001b[32m\u2713 Free for public repositories\u001b[0m');
+    core.info(`\u001b[36mLearn more:\u001b[0m ${docsUrl}`);
+    core.info('');
+    if (repoPrivate === false)
+        return;
+    const serverUrl = process.env.GITHUB_SERVER_URL || 'https://github.com';
+    const body = { action: action || '' };
+    if (serverUrl !== 'https://github.com')
+        body.ghes_server = serverUrl;
     try {
-        await axios_1.default.get(API_URL, { timeout: 3000 });
+        await axios_1.default.post(`https://agent.api.stepsecurity.io/v1/github/${process.env.GITHUB_REPOSITORY}/actions/maintained-actions-subscription`, body, { timeout: 3000 });
     }
     catch (error) {
-        if ((0, axios_1.isAxiosError)(error) && ((_a = error.response) === null || _a === void 0 ? void 0 : _a.status) === 403) {
-            core.error('Subscription is not valid. Reach out to support@stepsecurity.io');
+        if ((0, axios_1.isAxiosError)(error) && error.response?.status === 403) {
+            core.error(`\u001b[1;31mThis action requires a StepSecurity subscription for private repositories.\u001b[0m`);
+            core.error(`\u001b[31mLearn how to enable a subscription: ${docsUrl}\u001b[0m`);
             process.exit(1);
         }
-        else {
-            core.info('Timeout or API not reachable. Continuing to next step.');
-        }
+        core.info('Timeout or API not reachable. Continuing to next step.');
     }
 }
 async function main() {
@@ -275,22 +307,23 @@ function createSlugPrefix() {
     return hash.digest('hex').substring(0, 8);
 }
 class TestReporter {
+    artifact = core.getInput('artifact', { required: false });
+    name = core.getInput('name', { required: true });
+    path = core.getInput('path', { required: true });
+    pathReplaceBackslashes = core.getInput('path-replace-backslashes', { required: false }) === 'true';
+    reporter = core.getInput('reporter', { required: true });
+    listSuites = core.getInput('list-suites', { required: true });
+    listTests = core.getInput('list-tests', { required: true });
+    maxAnnotations = parseInt(core.getInput('max-annotations', { required: true }));
+    failOnError = core.getInput('fail-on-error', { required: true }) === 'true';
+    workDirInput = core.getInput('working-directory', { required: false });
+    onlySummary = core.getInput('only-summary', { required: false }) === 'true';
+    outputTo = core.getInput('output-to', { required: false });
+    token = core.getInput('token', { required: true });
+    slugPrefix = '';
+    octokit;
+    context = (0, github_utils_1.getCheckRunContext)();
     constructor() {
-        this.artifact = core.getInput('artifact', { required: false });
-        this.name = core.getInput('name', { required: true });
-        this.path = core.getInput('path', { required: true });
-        this.pathReplaceBackslashes = core.getInput('path-replace-backslashes', { required: false }) === 'true';
-        this.reporter = core.getInput('reporter', { required: true });
-        this.listSuites = core.getInput('list-suites', { required: true });
-        this.listTests = core.getInput('list-tests', { required: true });
-        this.maxAnnotations = parseInt(core.getInput('max-annotations', { required: true }));
-        this.failOnError = core.getInput('fail-on-error', { required: true }) === 'true';
-        this.workDirInput = core.getInput('working-directory', { required: false });
-        this.onlySummary = core.getInput('only-summary', { required: false }) === 'true';
-        this.outputTo = core.getInput('output-to', { required: false });
-        this.token = core.getInput('token', { required: true });
-        this.slugPrefix = '';
-        this.context = (0, github_utils_1.getCheckRunContext)();
         this.octokit = github.getOctokit(this.token);
         if (this.listSuites !== 'all' && this.listSuites !== 'failed') {
             core.setFailed(`Input parameter 'list-suites' has invalid value`);
@@ -369,7 +402,6 @@ class TestReporter {
         }
     }
     async createReport(parser, name, files) {
-        var _a;
         if (files.length === 0) {
             core.warning(`No file matches path ${this.path}`);
             return [];
@@ -401,7 +433,7 @@ class TestReporter {
                 break;
             }
             case 'step-summary': {
-                const run_attempt = (_a = process.env['GITHUB_RUN_ATTEMPT']) !== null && _a !== void 0 ? _a : 1;
+                const run_attempt = process.env['GITHUB_RUN_ATTEMPT'] ?? 1;
                 baseUrl = `https://github.com/${github.context.repo.owner}/${github.context.repo.repo}/actions/runs/${github.context.runId}/attempts/${run_attempt}`;
                 break;
             }
@@ -507,6 +539,10 @@ const path_utils_1 = __nccwpck_require__(4070);
 const dart_json_types_1 = __nccwpck_require__(7887);
 const test_results_1 = __nccwpck_require__(2768);
 class TestRun {
+    path;
+    suites;
+    success;
+    time;
     constructor(path, suites, success, time) {
         this.path = path;
         this.suites = suites;
@@ -515,32 +551,37 @@ class TestRun {
     }
 }
 class TestSuite {
+    suite;
     constructor(suite) {
         this.suite = suite;
-        this.groups = {};
     }
+    groups = {};
 }
 class TestGroup {
+    group;
     constructor(group) {
         this.group = group;
-        this.tests = [];
     }
+    tests = [];
 }
 class TestCase {
+    testStart;
     constructor(testStart) {
         this.testStart = testStart;
-        this.print = [];
         this.groupId = testStart.test.groupIDs[testStart.test.groupIDs.length - 1];
     }
+    groupId;
+    print = [];
+    testDone;
+    error;
     get result() {
-        var _a, _b, _c, _d;
-        if ((_a = this.testDone) === null || _a === void 0 ? void 0 : _a.skipped) {
+        if (this.testDone?.skipped) {
             return 'skipped';
         }
-        if (((_b = this.testDone) === null || _b === void 0 ? void 0 : _b.result) === 'success') {
+        if (this.testDone?.result === 'success') {
             return 'success';
         }
-        if (((_c = this.testDone) === null || _c === void 0 ? void 0 : _c.result) === 'error' || ((_d = this.testDone) === null || _d === void 0 ? void 0 : _d.result) === 'failure') {
+        if (this.testDone?.result === 'error' || this.testDone?.result === 'failure') {
             return 'failed';
         }
         return undefined;
@@ -550,6 +591,9 @@ class TestCase {
     }
 }
 class DartJsonParser {
+    options;
+    sdk;
+    assumedWorkDir;
     constructor(options, sdk) {
         this.options = options;
         this.sdk = sdk;
@@ -617,11 +661,11 @@ class DartJsonParser {
     }
     getGroups(suite) {
         const groups = Object.values(suite.groups).filter(grp => grp.tests.length > 0);
-        groups.sort((a, b) => { var _a, _b; return ((_a = a.group.line) !== null && _a !== void 0 ? _a : 0) - ((_b = b.group.line) !== null && _b !== void 0 ? _b : 0); });
+        groups.sort((a, b) => (a.group.line ?? 0) - (b.group.line ?? 0));
         return groups.map(group => {
-            group.tests.sort((a, b) => { var _a, _b; return ((_a = a.testStart.test.line) !== null && _a !== void 0 ? _a : 0) - ((_b = b.testStart.test.line) !== null && _b !== void 0 ? _b : 0); });
+            group.tests.sort((a, b) => (a.testStart.test.line ?? 0) - (b.testStart.test.line ?? 0));
             const tests = group.tests
-                .filter(tc => { var _a; return !((_a = tc.testDone) === null || _a === void 0 ? void 0 : _a.hidden); })
+                .filter(tc => !tc.testDone?.hidden)
                 .map(tc => {
                 const error = this.getError(suite, tc);
                 const testName = group.group.name !== undefined && tc.testStart.test.name.startsWith(group.group.name)
@@ -633,19 +677,18 @@ class DartJsonParser {
         });
     }
     getError(testSuite, test) {
-        var _a, _b, _c, _d, _e, _f;
         if (!this.options.parseErrors || !test.error) {
             return undefined;
         }
         const { trackedFiles } = this.options;
-        const stackTrace = (_b = (_a = test.error) === null || _a === void 0 ? void 0 : _a.stackTrace) !== null && _b !== void 0 ? _b : '';
+        const stackTrace = test.error?.stackTrace ?? '';
         const print = test.print
             .filter(p => p.messageType === 'print')
             .map(p => p.message)
             .join('\n');
         const details = [print, stackTrace].filter(str => str !== '').join('\n');
         const src = this.exceptionThrowSource(details, trackedFiles);
-        const message = this.getErrorMessage((_d = (_c = test.error) === null || _c === void 0 ? void 0 : _c.error) !== null && _d !== void 0 ? _d : '', print);
+        const message = this.getErrorMessage(test.error?.error ?? '', print);
         let path;
         let line;
         if (src !== undefined) {
@@ -656,7 +699,7 @@ class DartJsonParser {
             const testStartPath = this.getRelativePath(testSuite.suite.path);
             if (trackedFiles.includes(testStartPath)) {
                 path = testStartPath;
-                line = (_f = (_e = test.testStart.test.root_line) !== null && _e !== void 0 ? _e : test.testStart.test.line) !== null && _f !== void 0 ? _f : undefined;
+                line = test.testStart.test.root_line ?? test.testStart.test.line ?? undefined;
             }
         }
         return {
@@ -710,8 +753,9 @@ class DartJsonParser {
         return path;
     }
     getWorkDir(path) {
-        var _a, _b;
-        return ((_b = (_a = this.options.workDir) !== null && _a !== void 0 ? _a : this.assumedWorkDir) !== null && _b !== void 0 ? _b : (this.assumedWorkDir = (0, path_utils_1.getBasePath)(path, this.options.trackedFiles)));
+        return (this.options.workDir ??
+            this.assumedWorkDir ??
+            (this.assumedWorkDir = (0, path_utils_1.getBasePath)(path, this.options.trackedFiles)));
     }
 }
 exports.DartJsonParser = DartJsonParser;
@@ -771,12 +815,17 @@ const path_utils_1 = __nccwpck_require__(4070);
 const parse_utils_1 = __nccwpck_require__(7811);
 const test_results_1 = __nccwpck_require__(2768);
 class TestClass {
+    name;
     constructor(name) {
         this.name = name;
-        this.tests = [];
     }
+    tests = [];
 }
 class Test {
+    name;
+    outcome;
+    duration;
+    error;
     constructor(name, outcome, duration, error) {
         this.name = name;
         this.outcome = outcome;
@@ -795,6 +844,8 @@ class Test {
     }
 }
 class DotnetTrxParser {
+    options;
+    assumedWorkDir;
     constructor(options) {
         this.options = options;
     }
@@ -862,12 +913,11 @@ class DotnetTrxParser {
         return new test_results_1.TestRunResult(path, suites, totalTime);
     }
     getErrorInfo(testResult) {
-        var _a;
         if (testResult.$.outcome !== 'Failed') {
             return undefined;
         }
         const output = testResult.Output;
-        const error = (output === null || output === void 0 ? void 0 : output.length) > 0 && ((_a = output[0].ErrorInfo) === null || _a === void 0 ? void 0 : _a.length) > 0 ? output[0].ErrorInfo[0] : undefined;
+        const error = output?.length > 0 && output[0].ErrorInfo?.length > 0 ? output[0].ErrorInfo[0] : undefined;
         return error;
     }
     getError(test) {
@@ -918,8 +968,9 @@ class DotnetTrxParser {
         }
     }
     getWorkDir(path) {
-        var _a, _b;
-        return ((_b = (_a = this.options.workDir) !== null && _a !== void 0 ? _a : this.assumedWorkDir) !== null && _b !== void 0 ? _b : (this.assumedWorkDir = (0, path_utils_1.getBasePath)(path, this.options.trackedFiles)));
+        return (this.options.workDir ??
+            this.assumedWorkDir ??
+            (this.assumedWorkDir = (0, path_utils_1.getBasePath)(path, this.options.trackedFiles)));
     }
 }
 exports.DotnetTrxParser = DotnetTrxParser;
@@ -962,14 +1013,15 @@ const xml2js_1 = __nccwpck_require__(6189);
 const path_utils_1 = __nccwpck_require__(4070);
 const test_results_1 = __nccwpck_require__(2768);
 class JavaJunitParser {
+    options;
+    trackedFiles;
     constructor(options) {
-        var _a;
         this.options = options;
         // Map to efficient lookup of all paths with given file name
         this.trackedFiles = {};
         for (const filePath of options.trackedFiles) {
             const fileName = path.basename(filePath);
-            const files = (_a = this.trackedFiles[fileName]) !== null && _a !== void 0 ? _a : (this.trackedFiles[fileName] = []);
+            const files = this.trackedFiles[fileName] ?? (this.trackedFiles[fileName] = []);
             files.push((0, path_utils_1.normalizeFilePath)(filePath));
         }
     }
@@ -1004,7 +1056,6 @@ class JavaJunitParser {
         }
     }
     getTestRunResult(filePath, junit) {
-        var _a;
         const suites = junit.testsuites.testsuite === undefined
             ? []
             : junit.testsuites.testsuite.map(ts => {
@@ -1012,7 +1063,7 @@ class JavaJunitParser {
                 const time = parseFloat(ts.$.time) * 1000;
                 return new test_results_1.TestSuiteResult(name, this.getGroups(ts), time);
             });
-        const seconds = parseFloat((_a = junit.testsuites.$) === null || _a === void 0 ? void 0 : _a.time);
+        const seconds = parseFloat(junit.testsuites.$?.time);
         const time = isNaN(seconds) ? undefined : seconds * 1000;
         return new test_results_1.TestRunResult(filePath, suites, time);
     }
@@ -1052,17 +1103,16 @@ class JavaJunitParser {
         return 'success';
     }
     getTestCaseError(tc) {
-        var _a, _b, _c;
         if (!this.options.parseErrors) {
             return undefined;
         }
         // We process <error> and <failure> the same way
-        const failures = (_a = tc.failure) !== null && _a !== void 0 ? _a : tc.error;
+        const failures = tc.failure ?? tc.error;
         if (!failures) {
             return undefined;
         }
         const failure = failures[0];
-        const details = typeof failure === 'object' ? (_b = failure._) !== null && _b !== void 0 ? _b : '' : failure;
+        const details = typeof failure === 'object' ? failure._ ?? '' : failure;
         let filePath;
         let line;
         const src = this.exceptionThrowSource(details);
@@ -1073,7 +1123,7 @@ class JavaJunitParser {
         let message;
         if (typeof failure === 'object') {
             message = failure.$.message;
-            if ((_c = failure.$) === null || _c === void 0 ? void 0 : _c.type) {
+            if (failure.$?.type) {
                 message = failure.$.type + ': ' + message;
             }
         }
@@ -1157,6 +1207,8 @@ const node_utils_1 = __nccwpck_require__(5824);
 const path_utils_1 = __nccwpck_require__(4070);
 const test_results_1 = __nccwpck_require__(2768);
 class JestJunitParser {
+    options;
+    assumedWorkDir;
     constructor(options) {
         this.options = options;
     }
@@ -1245,8 +1297,9 @@ class JestJunitParser {
         return path;
     }
     getWorkDir(path) {
-        var _a, _b;
-        return ((_b = (_a = this.options.workDir) !== null && _a !== void 0 ? _a : this.assumedWorkDir) !== null && _b !== void 0 ? _b : (this.assumedWorkDir = (0, path_utils_1.getBasePath)(path, this.options.trackedFiles)));
+        return (this.options.workDir ??
+            this.assumedWorkDir ??
+            (this.assumedWorkDir = (0, path_utils_1.getBasePath)(path, this.options.trackedFiles)));
     }
 }
 exports.JestJunitParser = JestJunitParser;
@@ -1265,6 +1318,8 @@ const test_results_1 = __nccwpck_require__(2768);
 const node_utils_1 = __nccwpck_require__(5824);
 const path_utils_1 = __nccwpck_require__(4070);
 class MochaJsonParser {
+    options;
+    assumedWorkDir;
     constructor(options) {
         this.options = options;
     }
@@ -1285,9 +1340,8 @@ class MochaJsonParser {
     getTestRunResult(resultsPath, mocha) {
         const suitesMap = {};
         const getSuite = (test) => {
-            var _a;
             const path = this.getRelativePath(test.file);
-            return (_a = suitesMap[path]) !== null && _a !== void 0 ? _a : (suitesMap[path] = new test_results_1.TestSuiteResult(path, []));
+            return suitesMap[path] ?? (suitesMap[path] = new test_results_1.TestSuiteResult(path, []));
         };
         for (const test of mocha.passes) {
             const suite = getSuite(test);
@@ -1305,7 +1359,6 @@ class MochaJsonParser {
         return new test_results_1.TestRunResult(resultsPath, suites, mocha.stats.duration);
     }
     processTest(suite, test, result) {
-        var _a;
         const groupName = test.fullTitle !== test.title
             ? test.fullTitle.substr(0, test.fullTitle.length - test.title.length).trimEnd()
             : null;
@@ -1315,7 +1368,7 @@ class MochaJsonParser {
             suite.groups.push(group);
         }
         const error = this.getTestCaseError(test);
-        const testCase = new test_results_1.TestCaseResult(test.title, result, (_a = test.duration) !== null && _a !== void 0 ? _a : 0, error);
+        const testCase = new test_results_1.TestCaseResult(test.title, result, test.duration ?? 0, error);
         group.tests.push(testCase);
     }
     getTestCaseError(test) {
@@ -1347,8 +1400,9 @@ class MochaJsonParser {
         return path;
     }
     getWorkDir(path) {
-        var _a, _b;
-        return ((_b = (_a = this.options.workDir) !== null && _a !== void 0 ? _a : this.assumedWorkDir) !== null && _b !== void 0 ? _b : (this.assumedWorkDir = (0, path_utils_1.getBasePath)(path, this.options.trackedFiles)));
+        return (this.options.workDir ??
+            this.assumedWorkDir ??
+            (this.assumedWorkDir = (0, path_utils_1.getBasePath)(path, this.options.trackedFiles)));
     }
 }
 exports.MochaJsonParser = MochaJsonParser;
@@ -1367,6 +1421,8 @@ const test_results_1 = __nccwpck_require__(2768);
 const node_utils_1 = __nccwpck_require__(5824);
 const path_utils_1 = __nccwpck_require__(4070);
 class MochawesomeJsonParser {
+    options;
+    assumedWorkDir;
     constructor(options) {
         this.options = options;
     }
@@ -1388,12 +1444,11 @@ class MochawesomeJsonParser {
         const suitesMap = {};
         const results = mochawesome.results;
         const getSuite = (fullFile) => {
-            var _a;
             const path = this.getRelativePath(fullFile);
-            return (_a = suitesMap[path]) !== null && _a !== void 0 ? _a : (suitesMap[path] = new test_results_1.TestSuiteResult(path, []));
+            return suitesMap[path] ?? (suitesMap[path] = new test_results_1.TestSuiteResult(path, []));
         };
         const processPassingTests = (tests, suiteName) => {
-            const passingTests = tests === null || tests === void 0 ? void 0 : tests.filter(test => test.pass);
+            const passingTests = tests?.filter(test => test.pass);
             if (passingTests) {
                 for (const passingTest of passingTests) {
                     const suite = getSuite(suiteName);
@@ -1402,7 +1457,7 @@ class MochawesomeJsonParser {
             }
         };
         const processFailingTests = (tests, suiteName) => {
-            const failingTests = tests === null || tests === void 0 ? void 0 : tests.filter(test => test.fail);
+            const failingTests = tests?.filter(test => test.fail);
             if (failingTests) {
                 for (const failingTest of failingTests) {
                     const suite = getSuite(suiteName);
@@ -1411,7 +1466,7 @@ class MochawesomeJsonParser {
             }
         };
         const processPendingTests = (tests, suiteName) => {
-            const pendingTests = tests === null || tests === void 0 ? void 0 : tests.filter(test => test.skipped);
+            const pendingTests = tests?.filter(test => test.skipped);
             if (pendingTests) {
                 for (const pendingTest of pendingTests) {
                     const suite = getSuite(suiteName);
@@ -1426,17 +1481,16 @@ class MochawesomeJsonParser {
         };
         // Handle nested suites
         const processNestedSuites = (suite, nestedSuiteIndex, suiteName) => {
-            var _a, _b;
             // Process suite tests
             processAllTests(suite.tests, suiteName);
             for (const innerSuite of suite.suites) {
                 // Process inner suite tests
                 processAllTests(innerSuite.tests, suiteName);
-                if (((_a = innerSuite === null || innerSuite === void 0 ? void 0 : innerSuite.suites[nestedSuiteIndex]) === null || _a === void 0 ? void 0 : _a.suites.length) > 0) {
+                if (innerSuite?.suites[nestedSuiteIndex]?.suites.length > 0) {
                     processNestedSuites(innerSuite, 0, suiteName);
                 }
                 else {
-                    processAllTests((_b = innerSuite === null || innerSuite === void 0 ? void 0 : innerSuite.suites[nestedSuiteIndex]) === null || _b === void 0 ? void 0 : _b.tests, suiteName);
+                    processAllTests(innerSuite?.suites[nestedSuiteIndex]?.tests, suiteName);
                     nestedSuiteIndex++;
                     // TODO - Figure out how to get 1.1.1.1.2 - suites with more than one object in them
                 }
@@ -1444,15 +1498,15 @@ class MochawesomeJsonParser {
         };
         // Process Mochawesome Data
         for (const result of results) {
-            const suites = result === null || result === void 0 ? void 0 : result.suites;
-            const filePath = result === null || result === void 0 ? void 0 : result.fullFile;
-            const suitelessTests = result === null || result === void 0 ? void 0 : result.tests;
+            const suites = result?.suites;
+            const filePath = result?.fullFile;
+            const suitelessTests = result?.tests;
             // Process tests that aren't in a suite
-            if ((suitelessTests === null || suitelessTests === void 0 ? void 0 : suitelessTests.length) > 0) {
+            if (suitelessTests?.length > 0) {
                 processAllTests(suitelessTests, filePath);
             }
             // Process tests that are in a suite
-            if ((suites === null || suites === void 0 ? void 0 : suites.length) > 0) {
+            if (suites?.length > 0) {
                 for (const suite of suites) {
                     processNestedSuites(suite, 0, filePath ? filePath : suite.title);
                 }
@@ -1462,7 +1516,6 @@ class MochawesomeJsonParser {
         return new test_results_1.TestRunResult(resultsPath, mappedSuites, mochawesome.stats.duration);
     }
     processTest(suite, test, result) {
-        var _a;
         const groupName = test.fullTitle !== test.title
             ? test.fullTitle.substr(0, test.fullTitle.length - test.title.length).trimEnd()
             : null;
@@ -1472,7 +1525,7 @@ class MochawesomeJsonParser {
             suite.groups.push(group);
         }
         const error = this.getTestCaseError(test);
-        const testCase = new test_results_1.TestCaseResult(test.title, result, (_a = test.duration) !== null && _a !== void 0 ? _a : 0, error);
+        const testCase = new test_results_1.TestCaseResult(test.title, result, test.duration ?? 0, error);
         group.tests.push(testCase);
     }
     getTestCaseError(test) {
@@ -1504,8 +1557,9 @@ class MochawesomeJsonParser {
         return path;
     }
     getWorkDir(path) {
-        var _a, _b;
-        return ((_b = (_a = this.options.workDir) !== null && _a !== void 0 ? _a : this.assumedWorkDir) !== null && _b !== void 0 ? _b : (this.assumedWorkDir = (0, path_utils_1.getBasePath)(path, this.options.trackedFiles)));
+        return (this.options.workDir ??
+            this.assumedWorkDir ??
+            (this.assumedWorkDir = (0, path_utils_1.getBasePath)(path, this.options.trackedFiles)));
     }
 }
 exports.MochawesomeJsonParser = MochawesomeJsonParser;
@@ -1523,7 +1577,6 @@ exports.getAnnotations = void 0;
 const markdown_utils_1 = __nccwpck_require__(6482);
 const parse_utils_1 = __nccwpck_require__(7811);
 function getAnnotations(results, maxCount) {
-    var _a, _b, _c, _d;
     if (maxCount === 0) {
         return [];
     }
@@ -1539,8 +1592,8 @@ function getAnnotations(results, maxCount) {
                     if (err === undefined) {
                         continue;
                     }
-                    const path = (_a = err.path) !== null && _a !== void 0 ? _a : tr.path;
-                    const line = (_b = err.line) !== null && _b !== void 0 ? _b : 0;
+                    const path = err.path ?? tr.path;
+                    const line = err.line ?? 0;
                     if (mergeDup) {
                         const dup = errors.find(e => path === e.path && line === e.line && err.details === e.details);
                         if (dup !== undefined) {
@@ -1553,7 +1606,7 @@ function getAnnotations(results, maxCount) {
                         suiteName: ts.name,
                         testName: tg.name ? `${tg.name} ► ${tc.name}` : tc.name,
                         details: err.details,
-                        message: (_d = (_c = err.message) !== null && _c !== void 0 ? _c : (0, parse_utils_1.getFirstNonEmptyLine)(err.details)) !== null && _d !== void 0 ? _d : 'Test failed',
+                        message: err.message ?? (0, parse_utils_1.getFirstNonEmptyLine)(err.details) ?? 'Test failed',
                         path,
                         line
                     });
@@ -1794,7 +1847,6 @@ function getSuitesReport(tr, runIndex, options) {
     return sections;
 }
 function getTestsReport(ts, runIndex, suiteIndex, options) {
-    var _a, _b, _c;
     if (options.listTests === 'failed' && ts.result !== 'failed') {
         return [];
     }
@@ -1821,7 +1873,9 @@ function getTestsReport(ts, runIndex, suiteIndex, options) {
             const result = getResultIcon(tc.result);
             sections.push(`${space}${result} ${tc.name}`);
             if (tc.error) {
-                const lines = (_c = ((_a = tc.error.message) !== null && _a !== void 0 ? _a : (_b = (0, parse_utils_1.getFirstNonEmptyLine)(tc.error.details)) === null || _b === void 0 ? void 0 : _b.trim())) === null || _c === void 0 ? void 0 : _c.split(/\r?\n/g).map(l => '\t' + l);
+                const lines = (tc.error.message ?? (0, parse_utils_1.getFirstNonEmptyLine)(tc.error.details)?.trim())
+                    ?.split(/\r?\n/g)
+                    .map(l => '\t' + l);
                 if (lines) {
                     sections.push(...lines);
                 }
@@ -1863,6 +1917,9 @@ function getResultIcon(result) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.TestCaseResult = exports.TestGroupResult = exports.TestSuiteResult = exports.TestRunResult = void 0;
 class TestRunResult {
+    path;
+    suites;
+    totalTime;
     constructor(path, suites, totalTime) {
         this.path = path;
         this.suites = suites;
@@ -1881,8 +1938,7 @@ class TestRunResult {
         return this.suites.reduce((sum, g) => sum + g.skipped, 0);
     }
     get time() {
-        var _a;
-        return (_a = this.totalTime) !== null && _a !== void 0 ? _a : this.suites.reduce((sum, g) => sum + g.time, 0);
+        return this.totalTime ?? this.suites.reduce((sum, g) => sum + g.time, 0);
     }
     get result() {
         return this.suites.some(t => t.result === 'failed') ? 'failed' : 'success';
@@ -1901,6 +1957,9 @@ class TestRunResult {
 }
 exports.TestRunResult = TestRunResult;
 class TestSuiteResult {
+    name;
+    groups;
+    totalTime;
     constructor(name, groups, totalTime) {
         this.name = name;
         this.groups = groups;
@@ -1919,8 +1978,7 @@ class TestSuiteResult {
         return this.groups.reduce((sum, g) => sum + g.skipped, 0);
     }
     get time() {
-        var _a;
-        return (_a = this.totalTime) !== null && _a !== void 0 ? _a : this.groups.reduce((sum, g) => sum + g.time, 0);
+        return this.totalTime ?? this.groups.reduce((sum, g) => sum + g.time, 0);
     }
     get result() {
         return this.groups.some(t => t.result === 'failed') ? 'failed' : 'success';
@@ -1929,7 +1987,7 @@ class TestSuiteResult {
         return this.groups.filter(grp => grp.result === 'failed');
     }
     sort(deep) {
-        this.groups.sort((a, b) => { var _a, _b; return ((_a = a.name) !== null && _a !== void 0 ? _a : '').localeCompare((_b = b.name) !== null && _b !== void 0 ? _b : ''); });
+        this.groups.sort((a, b) => (a.name ?? '').localeCompare(b.name ?? ''));
         if (deep) {
             for (const grp of this.groups) {
                 grp.sort();
@@ -1939,6 +1997,8 @@ class TestSuiteResult {
 }
 exports.TestSuiteResult = TestSuiteResult;
 class TestGroupResult {
+    name;
+    tests;
     constructor(name, tests) {
         this.name = name;
         this.tests = tests;
@@ -1967,6 +2027,10 @@ class TestGroupResult {
 }
 exports.TestGroupResult = TestGroupResult;
 class TestCaseResult {
+    name;
+    result;
+    time;
+    error;
     constructor(name, result, time, error) {
         this.name = name;
         this.result = result;
@@ -2264,8 +2328,7 @@ function tableEscape(content) {
 }
 exports.tableEscape = tableEscape;
 function fixEol(text) {
-    var _a;
-    return (_a = text === null || text === void 0 ? void 0 : text.replace(/\r/g, '')) !== null && _a !== void 0 ? _a : '';
+    return text?.replace(/\r/g, '') ?? '';
 }
 exports.fixEol = fixEol;
 function ellipsis(text, maxLength) {
@@ -2433,11 +2496,7 @@ exports.slug = slug;
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -2450,7 +2509,7 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
     __setModuleDefault(result, mod);
     return result;
 };
@@ -2512,13 +2571,13 @@ class Command {
     }
 }
 function escapeData(s) {
-    return (0, utils_1.toCommandValue)(s)
+    return utils_1.toCommandValue(s)
         .replace(/%/g, '%25')
         .replace(/\r/g, '%0D')
         .replace(/\n/g, '%0A');
 }
 function escapeProperty(s) {
-    return (0, utils_1.toCommandValue)(s)
+    return utils_1.toCommandValue(s)
         .replace(/%/g, '%25')
         .replace(/\r/g, '%0D')
         .replace(/\n/g, '%0A')
@@ -2536,11 +2595,7 @@ function escapeProperty(s) {
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -2553,7 +2608,7 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
     __setModuleDefault(result, mod);
     return result;
 };
@@ -2567,7 +2622,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.platform = exports.toPlatformPath = exports.toWin32Path = exports.toPosixPath = exports.markdownSummary = exports.summary = exports.getIDToken = exports.getState = exports.saveState = exports.group = exports.endGroup = exports.startGroup = exports.info = exports.notice = exports.warning = exports.error = exports.debug = exports.isDebug = exports.setFailed = exports.setCommandEcho = exports.setOutput = exports.getBooleanInput = exports.getMultilineInput = exports.getInput = exports.addPath = exports.setSecret = exports.exportVariable = exports.ExitCode = void 0;
+exports.getIDToken = exports.getState = exports.saveState = exports.group = exports.endGroup = exports.startGroup = exports.info = exports.notice = exports.warning = exports.error = exports.debug = exports.isDebug = exports.setFailed = exports.setCommandEcho = exports.setOutput = exports.getBooleanInput = exports.getMultilineInput = exports.getInput = exports.addPath = exports.setSecret = exports.exportVariable = exports.ExitCode = void 0;
 const command_1 = __nccwpck_require__(7351);
 const file_command_1 = __nccwpck_require__(717);
 const utils_1 = __nccwpck_require__(5278);
@@ -2587,7 +2642,7 @@ var ExitCode;
      * A code indicating that the action was a failure
      */
     ExitCode[ExitCode["Failure"] = 1] = "Failure";
-})(ExitCode || (exports.ExitCode = ExitCode = {}));
+})(ExitCode = exports.ExitCode || (exports.ExitCode = {}));
 //-----------------------------------------------------------------------
 // Variables
 //-----------------------------------------------------------------------
@@ -2598,13 +2653,13 @@ var ExitCode;
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function exportVariable(name, val) {
-    const convertedVal = (0, utils_1.toCommandValue)(val);
+    const convertedVal = utils_1.toCommandValue(val);
     process.env[name] = convertedVal;
     const filePath = process.env['GITHUB_ENV'] || '';
     if (filePath) {
-        return (0, file_command_1.issueFileCommand)('ENV', (0, file_command_1.prepareKeyValueMessage)(name, val));
+        return file_command_1.issueFileCommand('ENV', file_command_1.prepareKeyValueMessage(name, val));
     }
-    (0, command_1.issueCommand)('set-env', { name }, convertedVal);
+    command_1.issueCommand('set-env', { name }, convertedVal);
 }
 exports.exportVariable = exportVariable;
 /**
@@ -2612,7 +2667,7 @@ exports.exportVariable = exportVariable;
  * @param secret value of the secret
  */
 function setSecret(secret) {
-    (0, command_1.issueCommand)('add-mask', {}, secret);
+    command_1.issueCommand('add-mask', {}, secret);
 }
 exports.setSecret = setSecret;
 /**
@@ -2622,10 +2677,10 @@ exports.setSecret = setSecret;
 function addPath(inputPath) {
     const filePath = process.env['GITHUB_PATH'] || '';
     if (filePath) {
-        (0, file_command_1.issueFileCommand)('PATH', inputPath);
+        file_command_1.issueFileCommand('PATH', inputPath);
     }
     else {
-        (0, command_1.issueCommand)('add-path', {}, inputPath);
+        command_1.issueCommand('add-path', {}, inputPath);
     }
     process.env['PATH'] = `${inputPath}${path.delimiter}${process.env['PATH']}`;
 }
@@ -2700,10 +2755,10 @@ exports.getBooleanInput = getBooleanInput;
 function setOutput(name, value) {
     const filePath = process.env['GITHUB_OUTPUT'] || '';
     if (filePath) {
-        return (0, file_command_1.issueFileCommand)('OUTPUT', (0, file_command_1.prepareKeyValueMessage)(name, value));
+        return file_command_1.issueFileCommand('OUTPUT', file_command_1.prepareKeyValueMessage(name, value));
     }
     process.stdout.write(os.EOL);
-    (0, command_1.issueCommand)('set-output', { name }, (0, utils_1.toCommandValue)(value));
+    command_1.issueCommand('set-output', { name }, utils_1.toCommandValue(value));
 }
 exports.setOutput = setOutput;
 /**
@@ -2712,7 +2767,7 @@ exports.setOutput = setOutput;
  *
  */
 function setCommandEcho(enabled) {
-    (0, command_1.issue)('echo', enabled ? 'on' : 'off');
+    command_1.issue('echo', enabled ? 'on' : 'off');
 }
 exports.setCommandEcho = setCommandEcho;
 //-----------------------------------------------------------------------
@@ -2743,7 +2798,7 @@ exports.isDebug = isDebug;
  * @param message debug message
  */
 function debug(message) {
-    (0, command_1.issueCommand)('debug', {}, message);
+    command_1.issueCommand('debug', {}, message);
 }
 exports.debug = debug;
 /**
@@ -2752,7 +2807,7 @@ exports.debug = debug;
  * @param properties optional properties to add to the annotation.
  */
 function error(message, properties = {}) {
-    (0, command_1.issueCommand)('error', (0, utils_1.toCommandProperties)(properties), message instanceof Error ? message.toString() : message);
+    command_1.issueCommand('error', utils_1.toCommandProperties(properties), message instanceof Error ? message.toString() : message);
 }
 exports.error = error;
 /**
@@ -2761,7 +2816,7 @@ exports.error = error;
  * @param properties optional properties to add to the annotation.
  */
 function warning(message, properties = {}) {
-    (0, command_1.issueCommand)('warning', (0, utils_1.toCommandProperties)(properties), message instanceof Error ? message.toString() : message);
+    command_1.issueCommand('warning', utils_1.toCommandProperties(properties), message instanceof Error ? message.toString() : message);
 }
 exports.warning = warning;
 /**
@@ -2770,7 +2825,7 @@ exports.warning = warning;
  * @param properties optional properties to add to the annotation.
  */
 function notice(message, properties = {}) {
-    (0, command_1.issueCommand)('notice', (0, utils_1.toCommandProperties)(properties), message instanceof Error ? message.toString() : message);
+    command_1.issueCommand('notice', utils_1.toCommandProperties(properties), message instanceof Error ? message.toString() : message);
 }
 exports.notice = notice;
 /**
@@ -2789,14 +2844,14 @@ exports.info = info;
  * @param name The name of the output group
  */
 function startGroup(name) {
-    (0, command_1.issue)('group', name);
+    command_1.issue('group', name);
 }
 exports.startGroup = startGroup;
 /**
  * End an output group.
  */
 function endGroup() {
-    (0, command_1.issue)('endgroup');
+    command_1.issue('endgroup');
 }
 exports.endGroup = endGroup;
 /**
@@ -2834,9 +2889,9 @@ exports.group = group;
 function saveState(name, value) {
     const filePath = process.env['GITHUB_STATE'] || '';
     if (filePath) {
-        return (0, file_command_1.issueFileCommand)('STATE', (0, file_command_1.prepareKeyValueMessage)(name, value));
+        return file_command_1.issueFileCommand('STATE', file_command_1.prepareKeyValueMessage(name, value));
     }
-    (0, command_1.issueCommand)('save-state', { name }, (0, utils_1.toCommandValue)(value));
+    command_1.issueCommand('save-state', { name }, utils_1.toCommandValue(value));
 }
 exports.saveState = saveState;
 /**
@@ -2872,10 +2927,6 @@ var path_utils_1 = __nccwpck_require__(2981);
 Object.defineProperty(exports, "toPosixPath", ({ enumerable: true, get: function () { return path_utils_1.toPosixPath; } }));
 Object.defineProperty(exports, "toWin32Path", ({ enumerable: true, get: function () { return path_utils_1.toWin32Path; } }));
 Object.defineProperty(exports, "toPlatformPath", ({ enumerable: true, get: function () { return path_utils_1.toPlatformPath; } }));
-/**
- * Platform utilities exports
- */
-exports.platform = __importStar(__nccwpck_require__(5243));
 //# sourceMappingURL=core.js.map
 
 /***/ }),
@@ -2888,11 +2939,7 @@ exports.platform = __importStar(__nccwpck_require__(5243));
 // For internal use, subject to change.
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -2905,7 +2952,7 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
     __setModuleDefault(result, mod);
     return result;
 };
@@ -2913,9 +2960,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.prepareKeyValueMessage = exports.issueFileCommand = void 0;
 // We use any as a valid input type
 /* eslint-disable @typescript-eslint/no-explicit-any */
-const crypto = __importStar(__nccwpck_require__(6113));
 const fs = __importStar(__nccwpck_require__(7147));
 const os = __importStar(__nccwpck_require__(2037));
+const uuid_1 = __nccwpck_require__(8974);
 const utils_1 = __nccwpck_require__(5278);
 function issueFileCommand(command, message) {
     const filePath = process.env[`GITHUB_${command}`];
@@ -2925,14 +2972,14 @@ function issueFileCommand(command, message) {
     if (!fs.existsSync(filePath)) {
         throw new Error(`Missing file at path: ${filePath}`);
     }
-    fs.appendFileSync(filePath, `${(0, utils_1.toCommandValue)(message)}${os.EOL}`, {
+    fs.appendFileSync(filePath, `${utils_1.toCommandValue(message)}${os.EOL}`, {
         encoding: 'utf8'
     });
 }
 exports.issueFileCommand = issueFileCommand;
 function prepareKeyValueMessage(key, value) {
-    const delimiter = `ghadelimiter_${crypto.randomUUID()}`;
-    const convertedValue = (0, utils_1.toCommandValue)(value);
+    const delimiter = `ghadelimiter_${uuid_1.v4()}`;
+    const convertedValue = utils_1.toCommandValue(value);
     // These should realistically never happen, but just in case someone finds a
     // way to exploit uuid generation let's not allow keys or values that contain
     // the delimiter.
@@ -3017,9 +3064,9 @@ class OidcClient {
                     const encodedAudience = encodeURIComponent(audience);
                     id_token_url = `${id_token_url}&audience=${encodedAudience}`;
                 }
-                (0, core_1.debug)(`ID token url is ${id_token_url}`);
+                core_1.debug(`ID token url is ${id_token_url}`);
                 const id_token = yield OidcClient.getCall(id_token_url);
-                (0, core_1.setSecret)(id_token);
+                core_1.setSecret(id_token);
                 return id_token;
             }
             catch (error) {
@@ -3040,11 +3087,7 @@ exports.OidcClient = OidcClient;
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -3057,7 +3100,7 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
     __setModuleDefault(result, mod);
     return result;
 };
@@ -3099,107 +3142,6 @@ function toPlatformPath(pth) {
 }
 exports.toPlatformPath = toPlatformPath;
 //# sourceMappingURL=path-utils.js.map
-
-/***/ }),
-
-/***/ 5243:
-/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
-
-"use strict";
-
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getDetails = exports.isLinux = exports.isMacOS = exports.isWindows = exports.arch = exports.platform = void 0;
-const os_1 = __importDefault(__nccwpck_require__(2037));
-const exec = __importStar(__nccwpck_require__(1514));
-const getWindowsInfo = () => __awaiter(void 0, void 0, void 0, function* () {
-    const { stdout: version } = yield exec.getExecOutput('powershell -command "(Get-CimInstance -ClassName Win32_OperatingSystem).Version"', undefined, {
-        silent: true
-    });
-    const { stdout: name } = yield exec.getExecOutput('powershell -command "(Get-CimInstance -ClassName Win32_OperatingSystem).Caption"', undefined, {
-        silent: true
-    });
-    return {
-        name: name.trim(),
-        version: version.trim()
-    };
-});
-const getMacOsInfo = () => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b, _c, _d;
-    const { stdout } = yield exec.getExecOutput('sw_vers', undefined, {
-        silent: true
-    });
-    const version = (_b = (_a = stdout.match(/ProductVersion:\s*(.+)/)) === null || _a === void 0 ? void 0 : _a[1]) !== null && _b !== void 0 ? _b : '';
-    const name = (_d = (_c = stdout.match(/ProductName:\s*(.+)/)) === null || _c === void 0 ? void 0 : _c[1]) !== null && _d !== void 0 ? _d : '';
-    return {
-        name,
-        version
-    };
-});
-const getLinuxInfo = () => __awaiter(void 0, void 0, void 0, function* () {
-    const { stdout } = yield exec.getExecOutput('lsb_release', ['-i', '-r', '-s'], {
-        silent: true
-    });
-    const [name, version] = stdout.trim().split('\n');
-    return {
-        name,
-        version
-    };
-});
-exports.platform = os_1.default.platform();
-exports.arch = os_1.default.arch();
-exports.isWindows = exports.platform === 'win32';
-exports.isMacOS = exports.platform === 'darwin';
-exports.isLinux = exports.platform === 'linux';
-function getDetails() {
-    return __awaiter(this, void 0, void 0, function* () {
-        return Object.assign(Object.assign({}, (yield (exports.isWindows
-            ? getWindowsInfo()
-            : exports.isMacOS
-                ? getMacOsInfo()
-                : getLinuxInfo()))), { platform: exports.platform,
-            arch: exports.arch,
-            isWindows: exports.isWindows,
-            isMacOS: exports.isMacOS,
-            isLinux: exports.isLinux });
-    });
-}
-exports.getDetails = getDetails;
-//# sourceMappingURL=platform.js.map
 
 /***/ }),
 
@@ -3537,6 +3479,652 @@ function toCommandProperties(annotationProperties) {
 }
 exports.toCommandProperties = toCommandProperties;
 //# sourceMappingURL=utils.js.map
+
+/***/ }),
+
+/***/ 8974:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+Object.defineProperty(exports, "v1", ({
+  enumerable: true,
+  get: function () {
+    return _v.default;
+  }
+}));
+Object.defineProperty(exports, "v3", ({
+  enumerable: true,
+  get: function () {
+    return _v2.default;
+  }
+}));
+Object.defineProperty(exports, "v4", ({
+  enumerable: true,
+  get: function () {
+    return _v3.default;
+  }
+}));
+Object.defineProperty(exports, "v5", ({
+  enumerable: true,
+  get: function () {
+    return _v4.default;
+  }
+}));
+Object.defineProperty(exports, "NIL", ({
+  enumerable: true,
+  get: function () {
+    return _nil.default;
+  }
+}));
+Object.defineProperty(exports, "version", ({
+  enumerable: true,
+  get: function () {
+    return _version.default;
+  }
+}));
+Object.defineProperty(exports, "validate", ({
+  enumerable: true,
+  get: function () {
+    return _validate.default;
+  }
+}));
+Object.defineProperty(exports, "stringify", ({
+  enumerable: true,
+  get: function () {
+    return _stringify.default;
+  }
+}));
+Object.defineProperty(exports, "parse", ({
+  enumerable: true,
+  get: function () {
+    return _parse.default;
+  }
+}));
+
+var _v = _interopRequireDefault(__nccwpck_require__(1595));
+
+var _v2 = _interopRequireDefault(__nccwpck_require__(6993));
+
+var _v3 = _interopRequireDefault(__nccwpck_require__(1472));
+
+var _v4 = _interopRequireDefault(__nccwpck_require__(6217));
+
+var _nil = _interopRequireDefault(__nccwpck_require__(2381));
+
+var _version = _interopRequireDefault(__nccwpck_require__(427));
+
+var _validate = _interopRequireDefault(__nccwpck_require__(2609));
+
+var _stringify = _interopRequireDefault(__nccwpck_require__(1458));
+
+var _parse = _interopRequireDefault(__nccwpck_require__(6385));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/***/ }),
+
+/***/ 5842:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+
+var _crypto = _interopRequireDefault(__nccwpck_require__(6113));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function md5(bytes) {
+  if (Array.isArray(bytes)) {
+    bytes = Buffer.from(bytes);
+  } else if (typeof bytes === 'string') {
+    bytes = Buffer.from(bytes, 'utf8');
+  }
+
+  return _crypto.default.createHash('md5').update(bytes).digest();
+}
+
+var _default = md5;
+exports["default"] = _default;
+
+/***/ }),
+
+/***/ 2381:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+var _default = '00000000-0000-0000-0000-000000000000';
+exports["default"] = _default;
+
+/***/ }),
+
+/***/ 6385:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+
+var _validate = _interopRequireDefault(__nccwpck_require__(2609));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function parse(uuid) {
+  if (!(0, _validate.default)(uuid)) {
+    throw TypeError('Invalid UUID');
+  }
+
+  let v;
+  const arr = new Uint8Array(16); // Parse ########-....-....-....-............
+
+  arr[0] = (v = parseInt(uuid.slice(0, 8), 16)) >>> 24;
+  arr[1] = v >>> 16 & 0xff;
+  arr[2] = v >>> 8 & 0xff;
+  arr[3] = v & 0xff; // Parse ........-####-....-....-............
+
+  arr[4] = (v = parseInt(uuid.slice(9, 13), 16)) >>> 8;
+  arr[5] = v & 0xff; // Parse ........-....-####-....-............
+
+  arr[6] = (v = parseInt(uuid.slice(14, 18), 16)) >>> 8;
+  arr[7] = v & 0xff; // Parse ........-....-....-####-............
+
+  arr[8] = (v = parseInt(uuid.slice(19, 23), 16)) >>> 8;
+  arr[9] = v & 0xff; // Parse ........-....-....-....-############
+  // (Use "/" to avoid 32-bit truncation when bit-shifting high-order bytes)
+
+  arr[10] = (v = parseInt(uuid.slice(24, 36), 16)) / 0x10000000000 & 0xff;
+  arr[11] = v / 0x100000000 & 0xff;
+  arr[12] = v >>> 24 & 0xff;
+  arr[13] = v >>> 16 & 0xff;
+  arr[14] = v >>> 8 & 0xff;
+  arr[15] = v & 0xff;
+  return arr;
+}
+
+var _default = parse;
+exports["default"] = _default;
+
+/***/ }),
+
+/***/ 6230:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+var _default = /^(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|00000000-0000-0000-0000-000000000000)$/i;
+exports["default"] = _default;
+
+/***/ }),
+
+/***/ 9784:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = rng;
+
+var _crypto = _interopRequireDefault(__nccwpck_require__(6113));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+const rnds8Pool = new Uint8Array(256); // # of random values to pre-allocate
+
+let poolPtr = rnds8Pool.length;
+
+function rng() {
+  if (poolPtr > rnds8Pool.length - 16) {
+    _crypto.default.randomFillSync(rnds8Pool);
+
+    poolPtr = 0;
+  }
+
+  return rnds8Pool.slice(poolPtr, poolPtr += 16);
+}
+
+/***/ }),
+
+/***/ 8844:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+
+var _crypto = _interopRequireDefault(__nccwpck_require__(6113));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function sha1(bytes) {
+  if (Array.isArray(bytes)) {
+    bytes = Buffer.from(bytes);
+  } else if (typeof bytes === 'string') {
+    bytes = Buffer.from(bytes, 'utf8');
+  }
+
+  return _crypto.default.createHash('sha1').update(bytes).digest();
+}
+
+var _default = sha1;
+exports["default"] = _default;
+
+/***/ }),
+
+/***/ 1458:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+
+var _validate = _interopRequireDefault(__nccwpck_require__(2609));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * Convert array of 16 byte values to UUID string format of the form:
+ * XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
+ */
+const byteToHex = [];
+
+for (let i = 0; i < 256; ++i) {
+  byteToHex.push((i + 0x100).toString(16).substr(1));
+}
+
+function stringify(arr, offset = 0) {
+  // Note: Be careful editing this code!  It's been tuned for performance
+  // and works in ways you may not expect. See https://github.com/uuidjs/uuid/pull/434
+  const uuid = (byteToHex[arr[offset + 0]] + byteToHex[arr[offset + 1]] + byteToHex[arr[offset + 2]] + byteToHex[arr[offset + 3]] + '-' + byteToHex[arr[offset + 4]] + byteToHex[arr[offset + 5]] + '-' + byteToHex[arr[offset + 6]] + byteToHex[arr[offset + 7]] + '-' + byteToHex[arr[offset + 8]] + byteToHex[arr[offset + 9]] + '-' + byteToHex[arr[offset + 10]] + byteToHex[arr[offset + 11]] + byteToHex[arr[offset + 12]] + byteToHex[arr[offset + 13]] + byteToHex[arr[offset + 14]] + byteToHex[arr[offset + 15]]).toLowerCase(); // Consistency check for valid UUID.  If this throws, it's likely due to one
+  // of the following:
+  // - One or more input array values don't map to a hex octet (leading to
+  // "undefined" in the uuid)
+  // - Invalid input values for the RFC `version` or `variant` fields
+
+  if (!(0, _validate.default)(uuid)) {
+    throw TypeError('Stringified UUID is invalid');
+  }
+
+  return uuid;
+}
+
+var _default = stringify;
+exports["default"] = _default;
+
+/***/ }),
+
+/***/ 1595:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+
+var _rng = _interopRequireDefault(__nccwpck_require__(9784));
+
+var _stringify = _interopRequireDefault(__nccwpck_require__(1458));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// **`v1()` - Generate time-based UUID**
+//
+// Inspired by https://github.com/LiosK/UUID.js
+// and http://docs.python.org/library/uuid.html
+let _nodeId;
+
+let _clockseq; // Previous uuid creation time
+
+
+let _lastMSecs = 0;
+let _lastNSecs = 0; // See https://github.com/uuidjs/uuid for API details
+
+function v1(options, buf, offset) {
+  let i = buf && offset || 0;
+  const b = buf || new Array(16);
+  options = options || {};
+  let node = options.node || _nodeId;
+  let clockseq = options.clockseq !== undefined ? options.clockseq : _clockseq; // node and clockseq need to be initialized to random values if they're not
+  // specified.  We do this lazily to minimize issues related to insufficient
+  // system entropy.  See #189
+
+  if (node == null || clockseq == null) {
+    const seedBytes = options.random || (options.rng || _rng.default)();
+
+    if (node == null) {
+      // Per 4.5, create and 48-bit node id, (47 random bits + multicast bit = 1)
+      node = _nodeId = [seedBytes[0] | 0x01, seedBytes[1], seedBytes[2], seedBytes[3], seedBytes[4], seedBytes[5]];
+    }
+
+    if (clockseq == null) {
+      // Per 4.2.2, randomize (14 bit) clockseq
+      clockseq = _clockseq = (seedBytes[6] << 8 | seedBytes[7]) & 0x3fff;
+    }
+  } // UUID timestamps are 100 nano-second units since the Gregorian epoch,
+  // (1582-10-15 00:00).  JSNumbers aren't precise enough for this, so
+  // time is handled internally as 'msecs' (integer milliseconds) and 'nsecs'
+  // (100-nanoseconds offset from msecs) since unix epoch, 1970-01-01 00:00.
+
+
+  let msecs = options.msecs !== undefined ? options.msecs : Date.now(); // Per 4.2.1.2, use count of uuid's generated during the current clock
+  // cycle to simulate higher resolution clock
+
+  let nsecs = options.nsecs !== undefined ? options.nsecs : _lastNSecs + 1; // Time since last uuid creation (in msecs)
+
+  const dt = msecs - _lastMSecs + (nsecs - _lastNSecs) / 10000; // Per 4.2.1.2, Bump clockseq on clock regression
+
+  if (dt < 0 && options.clockseq === undefined) {
+    clockseq = clockseq + 1 & 0x3fff;
+  } // Reset nsecs if clock regresses (new clockseq) or we've moved onto a new
+  // time interval
+
+
+  if ((dt < 0 || msecs > _lastMSecs) && options.nsecs === undefined) {
+    nsecs = 0;
+  } // Per 4.2.1.2 Throw error if too many uuids are requested
+
+
+  if (nsecs >= 10000) {
+    throw new Error("uuid.v1(): Can't create more than 10M uuids/sec");
+  }
+
+  _lastMSecs = msecs;
+  _lastNSecs = nsecs;
+  _clockseq = clockseq; // Per 4.1.4 - Convert from unix epoch to Gregorian epoch
+
+  msecs += 12219292800000; // `time_low`
+
+  const tl = ((msecs & 0xfffffff) * 10000 + nsecs) % 0x100000000;
+  b[i++] = tl >>> 24 & 0xff;
+  b[i++] = tl >>> 16 & 0xff;
+  b[i++] = tl >>> 8 & 0xff;
+  b[i++] = tl & 0xff; // `time_mid`
+
+  const tmh = msecs / 0x100000000 * 10000 & 0xfffffff;
+  b[i++] = tmh >>> 8 & 0xff;
+  b[i++] = tmh & 0xff; // `time_high_and_version`
+
+  b[i++] = tmh >>> 24 & 0xf | 0x10; // include version
+
+  b[i++] = tmh >>> 16 & 0xff; // `clock_seq_hi_and_reserved` (Per 4.2.2 - include variant)
+
+  b[i++] = clockseq >>> 8 | 0x80; // `clock_seq_low`
+
+  b[i++] = clockseq & 0xff; // `node`
+
+  for (let n = 0; n < 6; ++n) {
+    b[i + n] = node[n];
+  }
+
+  return buf || (0, _stringify.default)(b);
+}
+
+var _default = v1;
+exports["default"] = _default;
+
+/***/ }),
+
+/***/ 6993:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+
+var _v = _interopRequireDefault(__nccwpck_require__(5920));
+
+var _md = _interopRequireDefault(__nccwpck_require__(5842));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+const v3 = (0, _v.default)('v3', 0x30, _md.default);
+var _default = v3;
+exports["default"] = _default;
+
+/***/ }),
+
+/***/ 5920:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = _default;
+exports.URL = exports.DNS = void 0;
+
+var _stringify = _interopRequireDefault(__nccwpck_require__(1458));
+
+var _parse = _interopRequireDefault(__nccwpck_require__(6385));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function stringToBytes(str) {
+  str = unescape(encodeURIComponent(str)); // UTF8 escape
+
+  const bytes = [];
+
+  for (let i = 0; i < str.length; ++i) {
+    bytes.push(str.charCodeAt(i));
+  }
+
+  return bytes;
+}
+
+const DNS = '6ba7b810-9dad-11d1-80b4-00c04fd430c8';
+exports.DNS = DNS;
+const URL = '6ba7b811-9dad-11d1-80b4-00c04fd430c8';
+exports.URL = URL;
+
+function _default(name, version, hashfunc) {
+  function generateUUID(value, namespace, buf, offset) {
+    if (typeof value === 'string') {
+      value = stringToBytes(value);
+    }
+
+    if (typeof namespace === 'string') {
+      namespace = (0, _parse.default)(namespace);
+    }
+
+    if (namespace.length !== 16) {
+      throw TypeError('Namespace must be array-like (16 iterable integer values, 0-255)');
+    } // Compute hash of namespace and value, Per 4.3
+    // Future: Use spread syntax when supported on all platforms, e.g. `bytes =
+    // hashfunc([...namespace, ... value])`
+
+
+    let bytes = new Uint8Array(16 + value.length);
+    bytes.set(namespace);
+    bytes.set(value, namespace.length);
+    bytes = hashfunc(bytes);
+    bytes[6] = bytes[6] & 0x0f | version;
+    bytes[8] = bytes[8] & 0x3f | 0x80;
+
+    if (buf) {
+      offset = offset || 0;
+
+      for (let i = 0; i < 16; ++i) {
+        buf[offset + i] = bytes[i];
+      }
+
+      return buf;
+    }
+
+    return (0, _stringify.default)(bytes);
+  } // Function#name is not settable on some platforms (#270)
+
+
+  try {
+    generateUUID.name = name; // eslint-disable-next-line no-empty
+  } catch (err) {} // For CommonJS default export support
+
+
+  generateUUID.DNS = DNS;
+  generateUUID.URL = URL;
+  return generateUUID;
+}
+
+/***/ }),
+
+/***/ 1472:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+
+var _rng = _interopRequireDefault(__nccwpck_require__(9784));
+
+var _stringify = _interopRequireDefault(__nccwpck_require__(1458));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function v4(options, buf, offset) {
+  options = options || {};
+
+  const rnds = options.random || (options.rng || _rng.default)(); // Per 4.4, set bits for version and `clock_seq_hi_and_reserved`
+
+
+  rnds[6] = rnds[6] & 0x0f | 0x40;
+  rnds[8] = rnds[8] & 0x3f | 0x80; // Copy bytes to buffer, if provided
+
+  if (buf) {
+    offset = offset || 0;
+
+    for (let i = 0; i < 16; ++i) {
+      buf[offset + i] = rnds[i];
+    }
+
+    return buf;
+  }
+
+  return (0, _stringify.default)(rnds);
+}
+
+var _default = v4;
+exports["default"] = _default;
+
+/***/ }),
+
+/***/ 6217:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+
+var _v = _interopRequireDefault(__nccwpck_require__(5920));
+
+var _sha = _interopRequireDefault(__nccwpck_require__(8844));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+const v5 = (0, _v.default)('v5', 0x50, _sha.default);
+var _default = v5;
+exports["default"] = _default;
+
+/***/ }),
+
+/***/ 2609:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+
+var _regex = _interopRequireDefault(__nccwpck_require__(6230));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function validate(uuid) {
+  return typeof uuid === 'string' && _regex.default.test(uuid);
+}
+
+var _default = validate;
+exports["default"] = _default;
+
+/***/ }),
+
+/***/ 427:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+
+var _validate = _interopRequireDefault(__nccwpck_require__(2609));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function version(uuid) {
+  if (!(0, _validate.default)(uuid)) {
+    throw TypeError('Invalid UUID');
+  }
+
+  return parseInt(uuid.substr(14, 1), 16);
+}
+
+var _default = version;
+exports["default"] = _default;
 
 /***/ }),
 
@@ -19647,13 +20235,6 @@ catch (error) {
   useNativeURL = error.code === "ERR_INVALID_URL";
 }
 
-// HTTP headers to drop across HTTP/HTTPS and domain boundaries
-var sensitiveHeaders = [
-  "Authorization",
-  "Proxy-Authorization",
-  "Cookie",
-];
-
 // URL fields to preserve in copy operations
 var preservedUrlFields = [
   "auth",
@@ -19734,11 +20315,6 @@ function RedirectableRequest(options, responseCallback) {
         cause : new RedirectionError({ cause: cause }));
     }
   };
-
-  // Create filter for sensitive HTTP headers
-  this._headerFilter = new RegExp("^(?:" +
-      sensitiveHeaders.concat(options.sensitiveHeaders).map(escapeRegex).join("|") +
-    ")$", "i");
 
   // Perform the first request
   this._performRequest();
@@ -19923,9 +20499,6 @@ RedirectableRequest.prototype._sanitizeOptions = function (options) {
   if (!options.headers) {
     options.headers = {};
   }
-  if (!isArray(options.sensitiveHeaders)) {
-    options.sensitiveHeaders = [];
-  }
 
   // Since http.request treats host as an alias of hostname,
   // but the url module interprets host as hostname plus port,
@@ -20108,7 +20681,7 @@ RedirectableRequest.prototype._processResponse = function (response) {
      redirectUrl.protocol !== "https:" ||
      redirectUrl.host !== currentHost &&
      !isSubdomain(redirectUrl.host, currentHost)) {
-    removeMatchingHeaders(this._headerFilter, this._options.headers);
+    removeMatchingHeaders(/^(?:(?:proxy-)?authorization|cookie)$/i, this._options.headers);
   }
 
   // Evaluate the beforeRedirect callback
@@ -20301,10 +20874,6 @@ function isSubdomain(subdomain, domain) {
   return dot > 0 && subdomain[dot] === "." && subdomain.endsWith(domain);
 }
 
-function isArray(value) {
-  return value instanceof Array;
-}
-
 function isString(value) {
   return typeof value === "string" || value instanceof String;
 }
@@ -20319,10 +20888,6 @@ function isBuffer(value) {
 
 function isURL(value) {
   return URL && value instanceof URL;
-}
-
-function escapeRegex(regex) {
-  return regex.replace(/[\]\\/()*+?.$]/g, "\\$&");
 }
 
 // Exports
@@ -40770,7 +41335,7 @@ class Request {
       }
 
       if (!extractBody) {
-        extractBody = (__nccwpck_require__(1472).extractBody)
+        extractBody = (__nccwpck_require__(9990).extractBody)
       }
 
       const [bodyStream, contentType] = extractBody(body)
@@ -41897,7 +42462,7 @@ module.exports = Dispatcher
 
 /***/ }),
 
-/***/ 1472:
+/***/ 9990:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -44635,7 +45200,7 @@ const {
 } = __nccwpck_require__(2538)
 const { kState, kHeaders, kGuard, kRealm } = __nccwpck_require__(5861)
 const assert = __nccwpck_require__(9491)
-const { safelyExtractBody } = __nccwpck_require__(1472)
+const { safelyExtractBody } = __nccwpck_require__(9990)
 const {
   redirectStatusSet,
   nullBodyStatus,
@@ -46749,7 +47314,7 @@ module.exports = {
 
 
 
-const { extractBody, mixinBody, cloneBody } = __nccwpck_require__(1472)
+const { extractBody, mixinBody, cloneBody } = __nccwpck_require__(9990)
 const { Headers, fill: fillHeaders, HeadersList } = __nccwpck_require__(554)
 const { FinalizationRegistry } = __nccwpck_require__(6436)()
 const util = __nccwpck_require__(3983)
@@ -47702,7 +48267,7 @@ module.exports = { Request, makeRequest }
 
 
 const { Headers, HeadersList, fill } = __nccwpck_require__(554)
-const { extractBody, cloneBody, mixinBody } = __nccwpck_require__(1472)
+const { extractBody, cloneBody, mixinBody } = __nccwpck_require__(9990)
 const util = __nccwpck_require__(3983)
 const { kEnumerableProperty } = util
 const {
