@@ -1,7 +1,3 @@
 [[IgnoredVulns]]
-id = "GHSA-mh29-5h37-fv8m"
-reason = "Test dependency"
-
-[[IgnoredVulns]]
-id = "GHSA-73rr-hh4g-fpgx"
-reason = "Test dependency"
+id = "GHSA-w5hq-g745-h8pq"
+reason = "uuid@8.3.2 - Test fixture only: transitive dep via jest-junit. This lockfile is used solely to regenerate test fixtures locally; it is not bundled into the published action (dist/)."
