@@ -1,35 +1,23 @@
 [[IgnoredVulns]]
-id = "GHSA-f8q6-p94x-37v3"
-reason = "Test dependency"
-
-[[IgnoredVulns]]
-id = "GHSA-mwcw-c2x4-8c55"
-reason = "Test dependency"
-
-[[IgnoredVulns]]
-id = "GHSA-76p7-773f-r4q5"
-reason = "Test dependency"
-
-[[IgnoredVulns]]
-id = "GHSA-9965-vmph-33xx"
-reason = "Test dependency"
-
-[[IgnoredVulns]]
-id = "GHSA-vghf-hv5q-vc2g"
-reason = "Test dependency"
+id = "GHSA-73rr-hh4g-fpgx"
+reason = "diff - Test fixture only: transitive dep via mocha/mochawesome. This lockfile is used solely to regenerate test fixtures locally; it is not bundled into the published action (dist/)."
 
 [[IgnoredVulns]]
 id = "GHSA-mh29-5h37-fv8m"
-reason = "Test dependency"
+reason = "js-yaml - Test fixture only: transitive dep via cypress. This lockfile is used solely to regenerate test fixtures locally; it is not bundled into the published action (dist/)."
 
 [[IgnoredVulns]]
-id = "GHSA-73rr-hh4g-fpgx"
-reason = "Test dependency"
+id = "GHSA-q8mj-m7cp-5q26"
+reason = "qs - Test fixture only: transitive dep via cypress. This lockfile is used solely to regenerate test fixtures locally; it is not bundled into the published action (dist/)."
 
 [[IgnoredVulns]]
-id = "GHSA-xxjr-mmjv-4gpg"
-reason = "Test dependency"
+id = "GHSA-5c6j-r48x-rmvq"
+reason = "serialize-javascript - Test fixture only: transitive dep via mocha. This lockfile is used solely to regenerate test fixtures locally; it is not bundled into the published action (dist/)."
 
 [[IgnoredVulns]]
-id = "GHSA-6rw7-vpxm-498p"
-reason = "Test dependency"
+id = "GHSA-qj8w-gfj5-8c6v"
+reason = "serialize-javascript - Test fixture only: transitive dep via mocha. This lockfile is used solely to regenerate test fixtures locally; it is not bundled into the published action (dist/)."
+
+[[IgnoredVulns]]
+id = "GHSA-w5hq-g745-h8pq"
+reason = "uuid - Test fixture only: transitive dep via mochawesome. This lockfile is used solely to regenerate test fixtures locally; it is not bundled into the published action (dist/)."
