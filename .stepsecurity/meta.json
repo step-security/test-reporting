@@ -1,0 +1,18 @@
+{
+   "schema_version": "1",
+   "onboarding_type": "copied",
+   "archived": false,
+   "maintained_action_name": "step-security/test-reporting",
+   "upstream_full_repo_name": "phoenix-actions/test-reporting",
+   "action_type": "node",
+   "last_release": {
+     "tag_name": "v15.0.1",
+     "created_at": "2026-05-25T09:39:17Z",
+     "published_at": "2026-05-28T06:10:43Z"
+   },
+   "sync": {
+     "ignore_presets": [
+       "defaults_v1"
+     ]
+   }
+ }
