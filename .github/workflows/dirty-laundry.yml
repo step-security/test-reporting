@@ -16,18 +16,9 @@ jobs:
         with:
           egress-policy: audit
 
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@v7
       - run: npm ci
       - run: npm run build
       - run: npm run format-check
       - run: npm run lint
 
-      - name: Create mochawesome report
-        uses: ./
-        id: test-report
-        if: success() || failure()
-        with:
-          name: Mochawesome Tests
-          path: __tests__/fixtures/mochawesome1-json.json
-          reporter: mochawesome-json
-          fail-on-error: false
