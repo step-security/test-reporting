@@ -18,7 +18,11 @@ on:
       node_version:
         description: "Specify Node.js version (e.g., '18', '20', 'lts/*')"
         required: false
+        type: string
         default: "24"
+
+  pull_request:
+    types: [opened, synchronize, labeled]
 
 permissions:
   contents: write
