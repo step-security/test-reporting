@@ -1,0 +1,27 @@
+name: 'Dirty Laundry Report'
+on:
+  workflow_run:
+    workflows: ['Dirty Laundry Test']
+    types: [completed]
+
+permissions:
+  actions: read
+  checks: write
+
+jobs:
+  report:
+    name: Test Report
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Create mochawesome report
+        uses: ./
+        id: test-report
+        if: success() || failure()
+        with:
+          name: Mochawesome Tests
+          path: __tests__/fixtures/mochawesome1-json.json
+          reporter: mochawesome-json
+          fail-on-error: false
