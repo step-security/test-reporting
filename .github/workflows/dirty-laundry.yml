@@ -6,8 +6,12 @@ on:
     paths-ignore: ['**.md']
   workflow_dispatch:
 
+permissions: {}
+
 jobs:
   build-test:
+    permissions:
+      contents: read  # for actions/checkout to fetch code
     name: Build & Test
     runs-on: ubuntu-latest
     steps:
@@ -16,7 +20,7 @@ jobs:
         with:
           egress-policy: audit
 
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - run: npm ci
       - run: npm run build
       - run: npm run format-check
