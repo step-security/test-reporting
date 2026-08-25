@@ -11,6 +11,6 @@
   "devDependencies": {
     "cypress": "^14.5.4",
     "mocha": "^11.7.6",
-    "mochawesome": "^7.0.1"
+    "mochawesome": "^8.0.1"
   }
 }
