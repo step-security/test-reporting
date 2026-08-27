@@ -21,3 +21,39 @@ reason = "serialize-javascript - Test fixture only: transitive dep via mocha. Th
 [[IgnoredVulns]]
 id = "GHSA-w5hq-g745-h8pq"
 reason = "uuid - Test fixture only: transitive dep via mochawesome. This lockfile is used solely to regenerate test fixtures locally; it is not bundled into the published action (dist/)."
+
+[[IgnoredVulns]]
+id = "GHSA-3jxr-9vmj-r5cp"
+reason = "brace-expansion - Test fixture only: transitive dev dep via mocha/mochawesome. This lockfile is used solely to regenerate test fixtures locally; it is not bundled into the published action (dist/)."
+
+[[IgnoredVulns]]
+id = "GHSA-mh99-v99m-4gvg"
+reason = "brace-expansion - Test fixture only: transitive dev dep via mocha/mochawesome. This lockfile is used solely to regenerate test fixtures locally; it is not bundled into the published action (dist/)."
+
+[[IgnoredVulns]]
+id = "GHSA-rgw5-rvv9-x895"
+reason = "brace-expansion - Test fixture only: transitive dev dep via mocha/mochawesome. This lockfile is used solely to regenerate test fixtures locally; it is not bundled into the published action (dist/)."
+
+[[IgnoredVulns]]
+id = "GHSA-jmr9-qjv8-65gv"
+reason = "extract-zip - Test fixture only: transitive dev dep via cypress. This lockfile is used solely to regenerate test fixtures locally; it is not bundled into the published action (dist/)."
+
+[[IgnoredVulns]]
+id = "GHSA-hmw2-7cc7-3qxx"
+reason = "form-data - Test fixture only: transitive dev dep via cypress. This lockfile is used solely to regenerate test fixtures locally; it is not bundled into the published action (dist/)."
+
+[[IgnoredVulns]]
+id = "GHSA-52cp-r559-cp3m"
+reason = "js-yaml - Test fixture only: transitive dev dep via mocha/mochawesome. This lockfile is used solely to regenerate test fixtures locally; it is not bundled into the published action (dist/)."
+
+[[IgnoredVulns]]
+id = "GHSA-5p4m-2wfm-xmqj"
+reason = "js-yaml - Test fixture only: transitive dev dep via mocha/mochawesome. This lockfile is used solely to regenerate test fixtures locally; it is not bundled into the published action (dist/)."
+
+[[IgnoredVulns]]
+id = "GHSA-h67p-54hq-rp68"
+reason = "js-yaml - Test fixture only: transitive dev dep via mocha/mochawesome. This lockfile is used solely to regenerate test fixtures locally; it is not bundled into the published action (dist/)."
+
+[[IgnoredVulns]]
+id = "GHSA-ph9p-34f9-6g65"
+reason = "tmp - Test fixture only: transitive dev dep via mocha/mochawesome. This lockfile is used solely to regenerate test fixtures locally; it is not bundled into the published action (dist/)."
