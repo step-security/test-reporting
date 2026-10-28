@@ -13,7 +13,7 @@ on:
         default: "main"
       script:
         description: "Specify the build script to run"
-        required: true
+        required: false
         default: 'npm run all'
       node_version:
         description: "Specify Node.js version (e.g., '18', '20', 'lts/*')"

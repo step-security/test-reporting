@@ -1,7 +1,7 @@
 name: Test Reporting
 description: |
   Shows test results in GitHub UI: .NET (xUnit, NUnit, MSTest), Dart, Flutter, Java (JUnit), JavaScript (JEST, Mocha)
-author: Ian Moroney <ianmoroney@gmail.com>
+author: 'step-security'
 inputs:
   artifact:
     description: Name or regex of artifact containing test results
@@ -96,7 +96,7 @@ outputs:
   runHtmlUrl:
     description: Exposes the URL for the HTML version of the run report
 runs:
-  using: 'node16'
+  using: 'node24'
   main: 'dist/index.js'
 branding:
   color: blue
