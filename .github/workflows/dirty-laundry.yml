@@ -1,28 +1,28 @@
 name: 'Dirty Laundry Test'
 on:
   pull_request:
-    paths-ignore: ['**.md']
+    paths-ignore: [ '**.md' ]
   push:
-    paths-ignore: ['**.md']
+    paths-ignore: [ '**.md' ]
   workflow_dispatch:
-
-permissions: {}
 
 jobs:
   build-test:
-    permissions:
-      contents: read  # for actions/checkout to fetch code
     name: Build & Test
     runs-on: ubuntu-latest
     steps:
-      - name: Harden the runner (Audit all outbound calls)
-        uses: step-security/harden-runner@ec9f2d5744a09debf3a187a3f4f675c53b671911 # v2.13.0
-        with:
-          egress-policy: audit
-
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@v2
       - run: npm ci
       - run: npm run build
       - run: npm run format-check
       - run: npm run lint
 
+      - name: Create mochawesome report
+        uses: ./
+        id: test-report
+        if: success() || failure()
+        with:
+          name: Mochawesome Tests
+          path: __tests__/fixtures/mochawesome1-json.json
+          reporter: mochawesome-json
+          fail-on-error: false

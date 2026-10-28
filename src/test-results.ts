@@ -1,9 +1,5 @@
 export class TestRunResult {
-  constructor(
-    readonly path: string,
-    readonly suites: TestSuiteResult[],
-    private totalTime?: number
-  ) {}
+  constructor(readonly path: string, readonly suites: TestSuiteResult[], private totalTime?: number) {}
 
   get tests(): number {
     return this.suites.reduce((sum, g) => sum + g.tests, 0)
@@ -42,11 +38,7 @@ export class TestRunResult {
 }
 
 export class TestSuiteResult {
-  constructor(
-    readonly name: string,
-    readonly groups: TestGroupResult[],
-    private totalTime?: number
-  ) {}
+  constructor(readonly name: string, readonly groups: TestGroupResult[], private totalTime?: number) {}
 
   get tests(): number {
     return this.groups.reduce((sum, g) => sum + g.tests.length, 0)
@@ -84,10 +76,7 @@ export class TestSuiteResult {
 }
 
 export class TestGroupResult {
-  constructor(
-    readonly name: string | undefined | null,
-    readonly tests: TestCaseResult[]
-  ) {}
+  constructor(readonly name: string | undefined | null, readonly tests: TestCaseResult[]) {}
 
   get passed(): number {
     return this.tests.reduce((sum, t) => (t.result === 'success' ? sum + 1 : sum), 0)
