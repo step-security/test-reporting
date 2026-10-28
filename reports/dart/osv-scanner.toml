@@ -1,0 +1,3 @@
+[[IgnoredVulns]]
+id = "GHSA-4rgh-jx4f-qfcq"
+reason = "http (Dart) - Test fixture only: transitive dep via dart test runner. This lockfile is used solely to regenerate test fixtures locally; it is not bundled into the published action (dist/)."

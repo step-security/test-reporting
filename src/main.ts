@@ -227,7 +227,7 @@ class TestReporter {
     switch (this.outputTo) {
       case 'checks': {
         core.info(`Creating check run ${name}`)
-        createResp = await this.octokit.checks.create({
+        createResp = await this.octokit.rest.checks.create({
           head_sha: this.context.sha,
           name,
           status: 'in_progress',
@@ -266,7 +266,7 @@ class TestReporter {
     core.info(`Updating check run conclusion (${conclusion}) and output`)
     switch (this.outputTo) {
       case 'checks': {
-        const resp = await this.octokit.checks.update({
+        const resp = await this.octokit.rest.checks.update({
           check_run_id,
           conclusion,
           status: 'completed',
