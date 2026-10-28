@@ -6,6 +6,7 @@ on:
     paths-ignore: [ '**.md' ]
     branches:
       - main
+      - v12-main
   workflow_dispatch:
 
 jobs:
@@ -13,7 +14,7 @@ jobs:
     name: Build & Test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: npm ci
       - run: npm run build
       - run: npm run format-check
@@ -22,7 +23,7 @@ jobs:
 
       - name: Upload test results
         if: success() || failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: test-results
           path: __tests__/__results__/*.xml
