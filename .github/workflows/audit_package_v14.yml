@@ -10,7 +10,7 @@ on:
       base_branch:
           description: "Specify a base branch"
           required: false
-          default: "v12-main"
+          default: "v14-main"
       script:
         description: "Specify the build script to run"
         required: true
@@ -28,7 +28,7 @@ jobs:
     uses: step-security/reusable-workflows/.github/workflows/audit_fix.yml@v1
     with:
       force: ${{ inputs.force || false }}
-      base_branch: ${{ inputs.base_branch || 'v12-main' }}
+      base_branch: ${{ inputs.base_branch || 'v14-main' }}
       script: ${{ inputs.script || 'npm run all'}}
       node_version: "${{ inputs.node_version || '24' }}"
 
