@@ -13,7 +13,7 @@ on:
         default: "cherry-pick"
       script:
         description: "Specify the build script to run"
-        required: true
+        required: false
         default: 'npm run all'
       node_version:
         description: "Specify Node.js version (e.g., '18', '20', 'lts/*')"
@@ -38,6 +38,6 @@ jobs:
       original-owner: "phoenix-actions"
       repo-name: "test-reporting"
       base_branch: ${{ inputs.base_branch }}
-      script: ${{ inputs.script}}
+      script: ${{ inputs.script || 'npm run all' }}
       mode: ${{ github.event_name == 'pull_request' && 'verify' || inputs.mode }}
       node_version: "${{ inputs.node_version || '24' }}"
