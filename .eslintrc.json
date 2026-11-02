@@ -10,7 +10,6 @@
     "rules": {
       "camelcase": "off",
       "eslint-comments/no-use": "off",
-      "i18n-text/no-en": "off",
       "import/no-namespace": "off",
       "no-shadow": "off",
       "no-unused-vars": "off",
@@ -48,11 +47,11 @@
       "@typescript-eslint/restrict-plus-operands": "error",
       "@typescript-eslint/semi": ["error", "never"],
       "@typescript-eslint/type-annotation-spacing": "error",
-      "@typescript-eslint/unbound-method": "error"
+      "@typescript-eslint/unbound-method": "error",
+      "i18n-text/no-en": "off"
     },
     "env": {
       "node": true,
-      "es6": true,
-      "jest/globals": true
+      "es6": true
     }
   }

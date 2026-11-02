@@ -1,9 +1,7 @@
 import * as core from '@actions/core'
 import * as github from '@actions/github'
-import * as fs from 'fs'
 import {createHash} from 'crypto'
 import {GitHub} from '@actions/github/lib/utils'
-import axios, {isAxiosError} from 'axios'
 
 import {ArtifactProvider} from './input-providers/artifact-provider'
 import {LocalFileProvider} from './input-providers/local-file-provider'
@@ -23,8 +21,10 @@ import {MochawesomeJsonParser} from './parsers/mochawesome-json/mochawesome-json
 import {normalizeDirPath, normalizeFilePath} from './utils/path-utils'
 import {getCheckRunContext} from './utils/github-utils'
 import {Outputs} from './utils/constants'
+import fs from 'fs'
+import axios, {isAxiosError} from 'axios'
 
-async function validateSubscription(): Promise<void> {
+async function validateSubscription() {
   const eventPath = process.env.GITHUB_EVENT_PATH
   let repoPrivate: boolean | undefined
 
@@ -220,9 +220,9 @@ class TestReporter {
       results.push(tr)
     }
 
-    let createResp = null
-    let baseUrl = ''
-    let check_run_id = 0
+    let createResp = null,
+      baseUrl = '',
+      check_run_id = 0
 
     switch (this.outputTo) {
       case 'checks': {
@@ -237,7 +237,7 @@ class TestReporter {
           },
           ...github.context.repo
         })
-        baseUrl = createResp.data.html_url as string
+        baseUrl = createResp.data.html_url
         check_run_id = createResp.data.id
         break
       }

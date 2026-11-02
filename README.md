@@ -4,6 +4,7 @@
 
 A fork of [Dorny's test reporter](https://github.com/dorny/test-reporter) created primarily to add support for `mochawesome-json`. Also includes several further feature enhancements and bug fixes on the original.
 
+This [Github Action](https://github.com/marketplace/actions/test-reporting) displays test results from popular testing frameworks directly in GitHub.
 
 ✔️ Parses test results in XML or JSON format and creates nice report as Github Check Run
 
@@ -20,10 +21,12 @@ A fork of [Dorny's test reporter](https://github.com/dorny/test-reporter) create
 - Dart / [test](https://pub.dev/packages/test)
 - Flutter / [test](https://pub.dev/packages/test)
 - Java / [JUnit](https://junit.org/)
-- JavaScript / [JEST](https://jestjs.io/) / [Mocha](https://mochajs.org/) / [Mochawesome](https://github.com/adamgruber/mochawesome)
+- JavaScript / [JEST](https://jestjs.io/) / [Mocha](https://mochajs.org/ / [Mochawesome](https://github.com/adamgruber/mochawesome)
 
 For more information see [Supported formats](#supported-formats) section.
 
+Do you miss support for your favorite language or framework?
+Please create [Issue](https://github.com/step-security/test-reporting/issues/new) or contribute with PR.
 
 ## Example
 
@@ -39,12 +42,12 @@ jobs:
     name: Build & Test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4     # checkout the repo
+      - uses: actions/checkout@v7     # checkout the repo
       - run: npm ci                   # install packages
       - run: npm test                 # run tests (configured to use jest-junit reporter)
 
       - name: Test Report
-        uses: step-security/test-reporting@v8
+        uses: step-security/test-reporting@v12
         id: test-report               # Set ID reference for step
         if: success() || failure()    # run this step even if previous step failed
         with:
@@ -69,12 +72,12 @@ jobs:
     name: Build & Test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4     # checkout the repo
+      - uses: actions/checkout@v7     # checkout the repo
       - run: npm ci                   # install packages
       - run: npm test                 # run tests (configured to use jest-junit reporter)
 
       - name: Test Report
-        uses: step-security/test-reporting@v8
+        uses: step-security/test-reporting@v12
         id: test-report               # Set ID reference for step
         if: success() || failure()    # run this step even if previous step failed
         with:
@@ -103,10 +106,10 @@ jobs:
   build-test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2         # checkout the repo
+      - uses: actions/checkout@v7         # checkout the repo
       - run: npm ci                       # install packages
       - run: npm test                     # run tests (configured to use jest-junit reporter)
-      - uses: actions/upload-artifact@v2  # upload test results
+      - uses: actions/upload-artifact@v7  # upload test results
         if: success() || failure()        # run this step even if previous step failed
         with:
           name: test-results
@@ -124,7 +127,7 @@ jobs:
   report:
     runs-on: ubuntu-latest
     steps:
-    - uses: step-security/test-reporting@v8
+    - uses: step-security/test-reporting@v12
       id: test-report                     # Set ID reference for step
       with:
         artifact: test-results            # artifact name
@@ -136,7 +139,7 @@ jobs:
 ## Usage
 
 ```yaml
-- uses: step-security/test-reporting@v8
+- uses: step-security/test-reporting@v12
   with:
 
     # Name or regex of artifact containing test results
@@ -371,10 +374,13 @@ Unfortunately, there are some known issues and limitations caused by GitHub API:
 
 - Test report (i.e. Check Run summary) is markdown text. No custom styling or HTML is possible.
 - Maximum report size is 65535 bytes. Input parameters `list-suites` and `list-tests` will be automatically adjusted if max size is exceeded.
-- Test report can't reference any additional files (e.g. screenshots). You can use `actions/upload-artifact@v2` to upload them and inspect them manually.
+- Test report can't reference any additional files (e.g. screenshots). You can use `actions/upload-artifact@v7` to upload them and inspect them manually.
 - Check Runs are created for specific commit SHA. It's not possible to specify under which workflow test report should belong if more
   workflows are running for the same SHA. Thanks to this GitHub "feature" it's possible your test report will appear in an unexpected place in GitHub UI.
+  For more information, see [#67](https://github.com/dorny/test-reporter/issues/67).
 
+## See also
+- [paths-filter](https://github.com/dorny/paths-filter) - Conditionally run actions based on files modified by PR, feature branch, or pushed commits
 
 ## License
 

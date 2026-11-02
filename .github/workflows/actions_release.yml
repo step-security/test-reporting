@@ -8,7 +8,7 @@ on:
         required: true
       script:
         description: "Specify the build script to run"
-        required: true
+        required: false
         default: 'npm run all'
       node_version:
         description: "Specify Node.js version (e.g., '18', '20', 'lts/*')"
@@ -28,5 +28,5 @@ jobs:
     uses: step-security/reusable-workflows/.github/workflows/actions_release.yaml@v1
     with:
       tag: "${{ github.event.inputs.tag }}"
-      script: "${{ github.event.inputs.script }}"
-      node_version: "${{ github.event.inputs.node_version }}"
+      script: ${{ inputs.script || 'npm run all' }}
+      node_version: "${{ inputs.node_version || '24' }}"
