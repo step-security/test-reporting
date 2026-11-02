@@ -193,3 +193,7 @@ reason = "validator - Test fixture only: transitive dev dep via cypress. This lo
 [[IgnoredVulns]]
 id = "GHSA-vghf-hv5q-vc2g"
 reason = "validator - Test fixture only: transitive dev dep via cypress. This lockfile is used solely to regenerate test fixtures locally; it is not bundled into the published action (dist/)."
+
+[[IgnoredVulns]]
+id = "GHSA-g3hv-75wg-m249"
+reason = "minimatch - Test fixture only: transitive dev dep via mocha/mochawesome. This lockfile is used solely to regenerate test fixtures locally; it is not bundled into the published action (dist/)."

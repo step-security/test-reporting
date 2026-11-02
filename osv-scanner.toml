@@ -1,0 +1,11 @@
+[[IgnoredVulns]]
+id = "GHSA-gcqx-w48m-w2h4"
+reason = "deepmerge - No fixed version available. Transitive dev dep via jest-config. Not bundled into the published action (dist/)."
+
+[[IgnoredVulns]]
+id = "GHSA-3g3m-2fjr-6pw4"
+reason = "glob - Transitive dev dep via @jest/reporters and eslint internals. Fix requires upstream packages to upgrade; not bundled into the published action (dist/)."
+
+[[IgnoredVulns]]
+id = "GHSA-g3hv-75wg-m249"
+reason = "minimatch - Transitive dev dep via jest, @typescript-eslint, and eslint internals. Fix requires upstream packages to upgrade; not bundled into the published action (dist/)."
