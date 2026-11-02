@@ -221,3 +221,11 @@ reason = "ws - Test fixture only: transitive dev dep via jest. This lockfile is 
 [[IgnoredVulns]]
 id = "GHSA-c4w7-xm78-47vh"
 reason = "y18n - Test fixture only: transitive dev dep via jest. This lockfile is used solely to regenerate test fixtures locally; it is not bundled into the published action (dist/)."
+
+[[IgnoredVulns]]
+id = "GHSA-qr28-fpjm-wq7f"
+reason = "decode-uri-component - Test fixture only: transitive dev dep via jest. This lockfile is used solely to regenerate test fixtures locally; it is not bundled into the published action (dist/)."
+
+[[IgnoredVulns]]
+id = "GHSA-g3hv-75wg-m249"
+reason = "minimatch - Test fixture only: transitive dev dep via jest. This lockfile is used solely to regenerate test fixtures locally; it is not bundled into the published action (dist/)."
